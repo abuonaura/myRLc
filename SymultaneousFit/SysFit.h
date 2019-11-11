@@ -62,30 +62,46 @@ class SysFit{
 	public:
 		SysFit();
 		~SysFit() {;}
+		
 		vector<string> NameChannels(); //return Isolated/Kenriched
+		
 		void AllowBarlowBeaston() {BBeast = true;} //if this function is called the BarlowBeaston fit is turned on
+		void ActivateShapeUncertainties(string, Bool_t);
+		Bool_t IsShapeUncertain(string);
+		void ActivateGaussConstraint(string, Bool_t);
+		Bool_t IsGaussConstrained(string);
+		void SetWeightGaussConstraint(string , Double_t );
+		Double_t GetWeightGaussConstraint(string);
+
 		map<string,vector<Double_t>> GetStartParameters (string); //Gets the starting Parameters for the different samples in the 2 channels 
 		void SetStartParameters(map<string,vector<Double_t> >); //sets the start fit parameters
 		void PrintStartParams(string, map<string,vector<Double_t>>); //prints the starting fit parameters
+
 		vector<string> GetCategory(map<string,vector<Double_t> >); //Retrieves the name of the samples + "pha" (?)
+		
 		TString GetComponentName(TString); //Function to call when creating the legend
         	Int_t GetComponentColor(TString); //Assigns to each sample a color
 		TString GetFitVarName(TString); 
+		
 		Double_t GetHistoNormalisation(string, string); //Takes the normalization factor of each histogram to 1 (1./h->Integral())
-		Bool_t ActivateShapeUncertainties(string,RooStats::HistFactory::Channel*);
-		Bool_t ActivateGaussianConstraint(string,RooStats::HistFactory::Channel*);
+
+		RooStats::ModelConfig* SetChannelConstants(RooStats::ModelConfig*, string);
+		
 		void AddSample(string,string, bool ,const bool, bool, RooStats::HistFactory::Channel**,vector<Double_t>,vector<Double_t>); //Adds the samples to the channel
-		vector<Double_t> Fit(); //Perform the fit
+
+		RooStats::HistFactory::Measurement CreateMeasurement();
+		RooWorkspace *CreateWorkspace(RooStats::HistFactory::Measurement);
+		RooStats::ModelConfig* CreateModel(RooWorkspace* );
+		RooStats::ModelConfig* FixYields(RooStats::ModelConfig*, string, string);
+
+
+		vector<Double_t> Fit(RooStats::ModelConfig*, RooStats::HistFactory::Measurement, RooWorkspace *); //Perform the fit
 		void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::HistFactory::HistFactorySimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, bool legend=kFALSE);
+
+		
 
 
 	private:
-		//yields for applying gaussian constraints for MISID/Combinatorial in the control fit
-        Double_t y_misid_cf;
-        Double_t y_comb_cf ;
-        //weights for applying gaussian constraints for MISID/Combinatorial in the control fit
-        Double_t w_misid_cf;
-        Double_t w_comb_cf;
 
         Int_t alpha;
         Int_t beta ;
@@ -95,12 +111,16 @@ class SysFit{
         Int_t gamma_s;
 
 	Bool_t BBeast;
-	Bool_t ShapeUnc;
-	Bool_t GaussConstr;
 
 	map<string,vector<Double_t>> start_parameters;
 	map<string,vector<Double_t> > fit_result;
+	map<string, Double_t> weight; //Weight for Gaussian Constraint 
+	map<string, Bool_t> ShapeUnc; //set or not Gaussian Constraint 
+	map<string, Bool_t> GaussConstr; //set or not Gaussian Constraint 
 
+RooStats::HistFactory::Measurement measure;
+	RooWorkspace *wspace;
+	RooStats::ModelConfig* model;
 
 };
 

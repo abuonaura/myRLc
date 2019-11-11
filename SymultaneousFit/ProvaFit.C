@@ -35,11 +35,37 @@ void ProvaFit(Bool_t rebuild=true)
 			if (category[j]=="pha")
 				continue;
 			cout<<a.GetHistoNormalisation(filename, category[j])<<endl;
+			if(category[j]=="2charm")
+			{
+				a.ActivateShapeUncertainties(category[j]+"_mbody",true);
+				a.ActivateGaussConstraint(category[j]+"_mbody",false);
+				a.ActivateShapeUncertainties(category[j]+"_2body",false);
+				a.ActivateGaussConstraint(category[j]+"_2body",false);
+			}
+			else
+			{
+				a.ActivateShapeUncertainties(category[j],false);
+				if(category[j]=="MISID"||category[j]=="Combinatorial")
+					a.ActivateGaussConstraint(category[j],false);
+				else
+					a.ActivateGaussConstraint(category[j],false);
+			}
+			cout<<"--------------------------------------------"<<endl;
+			cout<<"Is category : "<<category[j]<<"  shape uncertain? "<< a.IsShapeUncertain(category[j])<<endl;
+			cout<<"Is category : "<<category[j]<<"  Gauss constrained? "<< a.IsGaussConstrained(category[j])<<endl;
+			cout<<"--------------------------------------------"<<endl;
 		}
+
+		
 
 	}
 
-	a.Fit();
+	RooStats::HistFactory::Measurement m = a.CreateMeasurement();
+	RooWorkspace* w = a.CreateWorkspace(m);
+	RooStats::ModelConfig* mc = a.CreateModel(w);
+	a.Fit(mc, m, w);
 
+
+	
 
 }
