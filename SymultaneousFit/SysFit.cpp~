@@ -94,9 +94,7 @@ void SysFit::SetStartParameters(RooArgList ParList, string ch_name)
 		const char* title =  ParList.at(i)->GetTitle();
 		RooRealVar* value = (RooRealVar*)(ParList.find(title));
 		RooErrorVar* error = value->errorVar();
-		//start_parameters[ch_name].insert(pair<string, vector<Double_t>>(string(title),{value->getVal(), value->getVal()-error->getVal(),value->getVal()+error->getVal() }));
-		start_parameters[ch_name][string(title)] = {value->getVal(), value->getVal()-error->getVal(),value->getVal()+error->getVal() };
-	
+		start_parameters[ch_name].insert(pair<string, vector<Double_t>>(string(title),{value->getVal(), value->getVal()-error->getVal(),value->getVal()+error->getVal() }));
 	}
 }
 

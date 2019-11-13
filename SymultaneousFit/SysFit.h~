@@ -79,7 +79,7 @@ class SysFit{
 		void PrintStartParams(string, map<string,vector<Double_t>>); //prints the starting fit parameters
 
 		vector<string> GetCategory(map<string,vector<Double_t> >); //Retrieves the name of the samples + "pha" (?)
-		vector<string> GetParametersName(map<string,vector<Double_t> >); //Retrieves the name of the parameters + "pha" (?)
+		vector<string> GeParametersName(map<string,vector<Double_t> >); //Retrieves the name of the parameters + "pha" (?)
 		
 		TString GetComponentName(TString); //Function to call when creating the legend
         	Int_t GetComponentColor(TString); //Assigns to each sample a color

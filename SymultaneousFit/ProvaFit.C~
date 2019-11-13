@@ -76,7 +76,7 @@ void ProvaFit(Bool_t rebuild=true)
 		a.PrintStartParams(names[i],newstartpars);
 	}
 	//a.PrintStartParameters(
-//	a.AllowBarlowBeaston();	
+	a.AllowBarlowBeaston();	
 
 	m = a.CreateMeasurement();
 	w = a.CreateWorkspace(m);

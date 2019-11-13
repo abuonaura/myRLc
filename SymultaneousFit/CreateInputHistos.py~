@@ -11,7 +11,7 @@ def init():
 def GetFileList(category):
     if category=='Isolated':
         startfiles={'data':['Data/Lb_Data_MagUp_reduced_preselected_iso_sw.root','Data/Lb_Data_MagDown_reduced_preselected_iso_sw.root'],
-                    'MISID':['MISID/OppositeSign/K_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/K_sample_MagUp_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_iso_sw_withCF.root'],
+                    'MISID':['MISID/K_sample_MagDown_iso_sw_withCF.root','MISID/K_sample_MagUp_iso_sw_withCF.root','MISID/Pi_sample_MagDown_iso_sw_withCF.root','MISID/Pi_sample_MagUp_iso_sw_withCF.root'],
                     'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
                     'mu':['MC/Lb_Lcmunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lcmunu_MagDown_PID_reduced_preselected.root'],
                     'tau':['MC/Lb_Lctaunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lctaunu_MagDown_PID_reduced_preselected.root'],
