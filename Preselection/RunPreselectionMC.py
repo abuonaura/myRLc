@@ -31,6 +31,10 @@ if polarity!='all':
 if step!='all':
     steps=[step]
 
+print(datatypes)
+print(polarity)
+print(step)
+
 BDTcut=0.65
 
 for dtype in datatypes:
@@ -53,4 +57,5 @@ for dtype in datatypes:
             if stp=='preselection':
                 #fname = datadir + 'MC/Lb_'+dtype+'_PID_reduced.root'
                 fname = startfname[0:-5]+'_reduced.root'
+                print(fname)
                 ApplyFinalSelections(fname,'MC',BDTcut, dtype)
