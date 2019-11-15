@@ -107,6 +107,10 @@ def FillHistograms(category):
     sigma_Comb = 0
     histos = []
     startfiles = GetFileList(category)
+
+    n2charm_2body=0
+    n2charm_mbody=0
+
     for sample in startfiles.keys():
         print(sample)
         files = GetStartRootFile(startfiles,sample)
@@ -180,8 +184,10 @@ def FillHistograms(category):
                     if TruthMatch(t) == True:
                         h_nominal.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight)
                         if Cut_Multibody(t)==False:
+                            n2charm_2body+=1
                             h_2body.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight)
                         if Cut_Multibody(t)==True:
+                            n2charm_mbody+=1
                             h_mbody.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight)
                             if t.w_2charm>-1000 and t.w_2charm!=1:
                                 h_mbody_1pl.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,Weight_MultibodyCharm_linear(t,1))
@@ -199,6 +205,9 @@ def FillHistograms(category):
             histos.append(h_mbody_1ml)
             histos.append(h_mbody_1pq)
             histos.append(h_mbody_1mq)
+
+            print("n2charm_2body: ", n2charm_2body)
+            print("n2charm_mbody: ", n2charm_mbody)
     return histos
 
 if __name__== "__main__":

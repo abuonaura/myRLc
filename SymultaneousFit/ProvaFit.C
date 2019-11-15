@@ -21,7 +21,8 @@ void ProvaFit(Bool_t rebuild=true)
 	SysFit a;
 
 
-	vector<string> ch2fit = {"Kenriched"};
+	//vector<string> ch2fit = {"Kenriched"};
+	vector<string> ch2fit = {"Isolated"};
 	a.SelectChannel2fit(ch2fit);
 	vector<string> names = a.NameChannels();
 
@@ -66,21 +67,25 @@ void ProvaFit(Bool_t rebuild=true)
 	
 	RooStats::HistFactory::Measurement m = a.CreateMeasurement();
 	RooWorkspace* w = a.CreateWorkspace(m);
+	
 	RooStats::ModelConfig* mc = a.CreateModel(w);
-	RooArgList ParList = a.Fit(mc, m, w);
+	RooFitResult *fit = a.Fit(mc, m, w);
 	
 	for (Int_t i =0; i<names.size();i++)
 	{
-		a.SetStartParameters(ParList, names[i]);
+		a.SetStartParameters(fit, names[i]);
 		map<string,vector<Double_t>> newstartpars = a.GetStartParameters(names[i]);
 		a.PrintStartParams(names[i],newstartpars);
 	}
-	//a.PrintStartParameters(
-//	a.AllowBarlowBeaston();	
 
+	//a.PrintStartParameters(
+	//
+/*
+	a.AllowBarlowBeaston();	
 	m = a.CreateMeasurement();
 	w = a.CreateWorkspace(m);
 	mc = a.CreateModel(w);
-	RooArgList ParList_new = a.Fit(mc, m, w);
-
+	RooFitResult* fit_new = a.Fit(mc, m, w);
+*/
+//	cout<<"---- "<<a.IsShapeUncertain("2charm-mbody")<<endl;
 }

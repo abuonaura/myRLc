@@ -75,7 +75,7 @@ class SysFit{
 		Double_t GetWeightGaussConstraint(string);
 
 		map<string,vector<Double_t>> GetStartParameters (string); //Gets the starting Parameters for the different samples in the 2 channels 
-		void SetStartParameters(RooArgList, string); //sets the start fit parameters
+		void SetStartParameters(RooFitResult *, string); //sets the start fit parameters
 		void PrintStartParams(string, map<string,vector<Double_t>>); //prints the starting fit parameters
 
 		vector<string> GetCategory(map<string,vector<Double_t> >); //Retrieves the name of the samples + "pha" (?)
@@ -97,7 +97,7 @@ class SysFit{
 		RooStats::ModelConfig* FixYields(RooStats::ModelConfig*, string, string);
 
 
-		RooArgList Fit(RooStats::ModelConfig*, RooStats::HistFactory::Measurement, RooWorkspace *); //Perform the fit
+		RooFitResult* Fit(RooStats::ModelConfig*, RooStats::HistFactory::Measurement, RooWorkspace *); //Perform the fit
 		void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::HistFactory::HistFactorySimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, bool legend=kFALSE);
 
 		
@@ -125,6 +125,8 @@ class SysFit{
 RooStats::HistFactory::Measurement measure;
 	RooWorkspace *wspace;
 	RooStats::ModelConfig* model;
+
+	void blindResult(RooFitResult*);
 
 };
 

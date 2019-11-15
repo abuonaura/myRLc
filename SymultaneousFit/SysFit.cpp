@@ -16,21 +16,21 @@ SysFit::SysFit()
 	beta_s = 172;
 	gamma_s = 23;
 	BBeast = false;
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{1.05E6,3.E3,3.E7}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{2.02E5,3.E3,3.E7}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{2.02E5,3.E3,3.E7}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{3.38E5,3.E3,3.E7}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{7.47E4,10,3.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{5.56E4,1.E1,3.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{1.E5,3.E3,2.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{2.02E5,3.E3,2.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{2.02E5,3.E3,2.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.4E4,3.E3,2.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{7.47E4,10,2.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{5.56E4,1.E1,2.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,1.E-9,1.}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstartau_Isolated",{0.05,1.E-9,1.}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("pha_Isolated",{0,-3.,3.}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncpha_Isolated",{0,-3.,3.}));
 	
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncmu_Kenriched",{1.4E3,100,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstarmu_Kenriched",{1.E3,10,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,1E-9,1.}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{1.E3,10,1.E4}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{1.E3,10,1.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{1.E3,500,5.E3}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{8.E3,1E3,2.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Kenriched",{3.2E3,1.E3,5.E3}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcMISID_Kenriched",{4.6E3,100,1.E4}));
 }
@@ -87,16 +87,20 @@ void SysFit::SetStartParameters(map<string,vector<Double_t> > parameters)
 	}
 }*/
 
-void SysFit::SetStartParameters(RooArgList ParList, string ch_name)
+void SysFit::SetStartParameters(RooFitResult *fitResult, string ch_name)
 {
+	RooArgList ParList = fitResult->floatParsFinal();
+
 	for(Int_t i=0;i<ParList.getSize();i++)
 	{
 		const char* title =  ParList.at(i)->GetTitle();
+		if(string(title)!="RLctau_"+ch_name)
+		{
 		RooRealVar* value = (RooRealVar*)(ParList.find(title));
 		RooErrorVar* error = value->errorVar();
 		//start_parameters[ch_name].insert(pair<string, vector<Double_t>>(string(title),{value->getVal(), value->getVal()-error->getVal(),value->getVal()+error->getVal() }));
-		start_parameters[ch_name][string(title)] = {value->getVal(), value->getVal()-error->getVal(),value->getVal()+error->getVal() };
-	
+		start_parameters[ch_name][string(title)] = {value->getVal(), value->getVal()-3*error->getVal(),value->getVal()+3*error->getVal() };
+		}
 	}
 }
 
@@ -238,7 +242,7 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 	sample.SetNormalizeByTheory(kFALSE);
 
 	//add the normalisation factors which will be multiplied
-	if(type=="tau")
+	if(type=="tau" || type=="startau") 
 	{
 		sample.AddNormFactor("Ncmu_"+category,mu_params[0],mu_params[1],mu_params[2]);
 		sample.AddNormFactor("RLc"+type+"_"+category, params[0],params[1],params[2]);
@@ -345,7 +349,7 @@ void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* dat
 
         //-----Construct the pulls plot
         RooHist *pulls = frame->pullHist();
-        pulls->SetFillColor(kGray+1);
+        pulls->SetFillColor(kGray+3);
 	//Build the legend
         TCanvas *clegend = new TCanvas("clegend", "clegend");
         TLegend leg(0.1,0.1,0.9,0.9);
@@ -416,8 +420,8 @@ void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* dat
         pframe->GetXaxis()->SetLabelSize(0.060/(ymax_2-ymin_2));
         pframe->GetXaxis()->SetTitleSize(0.060/(ymax_2-ymin_2));
 
-        pframe->SetMaximum(7.);
-        pframe->SetMinimum(-7.);
+        //pframe->SetMaximum(7.);
+        //pframe->SetMinimum(-7.);
 
  pframe->Draw();
 
@@ -523,6 +527,8 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 		meas.AddChannel(*channels[i]);
 		//Define the parameter of interest
 		meas.SetPOI("RLctau_"+channel_names[i]);
+		meas.SetPOI("RLcstartau_"+channel_names[i]);
+ 
 	}
 	cout << endl;
 	cout << "----------------------   Collecting histograms   ------------------------------" << endl;
@@ -556,7 +562,7 @@ RooStats::ModelConfig* SysFit::CreateModel(RooWorkspace* w)
 	return mc;
 }
 
-RooArgList SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w)
+RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w)
 {
 	RooSimultaneous *model_ = (RooSimultaneous*)mc->GetPdf();
 
@@ -674,7 +680,11 @@ RooArgList SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measure
 
 	RooFitResult *fitResult=minuit_hf->save("TempResult","TempResult");
 
-	// blindResult();
+ for(Int_t i=0; i<nchannels;i++)
+        {
+		if(channel_names[i]=="Isolated")
+			blindResult(fitResult);
+	}
 	
 	std::cout <<"-------CHECK---------------------------------" <<fitResult->edm() << std::endl;
 	//Verbose printing: Basic info, values of constant parameters, initial and
@@ -684,10 +694,9 @@ RooArgList SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measure
 	//Summary printing: Basic info plus final values of floating fit parameters
 	//fitResult->Print();
 
-	//PlotFrame(x_vector[0],"M_{miss}^{2}",data,model_hf,idx,-2,14,"[GeV^{2}/c^{4}]",1);
-	//PlotFrame(y_vector[0],"E_{l}",data,model_hf,idx,0,2600,"[MeV/c^{2}]");
-	//PlotFrame(z_vector[0],"q^{2}",data,model_hf,idx,-2,14,"[GeV^{2}/c^{4}]");
-
+	PlotFrame(x_vector[0],"M_{miss}^{2}",data,model_hf,idx,-2,14,"[GeV^{2}/c^{4}]",1);
+	PlotFrame(y_vector[0],"E_{l}",data,model_hf,idx,0,2600,"[MeV/c^{2}]");
+	PlotFrame(z_vector[0],"q^{2}",data,model_hf,idx,-2,14,"[GeV^{2}/c^{4}]");
 
 
 // Access list of final fit parameter values
@@ -699,19 +708,24 @@ RooArgList SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measure
     cout << "final value of floating parameters" << endl ;
     fitResult->floatParsFinal().Print("s") ;
 
-	RooArgList ParList = fitResult->floatParsFinal();
-	for(Int_t i=0;i<ParList.getSize();i++)
-	{
-		const char *title =  ParList.at(i)->GetTitle();
-		cout<< ParList.at(i)->GetTitle()<<endl;
-		RooRealVar* value = (RooRealVar*)(ParList.find(title));
-		cout<<value->getVal()<<endl;
-	}
 	
 	//RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLtau");
 //Double_t fitOut[] = {RLc_fitresult->getVal(),RLc_fitresult->errorVar()->getVal()};
 
 //	vector<Double_t> mean_and_error(fitOut,fitOut+sizeof(fitOut)/sizeof(Double_t));
-	return ParList;
+	return fitResult;
+}
+
+
+
+void SysFit::blindResult(RooFitResult *fitResult)
+{
+    RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLctau_Isolated");
+    RLc_fitresult->setRange(-999999,999999);
+    Double_t true_val = RLc_fitresult->getVal();
+    RLc_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha).Uniform(0,100)))*TRandom3(beta).Uniform(0,100)*true_val+TRandom3(gamma).Uniform(0,100));
+    RooRealVar* RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_Isolated");
+    RLcStar_fitresult->setRange(-999999,999999);
+    RLcStar_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha_s).Uniform(0,100)))*TRandom3(beta_s).Uniform(0,100)*RLcStar_fitresult->getVal()+TRandom3(gamma_s).Uniform(0,100));
 }
 
