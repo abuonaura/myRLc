@@ -29,8 +29,8 @@ SysFit::SysFit()
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncmu_Kenriched",{1.4E3,100,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstarmu_Kenriched",{1.E3,10,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,1E-9,1.}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{1.E3,500,5.E3}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{8.E3,1E3,2.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{5.E3,500,2.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{5.E3,500,2.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Kenriched",{3.2E3,1.E3,5.E3}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcMISID_Kenriched",{4.6E3,100,1.E4}));
 }

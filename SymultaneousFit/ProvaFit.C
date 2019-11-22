@@ -22,7 +22,8 @@ void ProvaFit(Bool_t rebuild=true)
 
 
 	//vector<string> ch2fit = {"Kenriched"};
-	vector<string> ch2fit = {"Isolated"};
+	//vector<string> ch2fit = {"Isolated"};
+	vector<string> ch2fit = {"Isolated","Kenriched"};
 	a.SelectChannel2fit(ch2fit);
 	vector<string> names = a.NameChannels();
 

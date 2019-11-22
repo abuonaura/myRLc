@@ -3,3 +3,6 @@
 *.hepmc
 *.png
 */plots/
+*.pcm
+*.pdf
+*.table
