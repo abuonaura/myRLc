@@ -1,6 +1,7 @@
 import ROOT as r
 from ROOT import TMath as rm
 import numpy as np
+from ReduceTree import TruthMatch, TruthMatchLambdab, TruthMatchLambdac, TruthMatchMuonPdg, TruthMatchMuonCharm,  TruthMatchMuonLb
 
 
 def GetBDTcut(BDTcut):
@@ -15,47 +16,6 @@ def GetmuPIDcut():
     mucut = r.TCut('mu_PIDmu>2. && mu_PIDmu-mu_PIDK>2. && mu_PIDmu-mu_PIDp>2.')
     return mucut
 
-def TruthMatch(tree):
-    if int(getattr(tree,'Lc_BKGCAT'))<30 and int(getattr(tree,'Lb_BKGCAT'))<50:
-        flag = True
-    else:
-        flag = False
-    return flag
-
-def TruthMatchLambdab(tree):
-    if abs(int(getattr(tree,'Lb_TRUEID')))==5122:
-        flag=True
-    else:
-        flag=False
-    return flag
-
-def TruthMatchLambdac(tree):
-    if abs(int(getattr(tree,'Lc_TRUEID')))==4122:
-        flag=True
-    else:
-        flag=False
-    return flag
-
-def TruthMatchMuonPdg(tree):
-    if abs(int(getattr(tree,'mu_TRUEID')))==13:
-        flag=True
-    else:
-        flag = False
-    return flag
-
-def TruthMatchMuonCharm(tree):
-    if abs(int(getattr(tree,'mu_MC_MOTHER_ID')))==431 or abs(int(getattr(tree,'mu_MC_MOTHER_ID')))==421 or  abs(int(getattr(tree,'mu_MC_MOTHER_ID')))==411:
-        flag = True
-    else:
-        flag=False
-    return flag
-
-def TruthMatchMuonLb(tree):
-    if abs(int(getattr(tree,'mu_MC_MOTHER_ID')))==5122:
-        flag = True
-    else:
-        flag=False
-    return flag
 
 def SelectMBody(tree):
     if abs(getattr(tree,'Lb_TrueHadron_D0_ID'))==4122 and getattr(tree,'Lb_TrueHadron_D1_ID')!=0 and getattr(tree,'Lb_TrueHadron_D2_ID')!=0:
@@ -144,7 +104,7 @@ def ApplyFinalSelections(fname,dtype,BDTcut,mcsample):
             bdt = GetBDTcut(BDTcut)
             print('Appling cuts: ', bdt)
             print('... CopyingTree with final preselections ...')
-            ot.CloneTree(0)
+            ot=t.CloneTree(0)
             for i in range(t.GetEntries()):
                 t.GetEntry(i)
                 if t.bdt>BDTcut:

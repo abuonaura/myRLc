@@ -32,8 +32,8 @@ if step!='all':
     steps=[step]
 
 print(datatypes)
-print(polarity)
-print(step)
+print(polarities)
+print(steps)
 
 BDTcut=0.65
 
@@ -44,6 +44,7 @@ for dtype in datatypes:
     else:
         startfname = datadir + 'MC/Lb_'+dtype+'_'+polarity+'_PID.root'
         for stp in steps:
+            print(stp)
             if stp=='Trigger&Mcut':
                 ofname = startfname[0:-5]+'_reduced.root'
                 print(ofname)
