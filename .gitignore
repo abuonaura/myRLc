@@ -1,0 +1,5 @@
+*.root
+*.txt
+*.hepmc
+*.png
+*/plots/
