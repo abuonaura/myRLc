@@ -1,7 +1,7 @@
 import ROOT as r
 from ROOT import TMath as rm
 import numpy as np
-from ReduceTree import TruthMatch, TruthMatchLambdab, TruthMatchLambdac, TruthMatchMuonPdg, TruthMatchMuonCharm,  TruthMatchMuonLb
+from TruthMatch import *
 
 
 def GetBDTcut(BDTcut):
