@@ -17,7 +17,8 @@ def GetFileList(category):
                     'tau':['MC/Lb_Lctaunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lctaunu_MagDown_PID_reduced_preselected.root'],
                     '2charm':['MC/Lb_LcDs_MagUp_PID_reduced_preselected.root','MC/Lb_LcDs_MagDown_PID_reduced_preselected.root'],
                     'starmu':['MC/Lb_Lc2625munu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625munu_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593munu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593munu_MagDown_PID_reduced_preselected.root'],
-                    'startau':['MC/Lb_Lc2625taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625taunu_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagDown_PID_reduced_preselected.root']}
+                    'startau':['MC/Lb_Lc2625taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625taunu_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagDown_PID_reduced_preselected.root'],
+                    'starDs':['MC/Lb_Lc2625Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625Ds_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagDown_PID_reduced_preselected.root']}
     
     if category=='Kenriched':
         startfiles ={'data':['ControlSamples/Lb_Data_MagUp_reduced_preselected_Kenr_sw.root','ControlSamples/Lb_Data_MagDown_reduced_preselected_Kenr_sw.root'],
@@ -26,7 +27,10 @@ def GetFileList(category):
             'mu':['ControlSamples/MC_Kenr/Lb_Lcmunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lcmunu_MagDown.root'],
             'tau':['ControlSamples/MC_Kenr/Lb_Lctaunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lctaunu_MagDown.root'],
             '2charm':['ControlSamples/MC_Kenr/Lb_LcDs_MagUp.root','ControlSamples/MC_Kenr/Lb_LcDs_MagDown.root'],
-            'starmu':['ControlSamples/MC_Kenr/Lb_Lc2625munu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593munu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625munu_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593munu_MagDown.root']}
+            'starmu':['ControlSamples/MC_Kenr/Lb_Lc2625munu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593munu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625munu_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593munu_MagDown.root'],
+            'starDs':['ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagDown.root'],
+            'startau':['ControlSamples/MC_Kenr/Lb_Lc2625taunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593taunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625taunu_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593taunu_MagDown.root']
+            }
 
     return startfiles
 
