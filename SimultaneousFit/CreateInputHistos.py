@@ -15,10 +15,10 @@ def GetFileList(category):
                     'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
                     'mu':['MC/Lb_Lcmunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lcmunu_MagDown_PID_reduced_preselected.root'],
                     'tau':['MC/Lb_Lctaunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lctaunu_MagDown_PID_reduced_preselected.root'],
-                    '2charm':['MC/Lb_LcDs_MagUp_PID_reduced_preselected.root','MC/Lb_LcDs_MagDown_PID_reduced_preselected.root'],
+                    '2charm':['MC/Lb_LcDs_MagUp_PID_reduced_preselected.root','MC/Lb_LcDs_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2625Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625Ds_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagDown_PID_reduced_preselected.root'],
                     'starmu':['MC/Lb_Lc2625munu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625munu_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593munu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593munu_MagDown_PID_reduced_preselected.root'],
-                    'startau':['MC/Lb_Lc2625taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625taunu_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagDown_PID_reduced_preselected.root'],
-                    'starDs':['MC/Lb_Lc2625Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625Ds_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagDown_PID_reduced_preselected.root']}
+                    'startau':['MC/Lb_Lc2625taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625taunu_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593taunu_MagDown_PID_reduced_preselected.root']}
+                    #'starDs':['MC/Lb_Lc2625Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625Ds_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagDown_PID_reduced_preselected.root']}
     
     if category=='Kenriched':
         startfiles ={'data':['ControlSamples/Lb_Data_MagUp_reduced_preselected_Kenr_sw.root','ControlSamples/Lb_Data_MagDown_reduced_preselected_Kenr_sw.root'],
@@ -26,9 +26,9 @@ def GetFileList(category):
             'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_Kenr.root','CombinatorialBkg/CombinatorialBkg_MagDown_Kenr.root'],
             'mu':['ControlSamples/MC_Kenr/Lb_Lcmunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lcmunu_MagDown.root'],
             'tau':['ControlSamples/MC_Kenr/Lb_Lctaunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lctaunu_MagDown.root'],
-            '2charm':['ControlSamples/MC_Kenr/Lb_LcDs_MagUp.root','ControlSamples/MC_Kenr/Lb_LcDs_MagDown.root'],
+            '2charm':['ControlSamples/MC_Kenr/Lb_LcDs_MagUp.root','ControlSamples/MC_Kenr/Lb_LcDs_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagDown.root'],
             'starmu':['ControlSamples/MC_Kenr/Lb_Lc2625munu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593munu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625munu_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593munu_MagDown.root'],
-            'starDs':['ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagDown.root'],
+            #'starDs':['ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagDown.root'],
             'startau':['ControlSamples/MC_Kenr/Lb_Lc2625taunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593taunu_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625taunu_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593taunu_MagDown.root']
             }
 
@@ -119,7 +119,7 @@ def FillHistograms(category):
         print(sample)
         files = GetStartRootFile(startfiles,sample)
         print(files)
-        if sample!='2charm':
+        if sample!='2charm' and sample!='starDs':
             h = r.TH3F('h_'+sample,"qem_"+sample,4,-2,14,10,0,2600,10,-2,14)
             h.SetDirectory(0)
             for fname in files:
