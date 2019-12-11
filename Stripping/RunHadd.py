@@ -15,15 +15,15 @@ folder = {'MC':{'Lb_Lcmunu':{'MagUp':'200','MagDown':'201'},
                 'Lb_Lc2593taunu':{'MagUp':'198','MagDown':'199'},
                 'Lb_Lc2593munu':{'MagUp':'202','MagDown':'203'}
                 },
-	   'MCtrackeronly':{'Lb_Lcmunu':{'MagUp':'237','MagDown':'238'},
-	                   'Lb_Lctaunu':{'MagUp':'239','MagDown':'240'},
-	                   'Lb_LcDs':{'MagUp':'241','MagDown':'242'},
-	                   'Lb_Lc2625taunu':{'MagUp':'243','MagDown':'244'},
-	                   'Lb_Lc2625munu':{'MagUp':'245','MagDown':'246'},
-	                   'Lb_Lc2593taunu':{'MagUp':'247','MagDown':'248'},
-	                   'Lb_Lc2593munu':{'MagUp':'249','MagDown':'250'},
-	                   'Lb_Lc2625Ds':{'MagUp':'251','MagDown':'252'},
-	                   'Lb_Lc2593Ds':{'MagUp':'253','MagDown':'254'}}
+	   'MCtrackeronly':{'Lb_Lcmunu':{'MagUp':'277','MagDown':'278'},
+	                   'Lb_Lctaunu':{'MagUp':'279','MagDown':'280'},
+	                   'Lb_LcDs':{'MagUp':'295','MagDown':'296'},
+	                   'Lb_Lc2625taunu':{'MagUp':'283','MagDown':'284'},
+	                   'Lb_Lc2625munu':{'MagUp':'285','MagDown':'286'},
+	                   'Lb_Lc2593taunu':{'MagUp':'287','MagDown':'288'},
+	                   'Lb_Lc2593munu':{'MagUp':'289','MagDown':'290'},
+	                   'Lb_Lc2625Ds':{'MagUp':'297','MagDown':'298'},
+	                   'Lb_Lc2593Ds':{'MagUp':'299','MagDown':'300'}}
 	}
 
 

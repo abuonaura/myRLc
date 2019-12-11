@@ -11,14 +11,18 @@ import re
 #########################################################################
 
 DaVinci().HistogramFile = 'DV_stripping_histos.root'
+#DaVinci().HistogramFile = 'DV_stripping_histos_LbLcmunu_fullsim.root'
+#DaVinci().HistogramFile = 'DV_stripping_histos_LbLcmunu_trackeronly.root'
 DaVinci().EvtMax = -1                         
-#DaVinci().EvtMax = 1000
+#DaVinci().EvtMax = 10000
 DaVinci().PrintFreq = 1000
 DaVinci().DataType  = "2016"
 DaVinci().Simulation = True
 DaVinci().Lumi =  not DaVinci().Simulation
 DaVinci().ProductionType = "Stripping"
 DaVinci().InputType = "DST"
+#DaVinci().TupleFile = "LbLcmunu_fullsim.root"
+#DaVinci().TupleFile = "LbLcmunu_trackeronly.root"
 DaVinci().TupleFile = "tupleoutMC_trackeronly.root"
 
 # change the column size of timing table                                                                             
@@ -29,7 +33,12 @@ TimingAuditor().TIMER.NameSize = 60
 if DaVinci().EvtMax !=-1:
 	#DaVinci().Input=['PFN:/home/hep/buonaura/Analysis/RLc/Datasets/MC/00090120_00000030_1.lctaunu.safestrip.dst']
 #------ Lb_Lc2593munu
-	DaVinci().Input=['PFN:/home/hep/buonaura/Analysis/RLc/Datasets/MC/00067107_00000006_1.lctaunu.safestrip.dst']
+	#DaVinci().Input=['PFN:/home/hep/buonaura/Analysis/RLc/Datasets/MC/00067107_00000006_1.lctaunu.safestrip.dst']
+#------ Lb_Lcmunu full sim
+#	DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_Lcmunu/FullSim/00066927_00000004_1.lctaunu.safestrip.dst']
+#------ Lb_Lcmunu trackeronly
+	DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_Lcmunu/TrackerOnly/00089847_00000022_1.lctaunu.safestrip.dst']
+
 
 
 
@@ -49,6 +58,7 @@ from StrippingSettings.Stripping28.LineConfigDictionaries_Semileptonic import B2
 #---> Substitute the tauonic line PID cuts.
 B2DMuForTauMu['CONFIG']['PIDmu']         = -99999
 B2DMuForTauMu['CONFIG']['KaonPIDK']      = -99999
+B2DMuForTauMu['CONFIG']['ProtonPIDp']      = -99999
 B2DMuForTauMu['CONFIG']['PionPIDKTight'] =  99999
 B2DMuForTauMu['CONFIG']['Hlt2Line'] =  ""
 
@@ -56,13 +66,15 @@ MyStream = StrippingStream("B2DMuNuXANDTAU")
 #create a line builder instance of type 'B2DMuForTauMu' and configure it with the 'CONFIG' dictionary.
 confB2DMuForTauMu = StrippingB2DMuForTauMu.B2DMuForTauMuconf("B2DMuForTauMu", B2DMuForTauMu['CONFIG'])
 
-#Replace Mu/Pi/K Selections with NoPID particles
+#Replace Mu/Pi/K/p Selections with NoPID particles
 replaceDictFilterDesktop = { 'MuforB2DMuForTauMu'  : 'Phys/StdAllNoPIDsMuons/Particles'
 		             ,'PiforB2DMuForTauMu' : 'Phys/StdAllNoPIDsPions/Particles'
-			     ,'KforB2DMuForTauMu'  : 'Phys/StdAllNoPIDsKaons/Particles' }
+			     ,'KforB2DMuForTauMu'  : 'Phys/StdAllNoPIDsKaons/Particles' 
+			     ,'PforB2DMuForTauMu'  : 'Phys/StdAllNoPIDsProtons/Particles' }
 replaceDictVoidFilter = { 'SelFilterPhys_StdAllLooseMuons_Particles' : "\n 0<CONTAINS('Phys/StdAllNoPIDsMuons/Particles',True)\n "
 		          ,'SelFilterPhys_StdLooseKaons_Particles'   : "\n 0<CONTAINS('Phys/StdAllNoPIDsKaons/Particles',True)\n "
 			  ,'SelFilterPhys_StdLoosePions_Particles'   : "\n 0<CONTAINS('Phys/StdAllNoPIDsPions/Particles',True)\n "
+			  ,'SelFilterPhys_StdLooseProtons_Particles'   : "\n 0<CONTAINS('Phys/StdAllNoPIDsProtons/Particles',True)\n "
 			  }
 
 #Read the line builders and loop over them 
@@ -205,7 +217,6 @@ tupleB.ToolList +=  [
                 ,"TupleToolMCBackgroundInfo"#comment out for data      
                 ,"TupleToolMCTruth" #comment out for data                                           
                 ,"TupleToolSLTruth"
-                ,"TupleToolANNPID"
                 ,"TupleToolL0Calo" #for Calorimeter info                                             
                 ] # Probably need to add many more Tools.                         
 
@@ -259,7 +270,7 @@ LoKi_B=tupleB.Lc.addTupleTool("LoKi::Hybrid::TupleTool/LoKi_B")
 LoKi_B.Variables = {
                 'TAU' : "BPVLTIME()"
                 }
-
+'''
 tupletistos = tupleB.Lb.addTupleTool("TupleToolTISTOS")
 tupletistos.VerboseL0 = True
 tupletistos.VerboseHlt1 = False
@@ -271,6 +282,7 @@ tupletistos1.VerboseL0 = True
 tupletistos1.VerboseHlt1 = True
 tupletistos1.VerboseHlt2 = False
 tupletistos1.TriggerList = l0_lines + hlt1_lines
+'''
 
 LoKi_muplus=tupleB.mu.addTupleTool("LoKi::Hybrid::TupleTool/LoKi_muplus")
 LoKi_muplus.Variables = {

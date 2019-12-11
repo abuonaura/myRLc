@@ -53,13 +53,14 @@ def createjob(sample,polarity,bkPath):
 		j.inputdata = data[0]
 	else:
 		j.inputdata = data
-	j.splitter = SplitByFiles(filesPerJob=2, ignoremissing = True)
+	#j.splitter = SplitByFiles(filesPerJob=2, ignoremissing = True)
+	j.splitter = SplitByFiles(filesPerJob=1, ignoremissing = True)
 	j.submit()
 	return
 
 if fullsim==False:
-	for sample in event.keys():
-		for polarity in polarities:
+	#for sample in event.keys():
+		#for polarity in polarities:
 			bkPath = '/MC/2016/Beam6500GeV-2016-'+polarity+'-TrackerOnly-Nu1.6-25ns-Pythia8/Sim09f/Reco16/Stripping28r1Filtered/'+event[sample]+'/LCTAUNU.SAFESTRIP.DST'
 			print(bkPath)
 			createjob(sample,polarity, bkPath)
