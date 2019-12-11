@@ -10,7 +10,8 @@ import numpy as np
 
 
 datadir = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/Datasets/'
-samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2625munu','Lb_Lc2593munu']
+#samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2625munu','Lb_Lc2593munu']
+samples = ['Lb_Lc2625Ds','Lb_Lc2593Ds']
 polarities = ['MagUp','MagDown']
 
 ISOBDTcut =0.35
