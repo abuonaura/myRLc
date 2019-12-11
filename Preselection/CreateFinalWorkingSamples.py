@@ -17,15 +17,28 @@ def GetmuPIDcut():
     return mucut
 
 
-def SelectMBody(tree):
-    if abs(getattr(tree,'Lb_TrueHadron_D0_ID'))==4122 and getattr(tree,'Lb_TrueHadron_D1_ID')!=0 and getattr(tree,'Lb_TrueHadron_D2_ID')!=0:
+def SelectMBody(tree, sample):
+    if sample=='LcDs':
+        D0pdg = 4122
+    if sample=='Lc2593Ds':
+        D0pdg = 14122
+    if sample=='Lc2625Ds':
+        D0pdg = 104124
+
+    if abs(getattr(tree,'Lb_TrueHadron_D0_ID'))==D0pdg and getattr(tree,'Lb_TrueHadron_D1_ID')!=0 and getattr(tree,'Lb_TrueHadron_D2_ID')!=0:
         flag = True
     else:
         flag = False
     return flag
 
-def Select2Body(tree):
-    if abs(int(getattr(tree,'Lb_TrueHadron_D0_ID')))==4122 and int(getattr(tree,'Lb_TrueHadron_D1_ID'))!=0 and int(getattr(tree,'Lb_TrueHadron_D2_ID'))==0:
+def Select2Body(tree,sample):
+    if sample=='LcDs':
+        D0pdg = 4122
+    if sample=='Lc2593Ds':
+        D0pdg = 14122
+    if sample=='Lc2625Ds':
+        D0pdg = 104124
+    if abs(int(getattr(tree,'Lb_TrueHadron_D0_ID')))==D0pdg and int(getattr(tree,'Lb_TrueHadron_D1_ID'))!=0 and int(getattr(tree,'Lb_TrueHadron_D2_ID'))==0:
         flag = True
     else:
         flag = False
@@ -100,7 +113,7 @@ def ApplyFinalSelections(fname,dtype,BDTcut,mcsample):
         of = r.TFile(ofname,'RECREATE')
         ot = r.TTree('DecayTree','DecayTree')
 
-        if mcsample!='LcDs':
+        if mcsample not in ['LcDs','Lc2625Ds','Lc2593Ds']:
             bdt = GetBDTcut(BDTcut)
             print('Appling cuts: ', bdt)
             print('... CopyingTree with final preselections ...')
@@ -109,14 +122,18 @@ def ApplyFinalSelections(fname,dtype,BDTcut,mcsample):
                 t.GetEntry(i)
                 if t.bdt>BDTcut:
                     if TruthMatch(t):
-                        if TruthMatchLambdab(t) and TruthMatchLambdac(t):
-                            if TruthMatchMuonPdg(t) and TruthMatchMuonLb(t):
-                                ot.Fill()
+                        if TruthMatchLambdab(t) and TruthMatchLambdac(t) and TruthMatchMuonPdg(t):
+                            if mcsample not in ['Lctaunu','Lc2625taunu','Lc2593taunu']:
+                                if TruthMatchMuonLb(t):
+                                    ot.Fill()
+                            if mcsample in ['Lctaunu','Lc2625taunu','Lc2593taunu']:
+                                if TruthMatchMuonTau(t):
+                                    ot.Fill()
             of.Write()
             of.Close()
             f.Close()
 
-        else:
+        if mcsample in ['LcDs','Lc2625Ds','Lc2593Ds']:
             ot = t.CloneTree(0)
             w_2charm = np.zeros(1,dtype=float)
 
@@ -130,7 +147,7 @@ def ApplyFinalSelections(fname,dtype,BDTcut,mcsample):
                     if TruthMatch(t):
                         if TruthMatchLambdab(t) and TruthMatchLambdac(t):
                             if TruthMatchMuonPdg(t) and TruthMatchMuonCharm(t):
-                                if SelectMBody(t):
+                                if SelectMBody(t,mcsample):
                                     Lc_LV = r.TLorentzVector(t.Lb_TrueHadron_D0_PX,t.Lb_TrueHadron_D0_PY,t.Lb_TrueHadron_D0_PZ, t.Lb_TrueHadron_D0_PE)
                                     D_LV = r.TLorentzVector(t.Lb_TrueHadron_D1_PX,t.Lb_TrueHadron_D1_PY,t.Lb_TrueHadron_D1_PZ, t.Lb_TrueHadron_D1_PE)
 
@@ -147,7 +164,7 @@ def ApplyFinalSelections(fname,dtype,BDTcut,mcsample):
                                         print(' Negative 2charm weight')
                                         w_2charm[0] = -1000.
                                     ot.Fill()
-                                if Select2Body(t):
+                                if Select2Body(t,mcsample):
                                     w_2charm[0]=1
                                     ot.Fill()
             of.Write()

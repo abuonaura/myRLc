@@ -19,8 +19,8 @@ step=args.step
 
 datadir = '$FILEDIR/'
 
-datatypes=['Lctaunu','Lcmunu','LcDs','Lc2593munu','Lc2593taunu','Lc2625munu','Lc2625taunu']
-#datatypes=['Lctaunu','LcDs','Lc2593munu','Lc2593taunu','Lc2625munu','Lc2625taunu']
+#datatypes=['Lctaunu','Lcmunu','LcDs','Lc2593munu','Lc2593taunu','Lc2625munu','Lc2625taunu']
+datatypes=['Lc2593Ds','Lc2625Ds']
 polarities=['MagUp','MagDown']
 steps=['Trigger&Mcut','addBDTinfo','preselection']
 
