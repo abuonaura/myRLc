@@ -15,13 +15,13 @@ import os,sys,getopt,time
 #Modified anti-isolated region k enriched definition: (Lb_ISOLATION_BDT>"+str(ISOBDTcut)+"&& Lb_ISOLATION_BDT2>" +str(ISOBDT2cut)+")&&((Lb_ISOLATION_PIDK>4.&&(Lb_ISOLATION_CHARGE==mu_ID/13 ||(Lb_ISOLATION_CHARGE==-mu_ID/13 && Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK<0.))) || (Lb_ISOLATION_PIDK2>4.&&(Lb_ISOLATION_CHARGE2==mu_ID/13 ||(Lb_ISOLATION_CHARGE2==-mu_ID/13 && Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2<0.))))
 
 
-datadir = '$FILEDIR/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities=['MagUp','MagDown']
 particles=['K','Pi']
 
-sample_suffixCF = {'full':'_sw_withCF.root', 'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-sample_suffix = {'full':'_sw.root', 'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
+sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
 
 ISOBDTcut = 0.35
 ISOBDT2cut = 0.2
@@ -46,10 +46,7 @@ def RoundHisto(h):
 
 def GetTemplatesData(sample):
     for polarity in polarities:
-        if sample!='Kenriched':
-            datafname = datadir+'Data/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-        else:
-            datafname = datadir+'ControlSamples/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
+        datafname = datadir+'Data/Lb_DataSS_'+polarity+'_preselected'+sample_suffix[sample]
         dataf = r.TFile(datafname, 'READ')
         datat = dataf.Get('DecayTree')
         for i in range(datat.GetEntries()):
@@ -94,12 +91,8 @@ def ComputeMISIDFractions(filenameIN, filenameOUT):
     f = r.TFile(filenameIN,'read')
     f1 = r.TFile(filenameOUT,'recreate')
     h_data = f.Get('h_data')
-    #h_data = ScaleHisto(h_data,1.)
     h_muMISID_Pi = f.Get('h_muMISID_Pi')
-    #h_muMISID_Pi = ScaleHisto(h_muMISID_Pi,1.)
     h_muMISID_K = f.Get('h_muMISID_K')
-    #h_muMISID_K = ScaleHisto(h_muMISID_K,1.)
-    #h_fPi = fraction of pions misidentified as muons in each bin
     h_fPi = r.TH3F('h_fPi',';E_{#mu} (MeV); q^{2} (MeV^{2}); Mmiss^{2} (MeV^{2});',10,0,2600,4,-2E6,14E6,10,-2E6,14E6)
     h_fPi.Divide(h_muMISID_Pi, h_data)
     for i in range(h_fPi.GetNbinsX()):
@@ -155,11 +148,9 @@ def AddMISIDweights(ifile,ofile, fractionfile,sample):
 
 if __name__ == '__main__':
     restart = False
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched", "restart"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","restart"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
@@ -173,8 +164,8 @@ if __name__ == '__main__':
     print('')
 
 
-    filename = datadir+'/MISID/IntermediateFiles_SS/Templates'+suffix[sample]
-    fractionfile = datadir+'/MISID/IntermediateFiles_SS/muMISIDfractions'+suffix[sample]
+    filename = datadir+'MISID/IntermediateFiles_SS/Templates'+suffix[sample]
+    fractionfile = datadir+'MISID/IntermediateFiles_SS/muMISIDfractions'+suffix[sample]
 
 
     if os.path.isfile(filename) and restart==False:
@@ -185,12 +176,8 @@ if __name__ == '__main__':
     ComputeMISIDFractions(filename, fractionfile)
     for polarity in polarities:
         print('>>>>>   Processing:          ', polarity )
-        if sample!='Kenriched':
-            datafname = datadir+'Data/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-            outdatafile = datadir+'Data/Lb_DataSS_'+polarity+'_sw_noMISID'+suffix[sample]
-        else:
-            datafname = datadir+'ControlSamples/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-            outdatafile = datadir+'ControlSamples/Lb_DataSS_'+polarity+'_sw_noMISID'+suffix[sample]
+        datafname = datadir+'Data/Lb_DataSS_'+polarity+'_preselected'+sample_suffix[sample]
+        outdatafile = datadir+'Data/Lb_DataSS_'+polarity+'_sw_noMISID'+suffix[sample]
 
         print('- Reading data file: '+datafname)
         print('- Output data file: '+outdatafile)

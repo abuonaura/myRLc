@@ -23,16 +23,17 @@ import os,sys,getopt,time
 #Modified anti-isolated region k enriched definition: (Lb_ISOLATION_BDT>"+str(ISOBDTcut)+"&& Lb_ISOLATION_BDT2>" +str(ISOBDT2cut)+")&&((Lb_ISOLATION_PIDK>4.&&(Lb_ISOLATION_CHARGE==mu_ID/13 ||(Lb_ISOLATION_CHARGE==-mu_ID/13 && Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK<0.))) || (Lb_ISOLATION_PIDK2>4.&&(Lb_ISOLATION_CHARGE2==mu_ID/13 ||(Lb_ISOLATION_CHARGE2==-mu_ID/13 && Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2<0.))))
 
 
-sample_suffix = {'full':'_sw.root', 'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
 
-datadir = '$FILEDIR/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
+
 polarities=['MagUp','MagDown']
 particles=['K','Pi']
 
 
 def CreateHisto(polarity,particle,sample):
-    fname= datadir+'/MISID/'+particle+'_sample_'+polarity+sample_suffix[sample]
+    fname= datadir+'/MISID/SameSign/'+particle+'_sample_'+polarity+sample_suffix[sample]
     f = r.TFile(fname,'READ')
     t = f.Get('DecayTree')
 
@@ -50,7 +51,8 @@ def CreateHisto(polarity,particle,sample):
     return h,h_misid
 
 def SaveHistos2file(sample):
-    f = r.TFile('HistosK2Pi'+suffix[sample],'recreate')
+    print('Saving Histos 2 file!')
+    f = r.TFile(datadir+'/MISID/IntermediateFiles_SS/HistosK2Pi'+suffix[sample],'recreate')
     misidfname = {'MagUp':{'K':'','Pi':''},'MagDown':{'K':'','Pi':''}}
     for particle in particles:
         for polarity in polarities:
@@ -142,11 +144,9 @@ def AddMISIDweightsWCF(ifile,ofile, polarity, particle,sample):
 
 if __name__ == '__main__':
     restart=False
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","restart"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","restart"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
@@ -155,8 +155,8 @@ if __name__ == '__main__':
             restart = True
 
     print('>>>   Evaluating cross-feed for sample: ', sample)
-
-    if os.path.isfile('HistosK2Pi'+suffix[sample]) and restart==False:
+    
+    if (os.path.isfile(datadir+'/MISID/IntermediateFiles_SS/HistosK2Pi'+suffix[sample]) and restart==False) or restart==False:
         print('File with histograms already exists!')
     else:
         SaveHistos2file(sample)

@@ -9,22 +9,19 @@ from ROOT import TFile, TTree, TH1F, TH3D, TCanvas
 import os, sys, getopt, time
 
 
-datadir = '$FILEDIR/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 datatypes = ['Data','DataSS']
 polarities = ['MagUp','MagDown']
 particles = ['K','Pi']
 
-sample_suffix = {'full':'_sw.root', 'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffixCF = {'full':'_sw_withCF.root', 'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
+sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
 
 LbMass = 5620.2
 
 def ReturnDatafname(type, polarity, sample):
-    if sample!='Kenriched':
-        datafiles = {'Data':{'MagUp': datadir + 'Data/Lb_Data_MagUp_sw_noMISID'+suffix[sample],'MagDown': datadir+'Data/Lb_Data_MagDown_sw_noMISID'+suffix[sample]},'DataSS':{'MagUp': datadir + 'Data/Lb_DataSS_MagUp_sw_noMISID'+suffix[sample],'MagDown': datadir+'Data/Lb_DataSS_MagDown_sw_noMISID'+suffix[sample]}}
-    else:
-        datafiles = {'Data':{'MagUp': datadir + 'ControlSamples/Lb_Data_MagUp_sw_noMISID'+suffix[sample],'MagDown': datadir+'ControlSamples/Lb_Data_MagDown_sw_noMISID'+suffix[sample]},'DataSS':{'MagUp': datadir + 'ControlSamples/Lb_DataSS_MagUp_sw_noMISID'+suffix[sample],'MagDown': datadir+'ControlSamples/Lb_DataSS_MagDown_sw_noMISID'+suffix[sample]}}
+    datafiles = {'Data':{'MagUp': datadir + 'Data/Lb_Data_MagUp_sw_noMISID'+suffix[sample],'MagDown': datadir+'Data/Lb_Data_MagDown_sw_noMISID'+suffix[sample]},'DataSS':{'MagUp': datadir + 'Data/Lb_DataSS_MagUp_sw_noMISID'+suffix[sample],'MagDown': datadir+'Data/Lb_DataSS_MagDown_sw_noMISID'+suffix[sample]}}
     fname = datafiles[type][polarity]
     return fname
 
@@ -40,7 +37,7 @@ def ScaleHisto(h,value):
 
 
 def SaveHistos2file(sample):
-    fnew = r.TFile('$FILEDIR/CombinatorialBkg/NonCorrectedHistos'+suffix[sample],'recreate')
+    fnew = r.TFile(datadir+'/CombinatorialBkg/NonCorrectedHistos'+suffix[sample],'recreate')
     print('Creating file NonCorrectedHistos'+suffix[sample])
     #Fill the histograms for both Data and DataSS in the 3 Lb_M regions (above, below, full)
     h_data_a = r.TH3F('h_data_above',';E_{#mu} (MeV); q^{2} (MeV^{2}); Mmiss^{2} (MeV^{2});',20,0,12000,20,-20E6,20E6,20,-20E6,20E6)
@@ -108,11 +105,9 @@ def SaveHistos2file(sample):
 
 if __name__ == '__main__':
     restart = False
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","restart"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","restart"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
@@ -127,13 +122,13 @@ if __name__ == '__main__':
     print('')
 
     #Save histos to a file (to avoid loosing too much time)
-    if os.path.isfile('$FILEDIR/CombinatorialBkg/NonCorrectedHistos'+suffix[sample]) and restart==False:
+    if os.path.isfile(datadir+'/CombinatorialBkg/NonCorrectedHistos'+suffix[sample]) and restart==False:
         print('File with histograms already exists!')    
     else:
         SaveHistos2file(sample)
 
     
-    fHistos = TFile('$FILEDIR/CombinatorialBkg/NonCorrectedHistos'+suffix[sample],'READ')
+    fHistos = TFile(datadir+'/CombinatorialBkg/NonCorrectedHistos'+suffix[sample],'READ')
     if sample!='Kenriched':
         h_data_a = fHistos.Get('h_data_above')
     h_data_b = fHistos.Get('h_data_below')

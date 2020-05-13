@@ -9,20 +9,18 @@ import numpy as np
 import os, sys, getopt, time
 
 LbMass=5620.2
-datadir = '$FILEDIR/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities = ['MagUp','MagDown']
 
 #Lb_DataSS_MagDown_sw_noMISID.root
 
-suffix = {'full':'.root','iso':'_iso.root','Kenriched':'_Kenr.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
 
 if __name__ == '__main__':
     reweight=0
     opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","reweight"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
@@ -31,10 +29,7 @@ if __name__ == '__main__':
             reweight=1
 
     for polarity in polarities:
-        if sample!='Kenriched':
-            fname = datadir + 'Data/Lb_DataSS_'+polarity+'_sw_noMISID'+suffix[sample]
-        else:
-            fname = datadir + 'ControlSamples/Lb_DataSS_'+polarity+'_sw_noMISID'+suffix[sample]
+        fname = datadir + 'Data/Lb_DataSS_'+polarity+'_sw_noMISID'+suffix[sample]
         ofname = datadir + 'CombinatorialBkg/CombinatorialBkg_'+polarity+suffix[sample]
         f = r.TFile(fname,'READ')
         t = f.Get('DecayTree')

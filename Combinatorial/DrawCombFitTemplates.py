@@ -8,22 +8,19 @@ Purpose: Draw fit templates of dataSS and misidSS samples for the different isol
 import ROOT as r
 import os, sys, getopt
 
-datadir = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/Datasets/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 
-#polarities=['MagUp','MagDown']
-polarities=['MagDown']
+polarities=['MagUp','MagDown']
+#polarities=['MagDown']
 particles=['K','Pi']
-sample_suffix = {'full':'_sw.root', 'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffix_misid = {'full':'_sw_withCF.root', 'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-sample_suffix_comb = {'full':'_sw_noMISID.root', 'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
+sample_suffix_misid = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
+sample_suffix_comb = {'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root'}
 
 
 def makeTemplateCombinatorial(polarity,sample):
     histo = r.TH3F('h_'+polarity+'Comb','; q^{2} (Gev^{2}); E_{l} (MeV^{2}); Mmiss^{2} (GeV^{2})',4,-2,14,10,0,2600,10,-2,14)
-    if sample!='Kenriched':
-        datafname = datadir + 'Data/Lb_DataSS_'+polarity+sample_suffix_comb[sample]
-    else:
-        datafname = datadir + 'ControlSamples/Lb_DataSS_'+polarity+sample_suffix_comb[sample]
+    datafname = datadir + 'Data/Lb_DataSS_'+polarity+sample_suffix_comb[sample]
     dataf = r.TFile(datafname, 'Read')
     datat = dataf.Get('DecayTree')
     print(datat.GetEntries())
@@ -38,11 +35,9 @@ def makeTemplateCombinatorial(polarity,sample):
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
@@ -87,4 +82,3 @@ if __name__ == '__main__':
     h_Mmiss_comb.Draw('histo')
     c1.SaveAs('plots/TemplatesONLYComb_'+sample+'.C')
     
-

@@ -1055,8 +1055,8 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		PlotFrame(x_vector[i],"M_{miss}^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
 		PlotFrame(y_vector[i],"E_{l}",data,model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
 		PlotFrame(z_vector[i],"q^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i]);
-		PlotInBins(x_vector[i],"M_{miss}^{2}",data,mc,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
-		PlotInBins(y_vector[i],"E_{l}",data,mc, model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
+		//PlotInBins(x_vector[i],"M_{miss}^{2}",data,mc,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
+		//PlotInBins(y_vector[i],"E_{l}",data,mc, model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
 	}
 
 	// Access list of final fit parameter values

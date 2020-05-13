@@ -1,0 +1,503 @@
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+MagUp
+    Data
+BDT file already created
+Total number of dataframes to analyse:  42
+0
+10
+20
+30
+40
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooAddPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooAddPdf::sig
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooGaussian::sig1
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::Lc_M
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::mean
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sigma1
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooGaussian::sig2
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sigma2
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sig1frac
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::nsig
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooExponential::bkg
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::l
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::nbkg
+[#1] INFO:Minization -- createNLL: caching constraint set under name CONSTR_OF_PDF_model_FOR_OBS_Lc_M with 0 entries
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (sig1,sig2,bkg)
+ **********
+ **    1 **SET PRINT           1
+ **********
+ **********
+ **    2 **SET NOGRAD
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 l           -1.00000e-01  5.00000e-02   -1.00000e+00  0.00000e+00
+     2 mean         2.29000e+03  4.00000e+00    2.27000e+03  2.31000e+03
+     3 nbkg         4.00000e+05  1.00000e+05    0.00000e+00  1.00000e+06
+     4 nsig         1.00000e+05  5.00000e+04    0.00000e+00  1.00000e+06
+     5 sig1frac     8.00000e-01  1.00000e-01    0.00000e+00  1.00000e+00
+     6 sigma1       3.00000e+00  1.00000e+00    0.00000e+00  1.00000e+01
+     7 sigma2       1.50000e+01  3.00000e+00    0.00000e+00  3.00000e+01
+ **********
+ **    3 **SET ERR         0.5
+ **********
+ **********
+ **    4 **SET PRINT           1
+ **********
+ **********
+ **    5 **SET STR           1
+ **********
+ NOW USING STRATEGY  1: TRY TO BALANCE SPEED AGAINST RELIABILITY
+ **********
+ **    6 **MIGRAD        3500           1
+ **********
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+ START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-03
+ FCN=-7.35099e+06 FROM MIGRAD    STATUS=INITIATE       86 CALLS          87 TOTAL
+                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -1.16499e-04   5.00000e-02   0.00000e+00  -2.08991e+04
+   2  mean         2.29000e+03   4.00000e+00   0.00000e+00   7.16115e+05
+   3  nbkg         4.00000e+05   1.00000e+05   0.00000e+00  -1.55166e+05
+   4  nsig         1.00000e+05   5.00000e+04   0.00000e+00  -7.57110e+05
+   5  sig1frac     8.00000e-01   1.00000e-01   0.00000e+00   1.30642e+04
+   6  sigma1       3.00000e+00   1.00000e+00   0.00000e+00  -9.99728e+04
+   7  sigma2       5.77743e+00   3.00000e+00  -6.62181e-01   6.26255e+03
+                               ERR DEF= 0.5
+ MIGRAD FAILS TO FIND IMPROVEMENT
+ MACHINE ACCURACY LIMITS FURTHER IMPROVEMENT.
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=-7.9737e+06 FROM HESSE     STATUS=OK             58 CALLS         610 TOTAL
+                     EDM=0.00594501    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -4.33421e-03   1.29405e-04   3.57523e-03  -3.34669e+01
+   2  mean         2.28679e+03   7.48633e-03   7.36469e-04  -9.84422e+00
+   3  nbkg         9.57235e+04   5.13515e+02   2.61573e-03   7.74909e-01
+   4  nsig         7.83356e+05   9.75275e+02   4.29166e-03   9.00053e+00
+   5  sig1frac     2.74846e-01   7.55378e-03   6.77757e-03  -1.81491e+01
+   6  sigma1       9.47528e+00   9.04280e-02   2.25067e-02  -3.02444e+00
+   7  sigma2       5.15671e+00   2.12174e-02   1.25791e-03  -7.18319e+01
+                               ERR DEF= 0.5
+ MIGRAD FAILS TO FIND IMPROVEMENT
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ FCN=-7.9737e+06 FROM MIGRAD    STATUS=CONVERGED     634 CALLS         635 TOTAL
+                     EDM=0.000278914    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   2.8 per cent
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -4.34292e-03   1.30550e-04  -0.00000e+00   5.45209e+00
+   2  mean         2.28679e+03   7.48656e-03  -0.00000e+00   1.43335e+00
+   3  nbkg         9.57162e+04   5.15653e+02  -0.00000e+00  -1.90019e+00
+   4  nsig         7.83344e+05   9.72946e+02   0.00000e+00  -8.31030e-01
+   5  sig1frac     2.75343e-01   7.12765e-03  -0.00000e+00   1.03976e+00
+   6  sigma1       9.47114e+00   8.63955e-02   0.00000e+00  -3.44492e-01
+   7  sigma2       5.15570e+00   2.03890e-02   0.00000e+00   4.44692e+00
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  7    ERR DEF=0.5
+  1.704e-08  8.524e-08 -2.356e-02  2.316e-02 -1.984e-07  3.453e-06  4.916e-07 
+  8.524e-08  5.605e-05 -5.232e-02  5.112e-02 -1.405e-06  1.820e-05  3.231e-06 
+ -2.356e-02 -5.232e-02  2.659e+05 -1.664e+05  1.188e+00 -2.216e+01 -2.881e+00 
+  2.316e-02  5.112e-02 -1.664e+05  9.466e+05 -1.084e+00  2.068e+01  2.607e+00 
+ -1.984e-07 -1.405e-06  1.188e+00 -1.084e+00  5.081e-05 -5.664e-04 -1.340e-04 
+  3.453e-06  1.820e-05 -2.216e+01  2.068e+01 -5.664e-04  7.468e-03  1.407e-03 
+  4.916e-07  3.231e-06 -2.881e+00  2.607e+00 -1.340e-04  1.407e-03  4.157e-04 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4      5      6      7
+        1  0.40487   1.000  0.087 -0.350  0.182 -0.213  0.306  0.185
+        2  0.09071   0.087  1.000 -0.014  0.007 -0.026  0.028  0.021
+        3  0.64409  -0.350 -0.014  1.000 -0.332  0.323 -0.497 -0.274
+        4  0.36032   0.182  0.007 -0.332  1.000 -0.156  0.246  0.131
+        5  0.97505  -0.213 -0.026  0.323 -0.156  1.000 -0.919 -0.922
+        6  0.95237   0.306  0.028 -0.497  0.246 -0.919  1.000  0.799
+        7  0.93238   0.185  0.021 -0.274  0.131 -0.922  0.799  1.000
+ **********
+ **    7 **SET ERR         0.5
+ **********
+ **********
+ **    8 **SET PRINT           1
+ **********
+ **********
+ **    9 **HESSE        3500
+ **********
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=-7.9737e+06 FROM HESSE     STATUS=OK             64 CALLS         699 TOTAL
+                     EDM=0.000432015    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                INTERNAL      INTERNAL  
+  NO.   NAME      VALUE            ERROR       STEP SIZE       VALUE   
+   1  l           -4.34292e-03   1.30691e-04   1.43009e-03   1.70269e+00
+   2  mean         2.28679e+03   7.48656e-03   7.36475e-04  -1.61333e-01
+   3  nbkg         9.57162e+04   5.38957e+02   1.04629e-03  -9.41714e-01
+   4  nsig         7.83344e+05   9.88949e+02   1.71666e-03   6.02481e-01
+   5  sig1frac     2.75343e-01   8.62371e-03   6.77656e-03  -6.74918e+00
+   6  sigma1       9.47114e+00   1.04399e-01   9.00269e-03   1.10671e+00
+   7  sigma2       5.15570e+00   2.34140e-02   1.25766e-03  -7.15887e-01
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  7    ERR DEF=0.5
+  1.708e-08  8.464e-08 -2.484e-02  2.482e-02 -2.387e-07  3.835e-06  5.743e-07 
+  8.464e-08  5.605e-05 -5.103e-02  5.100e-02 -1.366e-06  1.698e-05  3.050e-06 
+ -2.484e-02 -5.103e-02  2.905e+05 -1.947e+05  1.943e+00 -3.114e+01 -4.647e+00 
+  2.482e-02  5.100e-02 -1.947e+05  9.780e+05 -1.944e+00  3.114e+01  4.649e+00 
+ -2.387e-07 -1.366e-06  1.943e+00 -1.944e+00  7.438e-05 -8.528e-04 -1.900e-04 
+  3.835e-06  1.698e-05 -3.114e+01  3.114e+01 -8.528e-04  1.091e-02  2.083e-03 
+  5.743e-07  3.050e-06 -4.647e+00  4.649e+00 -1.900e-04  2.083e-03  5.482e-04 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4      5      6      7
+        1  0.38911   1.000  0.087 -0.353  0.192 -0.212  0.281  0.188
+        2  0.09007   0.087  1.000 -0.013  0.007 -0.021  0.022  0.017
+        3  0.68104  -0.353 -0.013  1.000 -0.365  0.418 -0.553 -0.368
+        4  0.39934   0.192  0.007 -0.365  1.000 -0.228  0.302  0.201
+        5  0.98366  -0.212 -0.021  0.418 -0.228  1.000 -0.947 -0.941
+        6  0.96903   0.281  0.022 -0.553  0.302 -0.947  1.000  0.852
+        7  0.95010   0.188  0.017 -0.368  0.201 -0.941  0.852  1.000
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#1] INFO:Minization -- createNLL picked up cached consraints from workspace with 0 entries
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions have been identified as constant and will be precalculated and cached: (sig,bkg)
+[#1] INFO:Fitting -- RooAbsPdf::fitTo(model) Calculating sum-of-weights-squared correction matrix for covariance matrix
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#1] INFO:InputArguments -- Printing Yields
+RooArgList:: = (nsig,nbkg)
+[#1] INFO:InputArguments -- yield in pdf: nsig 783346
+[#1] INFO:InputArguments -- yield in pdf: nbkg 95716.5
+[#1] INFO:Eval -- Checking Likelihood normalization:  
+[#1] INFO:Eval -- Yield of specie  Sum of Row in Matrix   Norm
+[#1] INFO:Eval -- 783346 783347 0.999999
+[#1] INFO:Eval -- 95716.5 95716 1
+[#1] INFO:Eval -- Calculating sWeight
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(model) directly selected PDF components: (bkg)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(model) indirectly selected PDF components: ()
+Info in <TCanvas::Print>: file FitResults/Fit_Data_MagUp.png has been created
+Created: /disk/lhcb_data2/RLcMuonic2016/Data/Lb_Data_MagUp_preselected_full_sw.root
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooAddPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooAddPdf::sig
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooGaussian::sig1
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::Lc_M
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::mean
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sigma1
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooGaussian::sig2
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sigma2
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sig1frac
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::nsig
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooExponential::bkg
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::l
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::nbkg
+[#1] INFO:Minization -- createNLL: caching constraint set under name CONSTR_OF_PDF_model_FOR_OBS_Lc_M with 0 entries
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (sig1,sig2,bkg)
+ **********
+ **    1 **SET PRINT           1
+ **********
+ **********
+ **    2 **SET NOGRAD
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 l           -1.00000e-01  5.00000e-02   -1.00000e+00  0.00000e+00
+     2 mean         2.29000e+03  4.00000e+00    2.27000e+03  2.31000e+03
+     3 nbkg         4.00000e+05  1.00000e+05    0.00000e+00  1.00000e+06
+     4 nsig         1.00000e+05  5.00000e+04    0.00000e+00  1.00000e+06
+     5 sig1frac     8.00000e-01  1.00000e-01    0.00000e+00  1.00000e+00
+     6 sigma1       3.00000e+00  1.00000e+00    0.00000e+00  1.00000e+01
+     7 sigma2       1.50000e+01  3.00000e+00    0.00000e+00  3.00000e+01
+ **********
+ **    3 **SET ERR         0.5
+ **********
+ **********
+ **    4 **SET PRINT           1
+ **********
+ **********
+ **    5 **SET STR           1
+ **********
+ NOW USING STRATEGY  1: TRY TO BALANCE SPEED AGAINST RELIABILITY
+ **********
+ **    6 **MIGRAD        3500           1
+ **********
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+ START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-03
+ FCN=-5.67124e+06 FROM MIGRAD    STATUS=INITIATE       82 CALLS          83 TOTAL
+                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -8.64873e-05   5.00000e-02   0.00000e+00  -1.55939e+04
+   2  mean         2.29000e+03   4.00000e+00   0.00000e+00   5.87502e+05
+   3  nbkg         4.00000e+05   1.00000e+05   0.00000e+00  -3.22190e+03
+   4  nsig         1.00000e+05   5.00000e+04   0.00000e+00  -5.59346e+05
+   5  sig1frac     8.00000e-01   1.00000e-01   0.00000e+00   1.00885e+04
+   6  sigma1       3.00000e+00   1.00000e+00   0.00000e+00  -7.98567e+04
+   7  sigma2       5.69489e+00   3.00000e+00  -6.69177e-01   5.22091e+03
+                               ERR DEF= 0.5
+ MIGRAD FAILS TO FIND IMPROVEMENT
+ MACHINE ACCURACY LIMITS FURTHER IMPROVEMENT.
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=-6.15275e+06 FROM HESSE     STATUS=OK             56 CALLS         563 TOTAL
+                     EDM=0.00717747    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -5.01810e-03   1.84416e-04   4.16842e-03  -2.90874e+01
+   2  mean         2.28681e+03   8.10944e-03   7.01168e-04  -4.68486e+01
+   3  nbkg         4.85070e+04   3.63696e+02   2.30088e-03  -3.83985e+01
+   4  nsig         6.40558e+05   8.51074e+02   2.90320e-03  -4.33015e+00
+   5  sig1frac     2.60665e-01   6.71409e-03   6.31027e-03   1.96320e+01
+   6  sigma1       9.54640e+00   8.16121e-02   2.24565e-02  -3.74856e+00
+   7  sigma2       5.17126e+00   2.01322e-02   1.18031e-03  -6.69287e+01
+                               ERR DEF= 0.5
+ MINUIT WARNING IN MIGRAD  
+ ============== Negative diagonal element 1 in Error Matrix
+ MINUIT WARNING IN MIGRAD  
+ ============== 1 added to diagonal of error matrix
+ MIGRAD FAILS TO FIND IMPROVEMENT
+ MIGRAD TERMINATED WITHOUT CONVERGENCE.
+ FCN=-6.15275e+06 FROM MIGRAD    STATUS=FAILED        629 CALLS         630 TOTAL
+                     EDM=501.911    STRATEGY= 1  ERROR MATRIX UNCERTAINTY 100.0 per cent
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -5.02946e-03   1.16473e-01  -0.00000e+00   9.51939e+00
+   2  mean         2.28681e+03   3.27683e+00   0.00000e+00   2.81724e-01
+   3  nbkg         4.85178e+04   1.39262e+05  -0.00000e+00   3.22283e-01
+   4  nsig         6.40562e+05   3.11601e+05   0.00000e+00  -6.85952e-01
+   5  sig1frac     2.61136e-01   2.85311e-01   0.00000e+00  -3.83110e-01
+   6  sigma1       9.54233e+00   1.35763e+00   0.00000e+00  -2.92902e+00
+   7  sigma2       5.17025e+00   7.26996e+00  -0.00000e+00   6.10471e-01
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  7    ERR DEF=0.5
+  2.454e-03 -9.435e-02 -7.830e+01  7.161e+01  4.600e-05  8.126e-06 -9.554e-03 
+ -9.435e-02  1.084e+01 -1.528e+05  1.398e+05  8.904e-02  1.341e-02 -1.864e+01 
+ -7.830e+01 -1.528e+05  2.296e+10  1.159e+08  7.400e+01  1.041e+01 -1.547e+04 
+  7.161e+01  1.398e+05  1.159e+08  1.150e+11 -6.764e+01 -1.100e+01  1.415e+04 
+  4.600e-05  8.904e-02  7.400e+01 -6.764e+01  9.644e-02  3.048e-06  9.040e-03 
+  8.126e-06  1.341e-02  1.041e+01 -1.100e+01  3.048e-06  2.184e+00  1.380e-03 
+ -9.554e-03 -1.864e+01 -1.547e+04  1.415e+04  9.040e-03  1.380e-03  6.230e+01 
+ERR MATRIX APPROXIMATE
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4      5      6      7
+        1  0.99998   1.000 -0.579 -0.010  0.004  0.003  0.000 -0.024
+        2  0.99999  -0.579  1.000 -0.306  0.125  0.087  0.003 -0.717
+        3  0.99994  -0.010 -0.306  1.000  0.002  0.002  0.000 -0.013
+        4  0.99966   0.004  0.125  0.002  1.000 -0.001 -0.000  0.005
+        5  0.99930   0.003  0.087  0.002 -0.001  1.000  0.000  0.004
+        6  0.64558   0.000  0.003  0.000 -0.000  0.000  1.000  0.000
+        7  0.99999  -0.024 -0.717 -0.013  0.005  0.004  0.000  1.000
+ ERR MATRIX APPROXIMATE
+ **********
+ **    7 **SET ERR         0.5
+ **********
+ **********
+ **    8 **SET PRINT           1
+ **********
+ **********
+ **    9 **HESSE        3500
+ **********
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=-6.15275e+06 FROM HESSE     STATUS=OK             64 CALLS         694 TOTAL
+                     EDM=0.000709688    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                INTERNAL      INTERNAL  
+  NO.   NAME      VALUE            ERROR       STEP SIZE       VALUE   
+   1  l           -5.02946e-03   1.84412e-04   4.16053e-03   1.71275e+00
+   2  mean         2.28681e+03   8.10976e-03   7.01201e-04  -1.60140e-01
+   3  nbkg         4.85178e+04   3.64490e+02   2.30089e-03  -1.12662e+00
+   4  nsig         6.40562e+05   8.51405e+02   2.90326e-03   2.84965e-01
+   5  sig1frac     2.61136e-01   6.79169e-03   6.31011e-03  -2.64353e+00
+   6  sigma1       9.54233e+00   8.25102e-02   2.24115e-02   1.13960e+00
+   7  sigma2       5.17025e+00   2.02934e-02   1.18078e-03  -7.14602e-01
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  7    ERR DEF=0.5
+  3.401e-08  1.152e-07 -2.244e-02  2.241e-02  1.546e-07  3.295e-06  3.751e-07 
+  1.152e-07  6.577e-05 -1.586e-02  1.580e-02  7.835e-07  9.762e-06  1.541e-06 
+ -2.244e-02 -1.586e-02  1.329e+05 -8.430e+04 -6.317e-01 -1.326e+01 -1.509e+00 
+  2.241e-02  1.580e-02 -8.430e+04  7.249e+05  6.333e-01  1.328e+01  1.512e+00 
+  1.546e-07  7.835e-07 -6.317e-01  6.333e-01  4.613e-05  5.093e-04  1.256e-04 
+  3.295e-06  9.762e-06 -1.326e+01  1.328e+01  5.093e-04  6.811e-03  1.290e-03 
+  3.751e-07  1.541e-06 -1.509e+00  1.512e+00  1.256e-04  1.290e-03  4.118e-04 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4      5      6      7
+        1  0.36304   1.000  0.077 -0.334  0.143  0.123  0.217  0.100
+        2  0.08152   0.077  1.000 -0.005  0.002  0.014  0.015  0.009
+        3  0.61072  -0.334 -0.005  1.000 -0.272 -0.255 -0.441 -0.204
+        4  0.29576   0.143  0.002 -0.272  1.000  0.110  0.189  0.088
+        5  0.97120   0.123  0.014 -0.255  0.110  1.000  0.909  0.911
+        6  0.94352   0.217  0.015 -0.441  0.189  0.909  1.000  0.770
+        7  0.92296   0.100  0.009 -0.204  0.088  0.911  0.770  1.000
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#1] INFO:Minization -- createNLL picked up cached consraints from workspace with 0 entries
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions have been identified as constant and will be precalculated and cached: (sig,bkg)
+[#1] INFO:Fitting -- RooAbsPdf::fitTo(model) Calculating sum-of-weights-squared correction matrix for covariance matrix
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#1] INFO:InputArguments -- Printing Yields
+RooArgList:: = (nsig,nbkg)
+[#1] INFO:InputArguments -- yield in pdf: nsig 640562
+[#1] INFO:InputArguments -- yield in pdf: nbkg 48517.8
+[#1] INFO:Eval -- Checking Likelihood normalization:  
+[#1] INFO:Eval -- Yield of specie  Sum of Row in Matrix   Norm
+[#1] INFO:Eval -- 640562 640563 0.999999
+[#1] INFO:Eval -- 48517.8 48518.1 0.999996
+[#1] INFO:Eval -- Calculating sWeight
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(model) directly selected PDF components: (bkg)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(model) indirectly selected PDF components: ()
+Info in <TCanvas::Print>: file FitResults/Fit_Data_MagUp_iso.png has been created
+Created: /disk/lhcb_data2/RLcMuonic2016/Data/Lb_Data_MagUp_preselected_iso_sw.root
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooAddPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooAddPdf::sig
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooGaussian::sig1
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::Lc_M
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::mean
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sigma1
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooGaussian::sig2
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sigma2
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::sig1frac
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::nsig
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooExponential::bkg
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::l
+[#1] INFO:ObjectHandling -- RooWorkspace::import() importing RooRealVar::nbkg
+[#1] INFO:Minization -- createNLL: caching constraint set under name CONSTR_OF_PDF_model_FOR_OBS_Lc_M with 0 entries
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (sig1,sig2,bkg)
+ **********
+ **    1 **SET PRINT           1
+ **********
+ **********
+ **    2 **SET NOGRAD
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 l           -1.00000e-01  5.00000e-02   -1.00000e+00  0.00000e+00
+     2 mean         2.29000e+03  4.00000e+00    2.27000e+03  2.31000e+03
+     3 nbkg         4.00000e+05  1.00000e+05    0.00000e+00  1.00000e+06
+     4 nsig         1.00000e+05  5.00000e+04    0.00000e+00  1.00000e+06
+     5 sig1frac     8.00000e-01  1.00000e-01    0.00000e+00  1.00000e+00
+     6 sigma1       3.00000e+00  1.00000e+00    0.00000e+00  1.00000e+01
+     7 sigma2       1.50000e+01  3.00000e+00    0.00000e+00  3.00000e+01
+ **********
+ **    3 **SET ERR         0.5
+ **********
+ **********
+ **    4 **SET PRINT           1
+ **********
+ **********
+ **    5 **SET STR           1
+ **********
+ NOW USING STRATEGY  1: TRY TO BALANCE SPEED AGAINST RELIABILITY
+ **********
+ **    6 **MIGRAD        3500           1
+ **********
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+ START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-03
+ FCN=339604 FROM MIGRAD    STATUS=INITIATE       82 CALLS          83 TOTAL
+                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -2.60120e-05   5.00000e-02   0.00000e+00  -4.58892e+01
+   2  mean         2.29000e+03   4.00000e+00   0.00000e+00   9.25545e+03
+   3  nbkg         4.00000e+05   1.00000e+05   0.00000e+00   4.73991e+05
+   4  nsig         1.00000e+05   5.00000e+04   0.00000e+00   2.83969e+05
+   5  sig1frac     8.00000e-01   1.00000e-01   0.00000e+00   3.06027e+02
+   6  sigma1       3.00000e+00   1.00000e+00   0.00000e+00  -1.81018e+03
+   7  sigma2       6.96702e+00   3.00000e+00  -5.65138e-01   1.31516e+02
+                               ERR DEF= 0.5
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=-84994.2 FROM MIGRAD    STATUS=CONVERGED     649 CALLS         650 TOTAL
+                     EDM=5.69331e-05    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  l           -3.02881e-03   5.47469e-04   1.55697e-03   2.26808e-01
+   2  mean         2.28668e+03   7.61469e-02   7.67628e-04   4.10938e-01
+   3  nbkg         7.26614e+03   2.55739e+02   2.38579e-04   2.10795e+00
+   4  nsig         1.10660e+04   2.62885e+02   2.24372e-04   3.03121e+00
+   5  sig1frac     8.29469e-01   5.56506e-02   6.83848e-03  -1.53100e-01
+   6  sigma1       5.69389e+00   2.20668e-01   2.71604e-03  -2.12162e-01
+   7  sigma2       1.34521e+01   3.80268e+00   1.10938e-02  -6.95436e-02
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  7    ERR DEF=0.5
+  2.997e-07 -6.236e-06 -8.399e-02 -8.392e-02  1.137e-05 -5.096e-05 -1.154e-03 
+ -6.236e-06  5.798e-03  1.615e+00  1.614e+00 -3.559e-04  1.508e-03  2.703e-02 
+ -8.399e-02  1.615e+00  6.540e+04  5.809e+04 -8.231e+00  3.630e+01  8.168e+02 
+ -8.392e-02  1.614e+00  5.809e+04  6.911e+04 -8.224e+00  3.627e+01  8.161e+02 
+  1.137e-05 -3.559e-04 -8.231e+00 -8.224e+00  3.120e-03 -1.163e-02 -1.907e-01 
+ -5.096e-05  1.508e-03  3.630e+01  3.627e+01 -1.163e-02  4.873e-02  7.459e-01 
+ -1.154e-03  2.703e-02  8.168e+02  8.161e+02 -1.907e-01  7.459e-01  1.478e+01 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4      5      6      7
+        1  0.63006   1.000 -0.150 -0.600 -0.583  0.372 -0.422 -0.548
+        2  0.15596  -0.150  1.000  0.083  0.081 -0.084  0.090  0.092
+        3  0.91924  -0.600  0.083  1.000  0.864 -0.576  0.643  0.831
+        4  0.89626  -0.583  0.081  0.864  1.000 -0.560  0.625  0.807
+        5  0.97365   0.372 -0.084 -0.576 -0.560  1.000 -0.944 -0.888
+        6  0.95315  -0.422  0.090  0.643  0.625 -0.944  1.000  0.879
+        7  0.97622  -0.548  0.092  0.831  0.807 -0.888  0.879  1.000
+ **********
+ **    7 **SET ERR         0.5
+ **********
+ **********
+ **    8 **SET PRINT           1
+ **********
+ **********
+ **    9 **HESSE        3500
+ **********
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=-84994.2 FROM HESSE     STATUS=OK             50 CALLS         700 TOTAL
+                     EDM=5.06144e-05    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                INTERNAL      INTERNAL  
+  NO.   NAME      VALUE            ERROR       STEP SIZE       VALUE   
+   1  l           -3.02881e-03   5.40278e-04   6.22787e-05   1.46067e+00
+   2  mean         2.28668e+03   7.60796e-02   1.53526e-04  -1.66653e-01
+   3  nbkg         7.26614e+03   2.43194e+02   4.77158e-05  -1.74149e+00
+   4  nsig         1.10660e+04   2.50857e+02   4.48745e-05  -1.36002e+00
+   5  sig1frac     8.29469e-01   4.71285e-02   2.73539e-04   2.42219e+00
+   6  sigma1       5.69389e+00   1.89750e-01   1.08642e-04   1.39226e-01
+   7  sigma2       1.34521e+01   3.28678e+00   4.43754e-04  -1.03379e-01
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  7    ERR DEF=0.5
+  2.919e-07 -5.921e-06 -7.678e-02 -7.677e-02  7.663e-06 -3.729e-05 -9.456e-04 
+ -5.921e-06  5.788e-03  1.342e+00  1.342e+00 -2.498e-04  1.107e-03  2.041e-02 
+ -7.678e-02  1.342e+00  5.914e+04  5.187e+04 -5.443e+00  2.593e+01  6.525e+02 
+ -7.677e-02  1.342e+00  5.187e+04  6.293e+04 -5.442e+00  2.592e+01  6.524e+02 
+  7.663e-06 -2.498e-04 -5.443e+00 -5.442e+00  2.233e-03 -8.276e-03 -1.309e-01 
+ -3.729e-05  1.107e-03  2.593e+01  2.592e+01 -8.276e-03  3.602e-02  5.212e-01 
+ -9.456e-04  2.041e-02  6.525e+02  6.524e+02 -1.309e-01  5.212e-01  1.098e+01 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4      5      6      7
+        1  0.61708   1.000 -0.144 -0.584 -0.566  0.300 -0.364 -0.528
+        2  0.15033  -0.144  1.000  0.073  0.070 -0.069  0.077  0.081
+        3  0.91027  -0.584  0.073  1.000  0.850 -0.474  0.562  0.810
+        4  0.88542  -0.566  0.070  0.850  1.000 -0.459  0.544  0.785
+        5  0.96298   0.300 -0.069 -0.474 -0.459  1.000 -0.923 -0.836
+        6  0.93607  -0.364  0.077  0.562  0.544 -0.923  1.000  0.829
+        7  0.96784  -0.528  0.081  0.810  0.785 -0.836  0.829  1.000
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#1] INFO:Minization -- createNLL picked up cached consraints from workspace with 0 entries
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions have been identified as constant and will be precalculated and cached: (sig,bkg)
+[#1] INFO:Fitting -- RooAbsPdf::fitTo(model) Calculating sum-of-weights-squared correction matrix for covariance matrix
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#1] INFO:InputArguments -- Printing Yields
+RooArgList:: = (nsig,nbkg)
+[#1] INFO:InputArguments -- yield in pdf: nsig 11065.4
+[#1] INFO:InputArguments -- yield in pdf: nbkg 7266.5
+[#1] INFO:Eval -- Checking Likelihood normalization:  
+[#1] INFO:Eval -- Yield of specie  Sum of Row in Matrix   Norm
+[#1] INFO:Eval -- 11065.4 11065.4 1
+[#1] INFO:Eval -- 7266.5 7266.46 1
+[#1] INFO:Eval -- Calculating sWeight
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(model) directly selected PDF components: (bkg)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(model) indirectly selected PDF components: ()
+Info in <TCanvas::Print>: file FitResults/Fit_Data_MagUp_Kenr.png has been created
+Created: /disk/lhcb_data2/RLcMuonic2016/Data/Lb_Data_MagUp_preselected_Kenr_sw.root
+       full
+Traceback (most recent call last):
+  File "DataFramesTrial_uproot.py", line 329, in <module>
+    CreateFinalTree(dt,polarity,sample)
+  File "DataFramesTrial_uproot.py", line 296, in CreateFinalTree
+    sw_sig[0] = t.sw_sig_Full
+AttributeError: 'TTree' object has no attribute 'sw_sig_Full'

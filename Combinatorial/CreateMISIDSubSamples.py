@@ -1,6 +1,6 @@
 '''
     Author: Annarita Buonaura
-    Date: December 30, 2018
+    Date: May 8th, 2020
 
     Description: Creates MISID templates for same sign samples as needed for combinatorial bkg studies
 '''
@@ -24,19 +24,18 @@ import os,sys,getopt,time
 #4.07.2019 
 #Modified anti-isolated region k enriched definition: (Lb_ISOLATION_BDT>"+str(ISOBDTcut)+"&& Lb_ISOLATION_BDT2>" +str(ISOBDT2cut)+")&&((Lb_ISOLATION_PIDK>4.&&(Lb_ISOLATION_CHARGE==mu_ID/13 ||(Lb_ISOLATION_CHARGE==-mu_ID/13 && Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK<0.))) || (Lb_ISOLATION_PIDK2>4.&&(Lb_ISOLATION_CHARGE2==mu_ID/13 ||(Lb_ISOLATION_CHARGE2==-mu_ID/13 && Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2<0.))))
 
-suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
 
-datadir = '$FILEDIR/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 
-pathID = datadir+'HistoPID/IDeff/'
-pathMisid = {'Mu':datadir+'HistoPID/MISIDeff/','K': datadir+'HistoPID/K2Pi/','Pi':datadir+'HistoPID/Pi2K/'}
+pathID = datadir+'HistoPID/IDeff_Ghost/'
+pathMisid = {'Mu':datadir+'HistoPID/MISIDeff_Ghost/','K': datadir+'HistoPID/K2Pi/','Pi':datadir+'HistoPID/Pi2K/'}
 
 particles = ['K','Pi']
 
-PIDcuts = {'K':'mu_PIDK >4.0',
-        'Pi':'mu_PIDK<2',
-        'P':'mu_PIDp < 0.0 && (mu_MC15TuneV1_ProbNNp - mu_MC15TuneV1_ProbNNk)>0.',
-        'Mu':'mu_PIDmu>-200'}
+PIDcuts = {'K':'mu_PIDK >4.0 && mu_ProbNNghost < 0.2',
+        'Pi':'mu_PIDK<2 && mu_ProbNNghost < 0.2'}
+
 K2pi_MisId = 'DLLK<2.0'
 Pi2K_MisId = 'DLLK>4.0'
 
@@ -150,7 +149,7 @@ def AddSweights(ifile,polarity,particle,sample):
     f.Close()
 
  #Save fit results to file
-    of_fit = r.TFile('$FILEDIR/MISID/IntermediateFiles_SS/FitResults/FitResults_'+particle+'_'+polarity+ suffix[sample],'Recreate')
+    of_fit = r.TFile(datadir+'/MISID/IntermediateFiles_SS/FitResults/FitResults_'+particle+'_'+polarity+ suffix[sample],'Recreate')
     result.Write()
     of_fit.Close()
 
@@ -165,8 +164,8 @@ def GetPIDhisto(PIDfilename,histoname):
     return h
 
 def AddMISIDweightNoCF(ifile, ofile, applyiso, polarity, particle):
-    reco_had_had = {'K':'DLLK >4.0 &&IsMuon==0','Pi':'DLLK<2 && IsMuon==0'}
-    reco_mu_had = {'K':'IsMuon==1 && DLLmu>2.0 && DLLmu-DLLK>2.0 && DLLmu-DLLp>2.0', 'Pi':'IsMuon==1 && DLLmu>2.0 && DLLmu-DLLK>2.0 && DLLmu-DLLp>2.0'}    
+    reco_had_had = {'K':'DLLK >4.0 &&IsMuon==0 && MC15TuneV1_ProbNNghost < 0.2','Pi':'DLLK<2 && IsMuon==0 && MC15TuneV1_ProbNNghost < 0.2'}
+    reco_mu_had = {'K':'IsMuon==1 && DLLmu>2.0 && DLLmu-DLLK>2.0 && DLLmu-DLLp>2.0 && DLLe<1 && MC15TuneV1_ProbNNghost < 0.2', 'Pi':'IsMuon==1 && DLLmu>2.0 && DLLmu-DLLK>2.0 && DLLmu-DLLp>2.0 && DLLe<1 && MC15TuneV1_ProbNNghost < 0.2'}
     reco_wrong_had = {'K':'IsMuon==0 && ' + K2pi_MisId, 'Pi': 'IsMuon==0 && '+Pi2K_MisId}
 
     #-----> Open PID histograms
@@ -244,11 +243,9 @@ def AddMISIDweightNoCF(ifile, ofile, applyiso, polarity, particle):
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
@@ -256,13 +253,8 @@ if __name__ == '__main__':
 
     print (sample)
     polarities = ['MagUp','MagDown']
-    if sample!='Kenriched':
-        files = {'MagUp': datadir+'Data/Lb_FakeMuSS_MagUp_reduced_preselected'+suffix[sample][0:-5]+'_sw.root',
-                'MagDown': datadir+'Data/Lb_FakeMuSS_MagDown_reduced_preselected'+suffix[sample][0:-5]+'_sw.root'}
-    else:
-        files = {'MagUp': datadir+'ControlSamples/Lb_FakeMuSS_MagUp_reduced_preselected'+suffix[sample][0:-5]+'_sw.root',
-                'MagDown': datadir+'ControlSamples/Lb_FakeMuSS_MagDown_reduced_preselected'+suffix[sample][0:-5]+'_sw.root'}
-    print ('Starting files: ', files)
+    files = {'MagUp': datadir+'Data/Lb_FakeMuSS_MagUp_preselected'+suffix[sample][0:-5]+'_sw.root',
+            'MagDown': datadir+'Data/Lb_FakeMuSS_MagDown_preselected'+suffix[sample][0:-5]+'_sw.root'}
 
     for polarity in polarities:
         for particle in particles:

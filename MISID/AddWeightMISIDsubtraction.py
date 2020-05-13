@@ -16,14 +16,13 @@ import os,sys,getopt,time
 
 
 
-
-datadir = '$FILEDIR/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities=['MagUp','MagDown']
 particles=['K','Pi']
 
-sample_suffix = {'full':'_sw.root', 'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffixCF = {'full':'_sw_withCF.root', 'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
+sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
 
 ISOBDTcut = 0.35
 ISOBDT2cut = 0.2
@@ -52,10 +51,7 @@ def RoundHisto(h):
 
 def GetTemplatesData(sample):
     for polarity in polarities:
-        if sample!='Kenriched':
-            datafname = datadir+'Data/Lb_Data_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-        else:
-            datafname = datadir+'ControlSamples/Lb_Data_'+polarity+'_reduced_preselected'+sample_suffix[sample]
+        datafname = datadir+'Data/Lb_Data_'+polarity+'_preselected'+sample_suffix[sample]
         dataf = r.TFile(datafname, 'READ')
         datat = dataf.Get('DecayTree')
         for i in range(datat.GetEntries()):
@@ -65,7 +61,7 @@ def GetTemplatesData(sample):
 
 def GetTemplatesMISID(particle, sample):
     for polarity in polarities:
-        misidfname = datadir+'/MISID/'+particle+'_sample_'+polarity+sample_suffixCF[sample]
+        misidfname = datadir+'/MISID/OppositeSign/'+particle+'_sample_'+polarity+sample_suffixCF[sample]
         misidf = r.TFile(misidfname,'READ')
         misidt = misidf.Get('DecayTree')
         for i in range(misidt.GetEntries()):
@@ -155,11 +151,9 @@ def AddMISIDweights(ifile,ofile, fractionfile, sample):
 
 if __name__ == '__main__':
     restart = False
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","restart"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","restart"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
@@ -185,12 +179,8 @@ if __name__ == '__main__':
     ComputeMISIDFractions(filename, fractionfile)
     for polarity in polarities:
         print('>>>>>   Processing:          ', polarity )
-        if sample!='Kenriched':
-            outdatafile = datadir+'Data/Lb_Data_'+polarity+'_sw_noMISID'+suffix[sample]
-            datafname = datadir+'Data/Lb_Data_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-        else:
-            outdatafile = datadir+'ControlSamples/Lb_Data_'+polarity+'_sw_noMISID'+suffix[sample]
-            datafname = datadir+'ControlSamples/Lb_Data_'+polarity+'_reduced_preselected'+sample_suffix[sample]
+        outdatafile = datadir+'Data/Lb_Data_'+polarity+'_sw_noMISID'+suffix[sample]
+        datafname = datadir+'Data/Lb_Data_'+polarity+'_preselected'+sample_suffix[sample]
         print('- Reading data file: '+datafname)
         print('- Output data file: '+outdatafile)
         AddMISIDweights(datafname, outdatafile, fractionfile, sample)

@@ -21,14 +21,13 @@ import os,sys,getopt,time
 #4.07.2019 
 #Modified anti-isolated region k enriched definition: (Lb_ISOLATION_BDT>"+str(ISOBDTcut)+"&& Lb_ISOLATION_BDT2>" +str(ISOBDT2cut)+")&&((Lb_ISOLATION_PIDK>4.&&(Lb_ISOLATION_CHARGE==mu_ID/13 ||(Lb_ISOLATION_CHARGE==-mu_ID/13 && Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK<0.))) || (Lb_ISOLATION_PIDK2>4.&&(Lb_ISOLATION_CHARGE2==mu_ID/13 ||(Lb_ISOLATION_CHARGE2==-mu_ID/13 && Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2<0.))))
 
-
-datadir = '$FILEDIR/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities=['MagUp','MagDown']
 particles=['K','Pi']
 
-sample_suffix = {'full':'_sw.root', 'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffixCF = {'full':'_sw_withCF.root', 'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root'}
+sample_suffix =  {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
+sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
 
 def ComputeMISIDfraction_NoCF(particle, sample):
     nmisid = {'MagUp':0.0,'MagDown':0.0}
@@ -37,10 +36,7 @@ def ComputeMISIDfraction_NoCF(particle, sample):
     nallTOT=0.
 
     for polarity in polarities:
-        if sample!='Kenriched':
-            datafname = datadir+'Data/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-        else:
-            datafname = datadir+'ControlSamples/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
+        datafname = datadir+'Data/Lb_DataSS_'+polarity+'_preselected'+sample_suffix[sample]
         dataf = r.TFile(datafname, 'READ')
         datat = dataf.Get('DecayTree')
 
@@ -54,15 +50,7 @@ def ComputeMISIDfraction_NoCF(particle, sample):
 
         for j in range(datat.GetEntries()):
             datat.GetEntry(j)
-            if sample=='iso':
-                if datat.Lb_ISOLATION_BDT<0.35:
-                    nall[polarity] = nall[polarity]+datat.sw_sig
-            if sample=='Kenriched':
-                if (datat.Lb_ISOLATION_BDT>0.35 and datat.Lb_ISOLATION_PIDK>4.) or (datat.Lb_ISOLATION_BDT2>0.35 and datat.Lb_ISOLATION_PIDK2>4.):
-                    nall[polarity] = nall[polarity]+datat.sw_sig
-            if sample=='full':
-                nall[polarity] = nall[polarity]+datat.sw_sig
-
+            nall[polarity] = nall[polarity]+datat.sw_sig
 
         nmisidTOT = nmisidTOT+nmisid[polarity]
         nallTOT = nallTOT+nall[polarity]
@@ -115,10 +103,7 @@ def ComputeMISIDfraction_WithCF(particle, sample):
     nallTOT=0.
 
     for polarity in polarities:
-        if sample!='Kenriched':
-            datafname = datadir+'Data/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-        else:
-            datafname = datadir+'ControlSamples/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
+        datafname = datadir+'Data/Lb_DataSS_'+polarity+'_preselected'+sample_suffix[sample]
 
         dataf = r.TFile(datafname, 'READ')
         datat = dataf.Get('DecayTree')
@@ -133,14 +118,7 @@ def ComputeMISIDfraction_WithCF(particle, sample):
             nmisid[polarity] = nmisid[polarity]+(misidt.sw_sig * misidt.w_recomu_CF *10)
         for j in range(datat.GetEntries()):
             datat.GetEntry(j)
-            if sample=='iso':
-                if datat.Lb_ISOLATION_BDT<0.35:
-                    nall[polarity] = nall[polarity]+datat.sw_sig
-            if sample=='Kenriched':
-                if (datat.Lb_ISOLATION_BDT>0.35 and datat.Lb_ISOLATION_PIDK>4.) or (datat.Lb_ISOLATION_BDT2>0.35 and datat.Lb_ISOLATION_PIDK2>4.):
-                    nall[polarity] = nall[polarity]+datat.sw_sig
-            if sample=='full':
-                nall[polarity] = nall[polarity]+datat.sw_sig
+            nall[polarity] = nall[polarity]+datat.sw_sig
 
         #print(nall[polarity])
         nmisidTOT = nmisidTOT+nmisid[polarity]
@@ -158,8 +136,6 @@ if __name__ == '__main__':
     opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):

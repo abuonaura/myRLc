@@ -10,10 +10,11 @@ import os, sys, glob
 
 #samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2625taunu','Lb_Lc2625munu','Lb_Lc2593taunu','Lb_Lc2593munu']
 #samples = ['Lb_LcDs','Lb_Lc2625taunu','Lb_Lc2625munu','Lb_Lc2593taunu','Lb_Lc2593munu']
-samples = ['Lb_Lc2625Ds']
-datadir = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/Datasets/MC/'
+samples = ['Lb_Lcmunu']
+#datadir = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/Datasets/MC/'
+datadir = '/disk/lhcb_data2/RLcMuonic2016/MC/'
 #polarities = ['MagUp','MagDown']
-polarities = ['MagDown']
+polarities = ['MagUp']
 
 for sample in samples:
     for polarity in polarities:
@@ -25,7 +26,7 @@ for sample in samples:
 	pidfile = startfile[:-5]+'_PID.root'
 	print(modfile, pidfile)
 
-
+	'''
 	print('... Rescaling ntracks ...')
 
 	f = r.TFile(startfile,'READ')
@@ -47,7 +48,7 @@ for sample in samples:
 	ot.Write()
 	of.Close()
 	f.Close()
-
+	'''
 	print('... End of rescaling... ')
 	print('... Adding PIDs ...' )
 

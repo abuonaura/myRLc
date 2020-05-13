@@ -1,5 +1,6 @@
 import ROOT as r
 import numpy as np
+import os
 
 from ROOT import gSystem
 gSystem.Load('libRooFit')
@@ -88,23 +89,18 @@ def PlotMassFit(model, ds, Lc_M,datatype,polarity,sample):
     frame.Draw()
     c.Draw()
     suffix_img = suffix[sample][0:-5]+'.png'
-    c.SaveAs('plots/Fit_'+datatype+'_'+polarity+suffix_img)
+    c.SaveAs('FitResults/Fit_'+datatype+'_'+polarity+suffix_img)
     return 
 
 def ComputeSweights(fname, datatype, polarity,sample):
-    f = r.TFile(fname,'read')
+    f = r.TFile(fname,'update')
     t = f.Get('DecayTree')
-    tl = f.Get('LumiTuple')
-
     ofname = fname[0:-5]+'_sw.root'
-
-    of = r.TFile(ofname,'recreate')
-    ot = r.TTree('DecayTree','DecayTree')
-    otl =r.TTree('LumiTuple','LumiTuple')
+    #of = r.TFile(ofname,'recreate')
+    #ot = r.TTree('DecayTree','DecayTree')
     
-    print(' ... Copying tree to add sweights ...')
-    ot = t.CloneTree(0)
-    otl = tl.CloneTree()
+    #print(' ... Copying tree to add sweights ...')
+    #ot = t.CloneTree(0)
 
     LcM_range = [2230,2330]
     Lc_M = r.RooRealVar('Lc_M','#Lambda_{c} mass',LcM_range[0],LcM_range[1])
@@ -130,22 +126,27 @@ def ComputeSweights(fname, datatype, polarity,sample):
     sw_bkg = np.zeros(1, dtype=float)
     sw_sig = np.zeros(1, dtype=float)
     
-    ot.Branch("sw_bkg",sw_bkg,"sw_bkg/D")
-    ot.Branch("sw_sig",sw_sig,"sw_sig/D")
+    if t.FindBranch('sw_bkg') and t.FindBranch('sw_sig'):
+        sw_bkg_b = t.GetBranch('sw_bkg')
+        sw_sig_b = t.GetBranch('sw_sig')
+        sw_bkg_b.Reset()
+        sw_sig_b.Reset()
+    sw_bkg_b = t.Branch("sw_bkg",sw_bkg,"sw_bkg/D")
+    sw_sig_b = t.Branch("sw_sig",sw_sig,"sw_sig/D")
 
-    print('<<<<< Created file ', ofname)
+    #print('<<<<< Created file ', ofname)
     
     for i in range(ds_w.numEntries()):
         t.GetEntry(i)
         sw_bkg[0]= ds_w.get(i).getRealValue("nbkg_sw")
         sw_sig[0] = ds_w.get(i).getRealValue("nsig_sw")
-        ot.Fill()
+        sw_bkg_b.Fill()
+        sw_sig_b.Fill()
 
-    ot.Write()
-    otl.Write()
-    of.Close()
+    t.Write()
     f.Close()
     
+    os.system('cp '+fname+ ' '+ofname)
     #Save fit results to file
     of_fit = r.TFile('FitResults/FitResults_'+datatype+'_'+polarity+suffix[sample],'Recreate')
     result.Write()

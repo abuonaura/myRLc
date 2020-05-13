@@ -8,21 +8,17 @@ Purpose: Draw fit templates of dataSS and misidSS samples for the different isol
 import ROOT as r
 import os, sys, getopt
 
-datadir = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/Datasets/'
-
-#polarities=['MagUp','MagDown']
-polarities=['MagDown']
+datadir = '/disk/lhcb_data2/RLcMuonic2016/'
+polarities=['MagUp','MagDown']
+#polarities=['MagDown']
 particles=['K','Pi']
-sample_suffix = {'full':'_sw.root', 'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffix_misid = {'full':'_sw_withCF.root', 'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-sample_suffix_comb = {'full':'_sw_noMISID.root', 'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
+sample_suffix_misid = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
+sample_suffix_comb = {'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root'}
 
 def makeTemplateDataSS(polarity,sample):
     histo = r.TH3F('h_'+polarity+'SS','; q^{2} (Gev^{2}); E_{l} (MeV^{2}); M_{miss}^{2} (GeV^{2})',4,-2,14,10,0,2600,10,-2,14)
-    if sample!='Kenriched':
-        datafname = datadir + 'Data/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-    else:
-        datafname = datadir + 'ControlSamples/Lb_DataSS_'+polarity+'_reduced_preselected'+sample_suffix[sample]
+    datafname = datadir + 'Data/Lb_DataSS_'+polarity+'_preselected'+sample_suffix[sample]
 
     dataf = r.TFile(datafname, 'Read')
     datat = dataf.Get('DecayTree')
@@ -35,10 +31,7 @@ def makeTemplateDataSS(polarity,sample):
 
 def makeTemplateData(polarity,sample):
     histo = r.TH3F('h_'+polarity,'; q^{2} (Gev^{2}); E_{l} (MeV^{2}); M_{miss}^{2} (GeV^{2})',4,-2,14,10,0,2600,10,-2,14)
-    if sample!='Kenriched':
-        datafname = datadir + 'Data/Lb_Data_'+polarity+'_reduced_preselected'+sample_suffix[sample]
-    else:
-        datafname = datadir + 'ControlSamples/Lb_Data_'+polarity+'_reduced_preselected'+sample_suffix[sample]
+    datafname = datadir + 'Data/Lb_Data_'+polarity+'_preselected'+sample_suffix[sample]
     dataf = r.TFile(datafname, 'Read')
     datat = dataf.Get('DecayTree')
     print(datat.GetEntries())
@@ -50,10 +43,7 @@ def makeTemplateData(polarity,sample):
 
 def makeTemplateCombinatorial(polarity,sample):
     histo = r.TH3F('h_'+polarity+'Comb','; q^{2} (Gev^{2}); E_{l} (MeV^{2}); M_{miss}^{2} (GeV^{2})',4,-2,14,10,0,2600,10,-2,14)
-    if sample!='Kenriched':
-        datafname = datadir + 'Data/Lb_DataSS_'+polarity+sample_suffix_comb[sample]
-    else:
-        datafname = datadir + 'ControlSamples/Lb_DataSS_'+polarity+sample_suffix_comb[sample]
+    datafname = datadir + 'Data/Lb_DataSS_'+polarity+sample_suffix_comb[sample]
     dataf = r.TFile(datafname, 'Read')
     datat = dataf.Get('DecayTree')
     print(datat.GetEntries())
@@ -88,8 +78,6 @@ if __name__ == '__main__':
     opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","norm"])
     print (opts,args)
     for o, a in opts:
-        if o in ("--full",):
-            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
