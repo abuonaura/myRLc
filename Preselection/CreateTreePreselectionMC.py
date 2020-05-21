@@ -1,3 +1,26 @@
+'''
+Author: Annarita Buonaura
+Date: May 21, 2020
+
+Description: Script to apply preselections to MC samples
+
+How to run:
+    - On full simulation (all sample, producing from scratch also the trigger files):
+    python -i CreateTreePreselectionMC.py --MCfull --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 all all --presel
+
+    - On TrackerOnly sim (all sample, producing from scratch also the trigger files):
+    python -i CreateTreePreselectionMC.py --MCTrackerOnly --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 all all --presel
+
+    - to see only selection efficiencies:
+    python -i CreateTreePreselectionMC.py --MCTrackerOnly --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 all all --eff
+
+    - to select only 1 polarity (e.g. MagUp):
+    python -i CreateTreePreselectionMC.py --MCTrackerOnly --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 all MagUp --presel
+
+    - to select only 1 sample (e.g. Lcmunu):
+    python -i CreateTreePreselectionMC.py --MCTrackerOnly --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 Lcmunu all --presel
+'''
+
 import uproot
 import sys, os
 import pandas as pd
@@ -8,7 +31,6 @@ from Add_MVA import AddBDTinfo
 from AddSweights import *
 from argparse import ArgumentParser
 
-filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full/'
 
 def EmulateTrigger(inputFile,restartL0HTOS,restartL0GTIS,restartHLT1_1,restartHLT1_2):
     os.chdir('../TrackerOnlyEmulators/')
@@ -32,8 +54,7 @@ def EmulateTrigger(inputFile,restartL0HTOS,restartL0GTIS,restartHLT1_1,restartHL
     os.chdir('../Preselection/')
     return
 
-def GetBDTfile(dtype,polarity):
-    ifname = filedir+'Lb_'+dtype+'_'+polarity+'_full.root'
+def GetBDTfile(ifname):
     bdtfname = ifname[0:-5]+'_MVA.root'
     if os.path.isfile(bdtfname):
         print('BDT file already created')
@@ -321,15 +342,34 @@ def PrintCutsEfficiencies(df):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
+    parser.add_argument('--MCfull',dest='MCfull', help="Process MC full simulation samples", required=False, default=False, action='store_true')
+    parser.add_argument('--MCTrackerOnly',dest='MCTO', help="Process MC TrackerOnly simulation samples", required=False, default=False, action='store_true')
     parser.add_argument('--L0HTOS',dest='restartL0HTOS', help="Forces to reproduce L0Hadron TOS file", required=False, default=False, action='store_true')
     parser.add_argument('--L0GTIS',dest='restartL0GTIS', help="Forces to reproduce L0Global TIS file", required=False, default=False, action='store_true')
     parser.add_argument('--HLT1_1',dest='restartHLT1_1', help="Forces to reproduce HLT1 one track file", required=False, default=False, action='store_true')
     parser.add_argument('--HLT1_2',dest='restartHLT1_2', help="Forces to reproduce HLT1 two track file", required=False, default=False, action='store_true')
+    parser.add_argument('datatype',choices=['Lctaunu','Lcmunu','LcDs','Lc2593munu','Lc2593taunu','Lc2625munu','Lc2625taunu','all'], help = 'which mc sample we want to run on', default = 'all')
+    parser.add_argument('polarity',choices=['MagUp','MagDown','all'], help = 'which data sample we want to run on', default = 'all')
+    parser.add_argument('--presel',dest='preselect',help='If this option is inserted the preselection file + the iso/Kenriched sample files are produced', default=False, action='store_true')
+    parser.add_argument('--eff',dest='efficiency',help='If this option is inserted, only the efficiency are printed out', default=False, action='store_true')
+
     options = parser.parse_args()
+    MCfull = options.MCfull
+    MCTO = options.MCTO
     restartL0HTOS = options.restartL0HTOS
     restartL0GTIS = options.restartL0GTIS
     restartHLT1_1 = options.restartHLT1_1
     restartHLT1_2 = options.restartHLT1_2
+    datatype=options.datatype
+    polarity=options.polarity
+    preslect = options.preselect
+    efficiencies = options.efficiency
+    
+    if MCfull==True:
+        #filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full/'
+        filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
+    if MCTO==True:
+        filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'
 
     ISOBDTcut =0.35
     ISOBDT2cut=0.2
@@ -338,16 +378,23 @@ if __name__ == "__main__":
     r.gInterpreter.Declare(func_isolation)
     r.gInterpreter.Declare(func_doublecharm)
     
-    dtype = ['Lcmunu','Lctaunu','LcDs','Lc2593munu','Lc2593taunu','Lc2593Ds','Lc2625munu','Lc2625taunu','Lc2625Ds']
-    #dtype = ['LcDs','Lc2625Ds']
-    #dtype = ['Lc2625taunu','Lc2625Ds']
+    datatypes = ['Lcmunu','Lctaunu','LcDs','Lc2593munu','Lc2593taunu','Lc2593Ds','Lc2625munu','Lc2625taunu','Lc2625Ds']
     polarities=['MagUp','MagDown']
-    #polarities=['MagDown']
+
+    if datatype!='all':
+        datatypes=[datatype]
+    if polarity!='all':
+        polarities=[polarity]
+
+
     for polarity in polarities:
         print(polarity)
-        for dt in dtype:
+        for dt in datatypes:
             print('   ', dt)
-            inputFile = filedir+'Lb_'+dt+'_'+polarity+'_full.root'
+            if MCfull==True:
+                inputFile = filedir+'Lb_'+dt+'_'+polarity+'_full.root'
+            if MCTO==True:
+                inputFile = filedir+'Lb_'+dt+'_'+polarity+'.root'
             pidgenFile = inputFile[0:-5]+'_PIDGen.root'
             pidcalibFile = inputFile[0:-5]+'_PIDCalib.root'
             EmulateTrigger(inputFile,restartL0HTOS,restartL0GTIS,restartHLT1_1,restartHLT1_2)
@@ -388,7 +435,7 @@ if __name__ == "__main__":
             t.AddFriend(tHLT1_1)
             t.AddFriend(tHLT1_2)
             
-            bdtfname = GetBDTfile(dt,polarity)
+            bdtfname = GetBDTfile(inputFile)
             fbdt = r.TFile(bdtfname)
             tbdt = fbdt.Get(tname2)
             t.AddFriend(tbdt)
@@ -446,28 +493,23 @@ if __name__ == "__main__":
                 column_name_vector.push_back("mbody")
                 column_name_vector.push_back("w_mbody")
 
-            print("Writing the preselection tree ...")
-            df3.Snapshot("DecayTree",inputFile[0:-5]+'_preselectionVars.root',column_name_vector)
-            print("Tree written.")
-           
-            ''' 
-            df4 = df3.Filter("FinalSel==true")
-            print("Writing the Full tree ...")
-            df4.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_full.root')
-            print("Tree written.")
-            
-            df5 = df3.Filter("FinalSel==true&&isIsolated==true")
-            print("Writing the Isolated tree ...")
-            df5.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_iso.root')
-            print("Tree written.")
-            
-            df6 = df3.Filter("FinalSel==true&&isKenriched==true")
-            print("Writing the Kenriched tree ...")
-            df6.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_Kenr.root')
-            print("Tree written.")
-            '''
-            
-            PrintCutsEfficiencies(df3)
+            if preselect==True:
+                print("Writing the preselection tree ...")
+                df3.Snapshot("DecayTree",inputFile[0:-5]+'_preselectionVars.root',column_name_vector)
+                print("Tree written.")
+               
+                df5 = df3.Filter("FinalSel==true&&isIsolated==true")
+                print("Writing the Isolated tree ...")
+                df5.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_iso.root')
+                print("Tree written.")
+                
+                df6 = df3.Filter("FinalSel==true&&isKenriched==true")
+                print("Writing the Kenriched tree ...")
+                df6.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_Kenr.root')
+                print("Tree written.")
+
+            if efficiencies==True:
+                PrintCutsEfficiencies(df3)
             #PlotFitTemplate(df4, dt, polarity)
 
 
