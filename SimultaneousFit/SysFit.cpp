@@ -27,15 +27,15 @@ SysFit::SysFit()
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstartau_Isolated",{0.05,1.E-9,1.}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncpha_Isolated",{0,-3.,3.}));
 
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncmu_Kenriched",{1.4E3,100,1.E4}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstarmu_Kenriched",{1.E3,10,1.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncmu_Kenriched",{2E2,0,1.E3}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstarmu_Kenriched",{1.E3,0,1.E4}));
 	//start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcstarDs_Kenriched",{1.E3,10,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstartau_Kenriched",{0.,1E-9,1}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,1E-9,1.}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{6.E3,500,2.E4}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{4.E3,500,2.E4}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Kenriched",{3.2E3,1.E2,5.E3}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcMISID_Kenriched",{4.6E3,100,2.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{3.E3,0,1.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{2.E3,500,2.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Kenriched",{1.7E3,1.E2,5.E3}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcMISID_Kenriched",{1.7E3,100,1.E4}));
 }
 
 
@@ -189,6 +189,8 @@ TString SysFit::GetFitVarName(TString title)
 
 Double_t SysFit::GetHistoNormalisation(string inputFile, string type)
 {
+	cout<<" InputFile name: " << inputFile<<endl;
+	cout<<" type: " <<type<<endl;
 	//Read root file with histograms of samples
 	TFile histFile(inputFile.c_str());
 	TH1 *h_temp;
@@ -866,6 +868,7 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 
 	//Define a channel for each category
 	vector <string> channel_names = NameChannels();
+	string MCcat = GetMCcathegory();
 	Int_t nchannels = channel_names.size();
 	vector <Channel*> channels;
 	for(Int_t i=0; i<nchannels; i++)
@@ -875,7 +878,7 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 		map<string,vector<Double_t>> start_param = GetStartParameters(channel_names[i]);
 		vector<string> category = GetCategory(start_param);
 		vector<string> param_names = GetParametersName(start_param);
-		string filename = string("RootFiles/Histos_")+channel_names[i]+string(".root");
+		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+MCcat+string(".root");
 
 		//Add the samples to the channels
 		for(Int_t j=0; j<category.size(); j++)

@@ -62,7 +62,9 @@ class SysFit{
 	public:
 		SysFit();
 		~SysFit() {;}
-	
+
+		void SetMCcathegory(string MCcat) {MCcathegory = MCcat;}
+		string GetMCcathegory() {return MCcathegory;}
 		void SelectChannel2fit(vector<string> ch) {channel_names = ch;}
 		vector<string> NameChannels() {return channel_names;} //return Isolated/Kenriched
 		
@@ -115,6 +117,7 @@ class SysFit{
         Int_t gamma_s;
 
 	vector<string> channel_names;
+	string MCcathegory; //either MCfull or MCTrackerOnly
 
 	Bool_t BBeast;
 
