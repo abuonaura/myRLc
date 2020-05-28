@@ -5,31 +5,43 @@ import argparse
 def init():
     ap = argparse.ArgumentParser(description='Create Input Histos for both isolated/K-enriched category')
     ap.add_argument('-c','--category', type=str, dest='category', default=None)
+    ap.add_argument('--MCfull',dest='MCfull', help="Process MC full simulation samples", required=False, default=False, action='store_true')
+    ap.add_argument('--MCTrackerOnly',dest='MCTO', help="Process MC TrackerOnly simulation samples", required=False, default=False, action='store_true')
     args = ap.parse_args()
     return args
 
-def GetFileList(category):
+def GetFileList(category,MCtype):
     if category=='Isolated':
-        startfiles={'data':['Data/Lb_Data_MagUp_preselected_iso_sw.root','Data/Lb_Data_MagDown_preselected_iso_sw.root'],
-                    'MISID':['MISID/OppositeSign/K_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/K_sample_MagUp_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_iso_sw_withCF.root'],
-                    'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
-                    'mu':['MC_full/Lb_Lcmunu_MagUp_full_preselected_iso.root','MC_full/Lb_Lcmunu_MagDown_full_preselected_iso.root'],
-                    'tau':['MC_full/Lb_Lctaunu_MagUp_full_preselected_iso.root','MC_full/Lb_Lctaunu_MagDown_full_preselected_iso.root'],
-                    '2charm':['MC_full/Lb_LcDs_MagUp_full_preselected_iso.root','MC_full/Lb_LcDs_MagDown_full_preselected_iso.root','MC_full/Lb_Lc2625Ds_MagUp_full_preselected_iso.root','MC_full/Lb_Lc2625Ds_MagDown_full_preselected_iso.root','MC_full/Lb_Lc2593Ds_MagUp_full_preselected_iso.root','MC_full/Lb_Lc2593Ds_MagDown_full_preselected_iso.root'],
-                    'starmu':['MC_full/Lb_Lc2625munu_MagUp_full_preselected_iso.root','MC_full/Lb_Lc2625munu_MagDown_full_preselected_iso.root','MC_full/Lb_Lc2593munu_MagUp_full_preselected_iso.root','MC_full/Lb_Lc2593munu_MagDown_full_preselected_iso.root'],
-                    'startau':['MC_full/Lb_Lc2625taunu_MagUp_full_preselected_iso.root','MC_full/Lb_Lc2625taunu_MagDown_full_preselected_iso.root','MC_full/Lb_Lc2593taunu_MagUp_full_preselected_iso.root','MC_full/Lb_Lc2593taunu_MagDown_full_preselected_iso.root']}
-                    #'starDs':['MC/Lb_Lc2625Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2625Ds_MagDown_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagUp_PID_reduced_preselected.root','MC/Lb_Lc2593Ds_MagDown_PID_reduced_preselected.root']}
+        if MCtype=='MCfull':
+            startfiles={'data':['Data/Lb_Data_MagUp_preselected_iso_sw.root','Data/Lb_Data_MagDown_preselected_iso_sw.root'],
+                        'MISID':['MISID/OppositeSign/K_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/K_sample_MagUp_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_iso_sw_withCF.root'],
+                        'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
+                        'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_iso.root'],
+                        'tau':['MC_full_new/Lb_Lctaunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lctaunu_MagDown_full_preselected_iso.root'],
+                        '2charm':['MC_full_new/Lb_LcDs_MagUp_full_preselected_iso.root','MC_full_new/Lb_LcDs_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_iso.root'],
+                        'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_iso.root'],
+                        'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_iso.root']}
+        if MCtype=='MCTrackerOnly':
+            startfiles={'data':['Data/Lb_Data_MagUp_preselected_iso_sw.root','Data/Lb_Data_MagDown_preselected_iso_sw.root'],
+                        'MISID':['MISID/OppositeSign/K_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/K_sample_MagUp_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_iso_sw_withCF.root'],
+                        'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
+                        'mu':['MC_TrackerOnly/Lb_Lcmunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lcmunu_MagDown_preselected_iso.root'],
+                        'tau':['MC_TrackerOnly/Lb_Lctaunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lctaunu_MagDown_preselected_iso.root'],
+                        '2charm':['MC_TrackerOnly/Lb_LcDs_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_LcDs_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625Ds_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagDown_preselected_iso.root'],
+                        'starmu':['MC_TrackerOnly/Lb_Lc2625munu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625munu_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593munu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593munu_MagDown_preselected_iso.root'],
+                        'startau':['MC_TrackerOnly/Lb_Lc2625taunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625taunu_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593taunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593taunu_MagDown_preselected_iso.root']}
+
     
     if category=='Kenriched':
         startfiles ={'data':['Data/Lb_Data_MagUp_preselected_Kenr_sw.root','Data/Lb_Data_MagDown_preselected_Kenr_sw.root'],
             'MISID':['MISID/OppositeSign/K_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/K_sample_MagDown_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_Kenr_sw_withCF.root'],
             'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_Kenr.root','CombinatorialBkg/CombinatorialBkg_MagDown_Kenr.root'],
-            'mu':['MC_full/Lb_Lcmunu_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lcmunu_MagDown_full_preselected_Kenr.root'],
-            'tau':['MC_full/Lb_Lctaunu_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lctaunu_MagDown_full_preselected_Kenr.root'],
-            '2charm':['MC_full/Lb_LcDs_MagUp_full_preselected_Kenr.root','MC_full/Lb_LcDs_MagDown_full_preselected_Kenr.root','MC_full/Lb_Lc2625Ds_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lc2593Ds_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lc2625Ds_MagDown_full_preselected_Kenr.root','MC_full/Lb_Lc2593Ds_MagDown_full_preselected_Kenr.root'],
-            'starmu':['MC_full/Lb_Lc2625munu_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lc2593munu_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lc2625munu_MagDown_full_preselected_Kenr.root','MC_full/Lb_Lc2593munu_MagDown_full_preselected_Kenr.root'],
+            'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_Kenr.root'],
+            'tau':['MC_full_new/Lb_Lctaunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lctaunu_MagDown_full_preselected_Kenr.root'],
+            '2charm':['MC_full_new/Lb_LcDs_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_LcDs_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_Kenr.root'],
+            'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_Kenr.root'],
             #'starDs':['ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagDown.root'],
-            'startau':['MC_full/Lb_Lc2625taunu_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lc2593taunu_MagUp_full_preselected_Kenr.root','MC_full/Lb_Lc2625taunu_MagDown_full_preselected_Kenr.root','MC_full/Lb_Lc2593taunu_MagDown_full_preselected_Kenr.root']
+            'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_Kenr.root']
             }
 
     return startfiles
@@ -101,11 +113,11 @@ def ScaleHisto(h,value):
     h.Scale(scale)
     return h
 
-def FillHistograms(category):
+def FillHistograms(categoryi, MCtype):
     sigma_MISID = 0
     sigma_Comb = 0
     histos = []
-    startfiles = GetFileList(category)
+    startfiles = GetFileList(category,MCtype)
 
     n2charm_2body=0
     n2charm_mbody=0
@@ -206,15 +218,25 @@ def FillHistograms(category):
 if __name__== "__main__":
     args = init()
     category = args.category
+    if args.MCfull==True:
+        MCtype = 'MCfull'
+    if args.MCTO==True:
+        MCtype = 'MCTrackerOnly'
+
     print('Category: ', category)
+    print('MCtype: ', MCtype)
+
     if category==None:
         print('Please choose a category: Isolated or Kenriched')
         sys.exit('Aborting code')
+    if MCtype==None:
+        print('Please select MC type: Full or TrackerOnly')
+        sys.exit('Aborting code')
 
-    outfile_name = 'RootFiles/Histos_'+category+'.root'
+    outfile_name = 'RootFiles/Histos_'+category+'_'+MCtype+'.root'
     outputFile = r.TFile.Open(outfile_name,"RECREATE")
     outputFile.SetCompressionAlgorithm(1)
-    histos = FillHistograms(category)
+    histos = FillHistograms(category, MCtype)
     for h in histos:
         h.SetDirectory(outputFile)
         SetNonNullBinContent(h)
