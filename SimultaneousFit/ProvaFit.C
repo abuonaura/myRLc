@@ -21,9 +21,12 @@ void ProvaFit(Bool_t rebuild=true)
 	SysFit a;
 
 
+	string MCcat = "MCfull";
+	//string MCcat = "MCTrackerOnly";
 	//vector<string> ch2fit = {"Kenriched"};
-	//vector<string> ch2fit = {"Isolated"};
-	vector<string> ch2fit = {"Isolated","Kenriched"};
+	vector<string> ch2fit = {"Isolated"};
+	//vector<string> ch2fit = {"Isolated","Kenriched"};
+	a.SetMCcathegory(MCcat);
 	a.SelectChannel2fit(ch2fit);
 	vector<string> names = a.NameChannels();
 
@@ -31,7 +34,9 @@ void ProvaFit(Bool_t rebuild=true)
 	for (Int_t i =0; i<names.size();i++)
 	{
 		cout<<names[i]<<endl;
-		string filename = string("RootFiles/Histos_")+names[i]+string(".root");
+		string filename = string("RootFiles/Histos_")+names[i]+string("_")+MCcat+string(".root");
+
+		//string filename = string("RootFiles/Histos_")+names[i]+string("_MCTrackerOnly.root");
 		cout<<filename<<endl;
 		map<string,vector<Double_t>> startparams = a.GetStartParameters(names[i]);
 		a.PrintStartParams(names[i],startparams);
@@ -53,6 +58,12 @@ void ProvaFit(Bool_t rebuild=true)
 				a.ActivateShapeUncertainties(category[j],false);
 				if(category[j]=="MISID"||category[j]=="Combinatorial")
 					a.ActivateGaussConstraint(category[j],false);
+					/*
+					if(category[j]=="MISID")
+						a.SetWeightGaussConstraint(category[j],14.97);
+					else if (category[j]=="Combinatorial")
+						a.SetWeightGaussConstraint(category[j],27.01);
+					*/
 				else
 					a.ActivateGaussConstraint(category[j],false);
 			}
