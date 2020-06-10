@@ -1,3 +1,13 @@
+'''
+Author: Annarita Buonaura
+Date: November 2019
+
+Description: Script to produce templates for fitting
+
+How to run:
+    - python CreateInputHistos.py -c Isolated (Kenriched) --MCfull (--MCTrackerOnly)
+'''
+
 import ROOT as r
 import os, sys
 import argparse
@@ -16,18 +26,20 @@ def GetFileList(category,MCtype):
             startfiles={'data':['Data/Lb_Data_MagUp_preselected_iso_sw.root','Data/Lb_Data_MagDown_preselected_iso_sw.root'],
                         'MISID':['MISID/OppositeSign/K_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/K_sample_MagUp_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_iso_sw_withCF.root'],
                         'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
-                        'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_iso.root'],
-                        'tau':['MC_full_new/Lb_Lctaunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lctaunu_MagDown_full_preselected_iso.root'],
-                        '2charm':['MC_full_new/Lb_LcDs_MagUp_full_preselected_iso.root','MC_full_new/Lb_LcDs_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_iso.root'],
-                        'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_iso.root'],
-                        'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_iso.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_iso.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_iso.root']}
+                        'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_iso_LbCorr.root'],
+                        'tau':['MC_full_new/Lb_Lctaunu_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lctaunu_MagDown_full_preselected_iso_LbCorr.root'],
+                        '2charm':['MC_full_new/Lb_LcDs_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_LcDs_MagDown_full_preselected_iso_LbCorr.root'],
+                        'starDs':['MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_iso_LbCorr.root'],
+                        'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_iso_LbCorr.root'],
+                        'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_iso_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_iso_LbCorr.root']}
         if MCtype=='MCTrackerOnly':
             startfiles={'data':['Data/Lb_Data_MagUp_preselected_iso_sw.root','Data/Lb_Data_MagDown_preselected_iso_sw.root'],
                         'MISID':['MISID/OppositeSign/K_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/K_sample_MagUp_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_iso_sw_withCF.root'],
                         'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
                         'mu':['MC_TrackerOnly/Lb_Lcmunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lcmunu_MagDown_preselected_iso.root'],
                         'tau':['MC_TrackerOnly/Lb_Lctaunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lctaunu_MagDown_preselected_iso.root'],
-                        '2charm':['MC_TrackerOnly/Lb_LcDs_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_LcDs_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625Ds_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagDown_preselected_iso.root'],
+                        '2charm':['MC_TrackerOnly/Lb_LcDs_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_LcDs_MagDown_preselected_iso.root'],
+                        'starDs':['MC_TrackerOnly/Lb_Lc2625Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625Ds_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagDown_preselected_iso.root'],
                         'starmu':['MC_TrackerOnly/Lb_Lc2625munu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625munu_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593munu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593munu_MagDown_preselected_iso.root'],
                         'startau':['MC_TrackerOnly/Lb_Lc2625taunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625taunu_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593taunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593taunu_MagDown_preselected_iso.root']}
 
@@ -36,12 +48,12 @@ def GetFileList(category,MCtype):
         startfiles ={'data':['Data/Lb_Data_MagUp_preselected_Kenr_sw.root','Data/Lb_Data_MagDown_preselected_Kenr_sw.root'],
             'MISID':['MISID/OppositeSign/K_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/K_sample_MagDown_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_Kenr_sw_withCF.root'],
             'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_Kenr.root','CombinatorialBkg/CombinatorialBkg_MagDown_Kenr.root'],
-            'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_Kenr.root'],
-            'tau':['MC_full_new/Lb_Lctaunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lctaunu_MagDown_full_preselected_Kenr.root'],
-            '2charm':['MC_full_new/Lb_LcDs_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_LcDs_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_Kenr.root'],
-            'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_Kenr.root'],
-            #'starDs':['ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagUp.root','ControlSamples/MC_Kenr/Lb_Lc2625Ds_MagDown.root','ControlSamples/MC_Kenr/Lb_Lc2593Ds_MagDown.root'],
-            'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_Kenr.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_Kenr.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_Kenr.root']
+            'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_Kenr_LbCorr.root'],
+            'tau':['MC_full_new/Lb_Lctaunu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lctaunu_MagDown_full_preselected_Kenr_LbCorr.root'],
+            '2charm':['MC_full_new/Lb_LcDs_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_LcDs_MagDown_full_preselected_Kenr_LbCorr.root'],
+            'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_Kenr_LbCorr.root'],
+            'starDs':['MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_Kenr_LbCorr.root'],
+            'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_Kenr_LbCorr.root']
             }
 
     return startfiles
@@ -113,7 +125,7 @@ def ScaleHisto(h,value):
     h.Scale(scale)
     return h
 
-def FillHistograms(categoryi, MCtype):
+def FillHistograms(category, MCtype):
     sigma_MISID = 0
     sigma_Comb = 0
     histos = []
@@ -148,7 +160,7 @@ def FillHistograms(categoryi, MCtype):
                             integral+=weight
                             sigma_Comb = sigma_Comb+ weight*weight
                     if sample == 'mu' or sample=='tau' or sample=='starmu' or sample=='startau':
-                        weight=t.Event_PIDCalibEffWeight
+                        weight=t.Event_PIDCalibEffWeight*t.w_LbCorr
                     h.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight)
             histos.append(h)
             if sample=='MISID' or sample=='Combinatorial':
@@ -164,7 +176,7 @@ def FillHistograms(categoryi, MCtype):
                 print ('   Ex. yield: ', h.Integral())
                 print ('   sigma: ', sigma_Comb)
 
-        if sample=='2charm':
+        if sample=='2charm' or sample=='starDs':
             h_nominal = r.TH3F('h_'+sample,"qem_"+sample,4,-2,14,10,0,2600,10,-2,14)
             h_2body = r.TH3F('h_'+sample+'-2body',"qem_"+sample,4,-2,14,10,0,2600,10,-2,14)
             h_mbody = r.TH3F('h_'+sample+'-mbody',"qem_"+sample,4,-2,14,10,0,2600,10,-2,14)
@@ -186,7 +198,7 @@ def FillHistograms(categoryi, MCtype):
                 t = f.Get('DecayTree')
                 for i in range(t.GetEntries()):
                     t.GetEntry(i)
-                    weight = t.Event_PIDCalibEffWeight
+                    weight = t.Event_PIDCalibEffWeight*t.w_LbCorr
                     h_nominal.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight)
                     if t.twobody==True and t.mbody==False:
                         n2charm_2body+=1
@@ -242,5 +254,4 @@ if __name__== "__main__":
         SetNonNullBinContent(h)
     outputFile.Write()
     outputFile.Close()
-
 
