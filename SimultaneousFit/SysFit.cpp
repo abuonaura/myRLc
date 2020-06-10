@@ -17,10 +17,11 @@ SysFit::SysFit()
 	gamma_s = 23;
 	BBeast = false;
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{8.E5,3.E3,2.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{1.0E5,3.E3,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{5.0E4,3.E3,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.6E5,3.E3,1.E6}));
-	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs_Isolated",{2E4,3.E3,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{6.E4,3.E3,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{2.0E4,3.E3,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{1.E4,10,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{1.E4,10,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.6E5,3.E4,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{3.1E4,10,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{4.0E4,1.E1,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,1.E-9,1.}));
@@ -29,17 +30,36 @@ SysFit::SysFit()
 
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncmu_Kenriched",{2E2,0,1.E3}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstarmu_Kenriched",{1.E3,0,1.E4}));
-	//start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcstarDs_Kenriched",{1.E3,10,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstartau_Kenriched",{0.,1E-9,1}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,1E-9,1.}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{3.E3,0,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{2.E3,500,2.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Kenriched",{1.E3,10,1.E4}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Kenriched",{1.E3,10,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Kenriched",{1.7E3,1.E2,5.E3}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcMISID_Kenriched",{1.7E3,100,1.E4}));
 }
 
+void SysFit::FitIsolated()
+{
+	FitType = "Single";
+	vector<string> ch2fit = {"Isolated"};
+	SelectChannel2fit(ch2fit);
+}
 
+void SysFit::FitKenriched()
+{
+	FitType = "Single";
+	vector<string> ch2fit = {"Kenriched"};
+	SelectChannel2fit(ch2fit);
+}
 
+void SysFit::DoSimultaneousFit()
+{
+	FitType = "Simultaneous";
+	vector<string> ch2fit = {"Isolated","Kenriched"};
+	SelectChannel2fit(ch2fit);
+}
 
 void SysFit::SetWeightGaussConstraint(string sample, Double_t w)
 {
@@ -154,7 +174,7 @@ TString SysFit::GetComponentName(TString component)
 	TString name = "";
 	if (component.Contains("h_mu_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #mu #nu";
 	else if(component.Contains("h_starmu_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #mu #nu_{#mu}";
-	else if(component.Contains("h_starDs_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c}";
+	else if(component.Contains("h_starDs")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c}";
 	else if(component.Contains("h_startau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #tau #nu_{#tau}";
 	else if(component.Contains("h_tau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #tau #nu_{#tau}";
 	else if(component.Contains("h_2charm")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c}";
@@ -170,7 +190,7 @@ Int_t SysFit::GetComponentColor(TString component)
 	if (component.Contains("h_mu_")) color = kBlue;
 	else if(component.Contains("h_starmu_")) color = kViolet;
 	else if(component.Contains("h_startau_")) color = kMagenta;
-	else if(component.Contains("h_starDs_")) color = kGreen+10;
+	else if(component.Contains("h_starDs")) color = kGreen+10;
 	else if(component.Contains("h_tau_"))color = kRed;
 	else if(component.Contains("h_2charm")) color = kGreen;
 	else if(component.Contains("h_MISID")) color = kYellow;
@@ -226,7 +246,7 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 
 
 	//Code for shape variations for 2charm sample
-	if(shapeUncert && type.find("2charm-mbody") !=std::string::npos)
+	if(shapeUncert && (type.find("2charm-mbody") !=std::string::npos||type.find("starDs-mbody") !=std::string::npos))
 	{
 		sample.SetName("h_"+type);
 		sample.SetHistoName("h_"+type);
@@ -234,7 +254,8 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 
 		sample.AddHistoSys(type+"_quadratic_variation","h_"+type+"_1mq",inputFile,"", "h_"+type+"_1pq",inputFile,"");
 	}
-	if(shapeUncert && type.find("2charm") == std::string::npos)
+	//Code for shape variation of samples != 2charm/starDs
+	if(shapeUncert && type.find("2charm") == std::string::npos && type.find("starDs-mbody") ==std::string::npos)
 	{
 		sample.SetName("h_w_"+type+"_mean");
 		sample.SetHistoName("h_w_"+type+"_mean");
@@ -279,8 +300,8 @@ void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* dat
 
         RooArgSet* components_set = model_pdf->getComponents();
         //cout<<"-------- components_set ----------"<<endl;
-        //components_set->Print();
-        //cout<<"----------------------------------"<<endl;
+       // components_set->Print();
+       // cout<<"----------------------------------"<<endl;
         
 		TIterator* comp_it = components_set->createIterator();
 
@@ -333,11 +354,11 @@ void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* dat
   channelData->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 
 
-        //cout<<"******************************************"<<endl;
+        cout<<"******************************************"<<endl;
         for (int i = 0; i < active_components_names.size(); ++i)
         {
-                std::cout << active_components_names[i] << std::endl;
-		cout<<endl;
+                //std::cout << active_components_names[i] << std::endl;
+				//cout<<endl;
                 TString component = "";
                 component+="*";
                 component+=active_components_names[i];
@@ -349,7 +370,7 @@ void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* dat
                 Int_t color = GetComponentColor(active_components_names[i]);
                 //cout<<color<<endl;
                 //cout<<component<<"     "<<TotComponents<<endl;
-                //
+                
                 //------- Plot each background component
                 //model_sumpdf->plotOn(frame, RooFit::Slice(*idx),RooFit::ProjWData(*idx,*data),RooFit::ProjectionRange("LbMuNu"),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(component),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot").Data()));
                 //------- Plot each background component stacking them up
@@ -372,42 +393,54 @@ data->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poi
         TLegend leg(0.1,0.1,0.9,0.9);
 
         if (strcmp(title,"q^{2}")==0)
-        {
-                std::vector<TGraph*> component_graphs;
-                Int_t CharmComp=0;
-                for (int i=0; i<active_components_names.size(); ++i)
-                {
-                        cout<<endl;
-			cout<<"*********************************"<<endl;
-                        cout<<active_components_names[i]<<endl;
-			cout<<"*********************************"<<endl;
-                        Int_t c = frame->numItems() -4 -i;
-                        //Int_t c = frame->numItems() -3 -i;
-                        cout<<c<<endl;
-			cout<<"*********************************"<<endl;
-                        frame->getObject(c)->Print();
-			cout<<"*********************************"<<endl;
-                        cout<<frame->numItems()<<endl;
-			cout<<"*********************************"<<endl;
-                             cout<<endl;
+		{
+			std::vector<TGraph*> component_graphs;
+			Int_t CharmComp=0;
+			Int_t CharmStarComp=0;
+			//cout << active_components_names.size()<<endl;
+			for (int i=0; i<active_components_names.size(); ++i)
+			{
+				//cout<<endl;
+				//cout<<"*********************************"<<endl;
+				//cout<<active_components_names[i]<<endl;
+				//cout<<"*********************************"<<endl;
+				Int_t c = frame->numItems()-4 -i;
+				//cout<<c<<endl;
+				//cout<<"*********************************"<<endl;
+				//frame->getObject(c)->Print();
+				//cout<<"*********************************"<<endl;
+				//cout<<frame->numItems()<<endl;
+				//cout<<"*********************************"<<endl;
+				//cout<<endl;
 
-                        TGraph* graph = (TGraph*) frame->getObject(frame->numItems()-4-i);
-                        //TGraph* graph = (TGraph*) frame->getObject(frame->numItems()-3-i);
-                        if(active_components_names[i].Contains("h_2charm-"))
-                        {
-                                CharmComp+=1;
-                                if(CharmComp==1)
+				//TGraph* graph = (TGraph*) frame->getObject(frame->numItems()-4-i);
+				TGraph* graph = (TGraph*) frame->getObject(c);
+				if(active_components_names[i].Contains("h_2charm-"))
 				{
-					cout<<active_components_names[i]<<endl;
-                                        leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
+					CharmComp+=1;
+					if(CharmComp==1)
+					{
+						//cout<<active_components_names[i]<<endl;
+						leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
+					}
+					else
+						continue;
 				}
-                                else
-                                        continue;
-                        }
-                        else
-                                 leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
-                }
-        }
+				if(active_components_names[i].Contains("h_starDs-"))
+				{
+					CharmStarComp+=1;
+					if(CharmStarComp==1)
+					{
+						//cout<<active_components_names[i]<<endl;
+						leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
+					}
+					else
+						continue;
+				}
+				else
+					leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
+			}
+		}
 
 	 //-----------Draw the fit result with the pulls plot below
         TCanvas *c1 = new TCanvas("c1", "c1");
@@ -468,11 +501,11 @@ data->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poi
         {
                 clegend->cd();
                 leg.Draw();
-                clegend->Print("plots/Legend.pdf");
+                clegend->Print(TString("plots_")+GetMCcathegory()+TString("/Legend.pdf"));
                 //clegend->Print("plots/Legend.C");
         }
 
-        c1->Print(TString("plots/Fit_")+GetFitVarName(title)+TString("_")+TString(name_suffix)+TString(".pdf"));
+        c1->Print(TString("plots_")+GetMCcathegory()+TString("/Fit_")+GetFitVarName(title)+TString("_")+TString(name_suffix)+TString("_")+GetFitType()+TString(".pdf"));
 
 }
 
@@ -837,7 +870,8 @@ RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, st
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNctau_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarmu_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstartau_"+channel).c_str())))->setConstant(kTRUE);
-	//((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-mbody_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-2body_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-mbody_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-2body_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcMISID_"+channel).c_str())))->setConstant(kTRUE);
@@ -921,8 +955,8 @@ RooWorkspace* SysFit::CreateWorkspace(RooStats::HistFactory::Measurement meas)
 	//build a workspace with a pdf and a modelconfig
 	RooWorkspace *w = RooStats::HistFactory::MakeModelAndMeasurementFast(meas);
 	cout<<"--------------------- Workspace created -------------------"<<endl;
-	w->Print();
-	cout<<"-----------------------------------------------------------"<<endl;
+	//w->Print();
+	//cout<<"-----------------------------------------------------------"<<endl;
 	return w;
 }
 

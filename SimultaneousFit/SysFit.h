@@ -51,7 +51,7 @@
 #include <vector>
 #include <map>
 
-
+vector<string> ch2fit = {"Isolated","Kenriched"};
 using namespace std;
 using namespace RooFit;
 using namespace RooStats;
@@ -63,6 +63,10 @@ class SysFit{
 		SysFit();
 		~SysFit() {;}
 
+		void DoSimultaneousFit();
+		void FitIsolated();
+		void FitKenriched();
+		string GetFitType(){return FitType;}
 		void SetMCcathegory(string MCcat) {MCcathegory = MCcat;}
 		string GetMCcathegory() {return MCcathegory;}
 		void SelectChannel2fit(vector<string> ch) {channel_names = ch;}
@@ -118,8 +122,10 @@ class SysFit{
 
 	vector<string> channel_names;
 	string MCcathegory; //either MCfull or MCTrackerOnly
+	string FitType; //Single, Simultaneous
 
 	Bool_t BBeast;
+	
 
 	map<string,map<string,vector<Double_t>>> start_parameters;
 	map<string,vector<Double_t> > fit_result;
