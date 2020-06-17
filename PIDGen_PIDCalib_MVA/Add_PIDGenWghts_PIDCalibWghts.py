@@ -12,7 +12,7 @@ perfhistname = {}
 perfhistname['K']  = "K_DLLK>4_All"
 perfhistname['Pi'] = "Pi_DLLK<2_All"
 perfhistname['P']  = "P_DLLp>0_All"
-perfhistname['Mu'] = "Mu_DLLmu>2&&DLLmu-DLLK>2&&DLLmu-DLLp>2&&IsMuon==1_All"
+perfhistname['Mu'] = "Mu_DLLmu>2&&DLLmu-DLLK>2&&DLLmu-DLLp>2&&IsMuon==1&&MC15TuneV1_ProbNNghost<0.2_All"
 trcks_PIDCalib  = ['Pi', 'K', 'P', 'Mu']
 leafs_PIDCalib  = ['Brunel_P', 'Brunel_PT', 'nTracks']
 
@@ -213,7 +213,7 @@ def AddPIDCalibWeights(infname, intreename, outfname, magtype, year = '2016', pe
     Proton: [DLLp>0]
     Kaon  : [DLLK>4]
     Pion  : [DLLK<2]
-    Muon  : [DLLmu>2&&DLLmu-DLLK>2&&DLLmu-DLLp>2&&IsMuon==1] (NB: This is an 'offline' cut on Muon not Stripping cut).
+    Muon  : [DLLmu>2&&DLLmu-DLLK>2&&DLLmu-DLLp>2&&IsMuon==1&&MC15TuneV1_ProbNNghost<0.2] (NB: This is an 'offline' cut on Muon not Stripping cut).
 
     Arguments:
     ---------
