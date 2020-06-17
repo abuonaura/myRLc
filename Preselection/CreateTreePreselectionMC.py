@@ -201,28 +201,37 @@ double GetMuCharge(double muID)
 
 double GetMass(double Lb_ISOLATION_PIDK, double Lb_ISOLATION_CHARGE, double muCharge, double PIDdiff)
 {
-    double m=0;
     double m_pi = 139.57018;
     double m_K = 493.677;
-    if (Lb_ISOLATION_PIDK>4.&&(Lb_ISOLATION_CHARGE==-muCharge || (Lb_ISOLATION_CHARGE==muCharge&& PIDdiff<0)))
-        m=m_K;
-    else
-        m=m_pi;
+    double m_p = 938.27208;
+    double m = m_pi;
+    if (Lb_ISOLATION_PIDK>4.)
+    {
+        if (Lb_ISOLATION_CHARGE==-muCharge || (Lb_ISOLATION_CHARGE==muCharge&& PIDdiff<0))
+            m=m_K;
+        else if (Lb_ISOLATION_CHARGE==muCharge&& PIDdiff>=0)
+            m=m_p;
+    }
     return m;
 }
 
-bool isKenriched(double Lb_ISOLATION_BDT, double ISOBDTcut, double Lb_ISOLATION_BDT2, double ISOBDT2cut, double mLc12, double mTOT, double m1, double m2)
+bool isKenriched(double Lb_ISOLATION_BDT, double ISOBDTcut, double Lb_ISOLATION_BDT2, double ISOBDT2cut, double mLc12, double mTOT, double m1, double m2, double Type, double Type2, double NNghost, double NNghost2)
 {
     double m_K = 493.677;
-    if(Lb_ISOLATION_BDT>ISOBDTcut && Lb_ISOLATION_BDT2>ISOBDT2cut)
+    if (Type==3 && NNghost<0.2 && Type2==3 && NNghost2<0.2)
     {
-        if (mLc12>2700 && mTOT<5620 && (m1==m_K || m2==m_K))
-            return true;
+        if(Lb_ISOLATION_BDT>ISOBDTcut && Lb_ISOLATION_BDT2>ISOBDT2cut)
+        {
+            if (mLc12>2700 && mTOT<5620 && (m1==m_K || m2==m_K))
+                return true;
+            else
+                return false;
+        }
         else
             return false;
     }
     else
-        return false;
+      return false;
 }
 '''
 
@@ -298,7 +307,7 @@ def CheckIsolation(df,inputFile,ISOBDTcut, ISOBDT2cut):
     df1 = df1.Define("pTOT_y","pLc12_y+mu_PY")
     df1 = df1.Define("pTOT_z","pLc12_z+mu_PZ")
     df1 = df1.Define("mTOT","TMath::Sqrt(TMath::Power(Etot,2)-pTOT_x*pTOT_x - pTOT_y*pTOT_y - pTOT_z*pTOT_z)")
-    df1 = df1.Define("isKenriched","isKenriched(Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT,"+str(ISOBDT2cut)+", mLc12, mTOT, m1,  m2)")
+    df1 = df1.Define("isKenriched","isKenriched(Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT,"+str(ISOBDT2cut)+", mLc12, mTOT, m1,  m2, Lb_ISOLATION_Type, Lb_ISOLATION_Type2, Lb_ISOLATION_NNghost, Lb_ISOLATION_NNghost2)")
     df1 = df1.Define("isIsolated","Lb_ISOLATION_BDT<"+str(ISOBDTcut))
     column_name_vector = r.std.vector('string')()
     column_name_vector.push_back("isKenriched")
@@ -362,7 +371,7 @@ if __name__ == "__main__":
     restartHLT1_2 = options.restartHLT1_2
     datatype=options.datatype
     polarity=options.polarity
-    preslect = options.preselect
+    preselect = options.preselect
     efficiencies = options.efficiency
     
     if MCfull==True:
@@ -497,7 +506,7 @@ if __name__ == "__main__":
                 print("Writing the preselection tree ...")
                 df3.Snapshot("DecayTree",inputFile[0:-5]+'_preselectionVars.root',column_name_vector)
                 print("Tree written.")
-               
+                
                 df5 = df3.Filter("FinalSel==true&&isIsolated==true")
                 print("Writing the Isolated tree ...")
                 df5.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_iso.root')

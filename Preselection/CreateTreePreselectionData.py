@@ -70,14 +70,15 @@ def ApplyPIDCalibCuts(df):
           df.K_P.between(0,200000)&df.K_PT.between(0,60000),'PIDCalib'] = True
     return df
 
-#def ApplyMuCuts(df,dtype):
-#    df['MuCuts'] = False
-#    if dtype=='Data'or dtype=='DataSS':
-#        df.loc[(df.mu_PIDmu>2) & ((df.mu_PIDmu -df.mu_PIDK)>2) & ((df.mu_PIDmu -df.mu_PIDp)>2) & (df.mu_PIDe<1) & (df.mu_ProbNNghost<0.3),'MuCuts']=True
-#    else:
-#        df.loc[df.mu_ProbNNghost<0.3,'MuCuts']=True
-#    return df
+def ApplyMuCuts(df,dtype):
+    df['MuCuts'] = False
+    if dtype=='Data'or dtype=='DataSS':
+        df.loc[(df.mu_PIDmu>2) & ((df.mu_PIDmu -df.mu_PIDK)>2) & ((df.mu_PIDmu -df.mu_PIDp)>2) & (df.mu_PIDe<1) & (df.mu_ProbNNghost<0.2),'MuCuts']=True
+    else:
+        df.loc[df.mu_ProbNNghost<0.2,'MuCuts']=True
+    return df
 
+'''
 def ApplyMuCuts(df,dtype):
     if dtype=='Data'or dtype=='DataSS':
         df['MuCuts'] = False
@@ -85,6 +86,7 @@ def ApplyMuCuts(df,dtype):
     else:
         df['MuCuts'] = True
     return df
+'''
 
 def GetFinalPreselection(df):
     df['Preselection'] = False
@@ -135,7 +137,8 @@ m_mu = 105.6583745 #+/- 0.0000024 MeV (PDG)
 m_Lc = 2286.46 #+/- 0.14 MeV (PDG)
 
 def CheckIfIsKenriched(df):
-    df1 = df[(df.Lb_ISOLATION_BDT>ISOBDTcut) & (df.Lb_ISOLATION_BDT2>ISOBDT2cut)].copy()
+    df1 = df[(df.Lb_ISOLATION_Type==3) & (df.Lb_ISOLATION_Type2==3) & (df.Lb_ISOLATION_NNghost<0.2) & (df.Lb_ISOLATION_NNghost2<0.2)].copy()
+    df1 = df1[(df1.Lb_ISOLATION_BDT>ISOBDTcut) & (df1.Lb_ISOLATION_BDT2>ISOBDT2cut)]
     df1['E1pi'] = np.sqrt(df1["Lb_ISOLATION_PX"]**2 + df1['Lb_ISOLATION_PY']**2 + df1['Lb_ISOLATION_PZ']**2 + m_pi**2)
     df1['E2pi'] = np.sqrt(df1["Lb_ISOLATION_PX2"]**2 + df1['Lb_ISOLATION_PY2']**2 + df1['Lb_ISOLATION_PZ2']**2 + m_pi**2)
     df1['ELc'] =np.sqrt(df1['Lc_PX']**2+df1['Lc_PY']**2+df1['Lc_PZ']**2 + m_Lc**2)
@@ -152,9 +155,13 @@ def CheckIfIsKenriched(df):
     df1.loc[(df1.Lb_ISOLATION_PIDK>4.)&((df1.Lb_ISOLATION_CHARGE==-df1.muCharge)|
                                         ((df1.Lb_ISOLATION_CHARGE==df1.muCharge) 
                                          & (df1.PIDdiff<0))),'m1']= m_K
+    df1.loc[(df1.Lb_ISOLATION_PIDK>4.)&((df1.Lb_ISOLATION_CHARGE==df1.muCharge) 
+                                         & (df1.PIDdiff>0)),'m1']= m_p
     df1.loc[(df1.Lb_ISOLATION_PIDK2>4.)&((df1.Lb_ISOLATION_CHARGE2==-df1.muCharge)|
                                         ((df1.Lb_ISOLATION_CHARGE2==df1.muCharge) 
                                          & (df1.PIDdiff2<0))),'m2']= m_K
+    df1.loc[(df1.Lb_ISOLATION_PIDK2>4.)&((df1.Lb_ISOLATION_CHARGE2==df1.muCharge) 
+                                         & (df1.PIDdiff2>0)),'m2']= m_p
     df1['E1'] = np.sqrt(df1["Lb_ISOLATION_PX"]**2 + df1['Lb_ISOLATION_PY']**2 + df1['Lb_ISOLATION_PZ']**2 +df1['m1']**2)
     df1['E2'] = np.sqrt(df1["Lb_ISOLATION_PX2"]**2 + df1['Lb_ISOLATION_PY2']**2 + df1['Lb_ISOLATION_PZ2']**2 +df1['m2']**2)
     df1['Emu'] = np.sqrt(df1.mu_PX**2 + df1.mu_PY**2 + df1.mu_PZ**2 +m_mu**2)
@@ -264,7 +271,6 @@ def CreatePreselectionTree(dtype,polarity):
     finalDf_Iso.to_root(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_iso.root','DecayTree')
     ofname = ComputeSweights(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_iso.root',dtype,polarity,'iso')
     print('Created: '+ofname)
-    
     #Create Kenr root file
     print('Creating Kenriched preselected file: ')
     finalDf_Kenr = pd.concat(dflist_final_Kenr)
@@ -274,12 +280,11 @@ def CreatePreselectionTree(dtype,polarity):
     
     #merge all the results together
 
-    return finalDf, finalDf_Full, finalDf_Iso, finalDf_Kenr
+    #return finalDf, finalDf_Full, finalDf_Iso, finalDf_Kenr
 
 
 if __name__ == "__main__":
     dtype = ['Data','DataSS','FakeMu','FakeMuSS']
-    #dtype = ['DataSS']
     polarities=['MagUp','MagDown']
     #polarities=['MagDown']
     for polarity in polarities:
