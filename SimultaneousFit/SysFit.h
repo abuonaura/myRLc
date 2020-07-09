@@ -108,8 +108,8 @@ class SysFit{
 		void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
 		void PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::ModelConfig *mc,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
 
-		
-
+		void SaveFitResults(string,RooFitResult *fitResult);	
+		void CheckDiscrepancyWrtLastRLcValue(string fname);
 
 	private:
 

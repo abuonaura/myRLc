@@ -3,7 +3,7 @@
 #include <TROOT.h>
 #include <vector>
 
-void RunFit(Bool_t rebuild=true,string MCcat="MCfull",string FitType="Kenriched")
+void RunFit(string MCcat,string FitType,Bool_t rebuild=true)
 {
     cout<<rebuild<<endl;
 
@@ -57,6 +57,10 @@ void RunFit(Bool_t rebuild=true,string MCcat="MCfull",string FitType="Kenriched"
             {
                 a.ActivateShapeUncertainties(category[j],true);
 			}
+			else if(category[j]=="mu" || category[j]=="tau")
+			{
+				a.ActivateShapeUncertainties(category[j],true);
+			}
 		}
 	}
 
@@ -65,7 +69,14 @@ void RunFit(Bool_t rebuild=true,string MCcat="MCfull",string FitType="Kenriched"
     RooWorkspace* w = a.CreateWorkspace(m);
 
     RooStats::ModelConfig* mc = a.CreateModel(w);
-    RooFitResult *fit = a.Fit(mc, m, w);
+    RooFitResult *fitResult = a.Fit(mc, m, w);
+
+	for (Int_t i =0; i<names.size();i++)
+    {
+		string outfilename = string("FitResults_")+names[i]+string("_")+MCcat+string(".txt");
+        a.SaveFitResults(outfilename,fitResult);
+        a.CheckDiscrepancyWrtLastRLcValue(outfilename);
+	}
 
 }
 
