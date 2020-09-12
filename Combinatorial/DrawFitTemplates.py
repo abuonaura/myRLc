@@ -12,9 +12,9 @@ datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities=['MagUp','MagDown']
 #polarities=['MagDown']
 particles=['K','Pi']
-sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffix_misid = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-sample_suffix_comb = {'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root','Lcpipi':'_Lcpipi_sw.root'}
+sample_suffix_misid = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root','Lcpipi':'_Lcpipi_sw_withCF.root'}
+sample_suffix_comb = {'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root','Lcpipi':'_sw_noMISID_Lcpipi.root'}
 
 def makeTemplateDataSS(polarity,sample):
     histo = r.TH3F('h_'+polarity+'SS','; q^{2} (Gev^{2}); E_{l} (MeV^{2}); M_{miss}^{2} (GeV^{2})',4,-2,14,10,0,2600,10,-2,14)
@@ -75,13 +75,15 @@ def ScaleHisto(h,value):
 if __name__ == '__main__':
 
     normalise = False
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","norm"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["Lcpipi","iso","Kenriched","norm"])
     print (opts,args)
     for o, a in opts:
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
             sample = 'Kenriched'
+        if o in ("--Lcpipi",):
+            sample = 'Lcpipi'
         if o in ("--norm",):
             normalise = True
     

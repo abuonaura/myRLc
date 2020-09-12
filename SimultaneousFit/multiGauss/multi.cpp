@@ -755,8 +755,8 @@ static const char *__pyx_f[] = {
 /*--- Type declarations ---*/
 struct __pyx_obj_5multi_PyMultiGauss;
 
-/* "multi.pyx":6
- * from ROOT import *
+/* "multi.pyx":7
+ * import ROOT
  * 
  * cdef class PyMultiGauss:             # <<<<<<<<<<<<<<
  *     cdef MultiGauss* c_multig
@@ -1019,9 +1019,6 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
 #define __Pyx_PyErr_GivenExceptionMatches2(err, type1, type2) (PyErr_GivenExceptionMatches(err, type1) || PyErr_GivenExceptionMatches(err, type2))
 #endif
 
-/* CStringEquals.proto */
-static CYTHON_INLINE int __Pyx_StrEq(const char *, const char *);
-
 /* CheckBinaryVersion.proto */
 static int __Pyx_check_binary_version(void);
 
@@ -1057,7 +1054,6 @@ int __pyx_module_is_main_multi = 0;
 /* Implementation of 'multi' */
 static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_range;
-static const char __pyx_k__3[] = "*";
 static const char __pyx_k_ROOT[] = "ROOT";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
@@ -1075,7 +1071,6 @@ static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static PyObject *__pyx_n_s_ROOT;
 static PyObject *__pyx_n_s_TypeError;
-static PyObject *__pyx_n_s__3;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_import;
@@ -1098,7 +1093,7 @@ static PyObject *__pyx_tp_new_5multi_PyMultiGauss(PyTypeObject *t, PyObject *a, 
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 
-/* "multi.pyx":9
+/* "multi.pyx":10
  *     cdef MultiGauss* c_multig
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1128,7 +1123,7 @@ static int __pyx_pf_5multi_12PyMultiGauss___cinit__(struct __pyx_obj_5multi_PyMu
   multifit::MultiGauss *__pyx_t_1;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "multi.pyx":10
+  /* "multi.pyx":11
  * 
  *     def __cinit__(self):
  *         self.c_multig = new MultiGauss()             # <<<<<<<<<<<<<<
@@ -1139,11 +1134,11 @@ static int __pyx_pf_5multi_12PyMultiGauss___cinit__(struct __pyx_obj_5multi_PyMu
     __pyx_t_1 = new multifit::MultiGauss();
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(1, 10, __pyx_L1_error)
+    __PYX_ERR(1, 11, __pyx_L1_error)
   }
   __pyx_v_self->c_multig = __pyx_t_1;
 
-  /* "multi.pyx":9
+  /* "multi.pyx":10
  *     cdef MultiGauss* c_multig
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1162,7 +1157,7 @@ static int __pyx_pf_5multi_12PyMultiGauss___cinit__(struct __pyx_obj_5multi_PyMu
   return __pyx_r;
 }
 
-/* "multi.pyx":11
+/* "multi.pyx":12
  *     def __cinit__(self):
  *         self.c_multig = new MultiGauss()
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1185,7 +1180,7 @@ static void __pyx_pf_5multi_12PyMultiGauss_2__dealloc__(struct __pyx_obj_5multi_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "multi.pyx":12
+  /* "multi.pyx":13
  *         self.c_multig = new MultiGauss()
  *     def __dealloc__(self):
  *         del self.c_multig             # <<<<<<<<<<<<<<
@@ -1194,7 +1189,7 @@ static void __pyx_pf_5multi_12PyMultiGauss_2__dealloc__(struct __pyx_obj_5multi_
  */
   delete __pyx_v_self->c_multig;
 
-  /* "multi.pyx":11
+  /* "multi.pyx":12
  *     def __cinit__(self):
  *         self.c_multig = new MultiGauss()
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1206,7 +1201,7 @@ static void __pyx_pf_5multi_12PyMultiGauss_2__dealloc__(struct __pyx_obj_5multi_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "multi.pyx":14
+/* "multi.pyx":15
  *         del self.c_multig
  * 
  *     def get_parameters(self):             # <<<<<<<<<<<<<<
@@ -1232,19 +1227,19 @@ static PyObject *__pyx_pf_5multi_12PyMultiGauss_4get_parameters(struct __pyx_obj
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_parameters", 0);
 
-  /* "multi.pyx":15
+  /* "multi.pyx":16
  * 
  *     def get_parameters(self):
  *         return self.c_multig.function()             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_map_to_py_std_3a__3a_string____std_3a__3a_vector_3c_double_3e___(__pyx_v_self->c_multig->function()); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 15, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_map_to_py_std_3a__3a_string____std_3a__3a_vector_3c_double_3e___(__pyx_v_self->c_multig->function()); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "multi.pyx":14
+  /* "multi.pyx":15
  *         del self.c_multig
  * 
  *     def get_parameters(self):             # <<<<<<<<<<<<<<
@@ -1882,261 +1877,6 @@ static PyMethodDef __pyx_methods[] = {
   {0, 0, 0, 0}
 };
 
-static int __pyx_import_star_set(PyObject *o, PyObject* py_name, char *name) {
-  static const char* internal_type_names[] = {
-    "MultiGauss",
-    "PyMultiGauss",
-    "X",
-    "Y",
-    "__pyx_ctuple_size_t",
-    "__pyx_ctuple_size_t_struct",
-    "map",
-    "string",
-    "vector",
-    0
-  };
-  const char** type_name = internal_type_names;
-  while (*type_name) {
-    if (__Pyx_StrEq(name, *type_name)) {
-      PyErr_Format(PyExc_TypeError, "Cannot overwrite C type %s", name);
-      goto bad;
-    }
-    type_name++;
-  }
-  if (0);
-  else {
-    if (PyObject_SetAttr(__pyx_m, py_name, o) < 0) goto bad;
-  }
-  return 0;
-  bad:
-  return -1;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-static int
-__Pyx_import_all_from(PyObject *locals, PyObject *v)
-{
-    PyObject *all = PyObject_GetAttrString(v, "__all__");
-    PyObject *dict, *name, *value;
-    int skip_leading_underscores = 0;
-    int pos, err;
-
-    if (all == NULL) {
-        if (!PyErr_ExceptionMatches(PyExc_AttributeError))
-            return -1;
-        PyErr_Clear();
-        dict = PyObject_GetAttrString(v, "__dict__");
-        if (dict == NULL) {
-            if (!PyErr_ExceptionMatches(PyExc_AttributeError))
-                return -1;
-            PyErr_SetString(PyExc_ImportError,
-            "from-import-* object has no __dict__ and no __all__");
-            return -1;
-        }
-#if PY_MAJOR_VERSION < 3
-        all = PyObject_CallMethod(dict, (char *)"keys", NULL);
-#else
-        all = PyMapping_Keys(dict);
-#endif
-        Py_DECREF(dict);
-        if (all == NULL)
-            return -1;
-        skip_leading_underscores = 1;
-    }
-
-    for (pos = 0, err = 0; ; pos++) {
-        name = PySequence_GetItem(all, pos);
-        if (name == NULL) {
-            if (!PyErr_ExceptionMatches(PyExc_IndexError))
-                err = -1;
-            else
-                PyErr_Clear();
-            break;
-        }
-        if (skip_leading_underscores &&
-#if PY_MAJOR_VERSION < 3
-            PyString_Check(name) &&
-            PyString_AS_STRING(name)[0] == '_')
-#else
-            PyUnicode_Check(name) &&
-            PyUnicode_AS_UNICODE(name)[0] == '_')
-#endif
-        {
-            Py_DECREF(name);
-            continue;
-        }
-        value = PyObject_GetAttr(v, name);
-        if (value == NULL)
-            err = -1;
-        else if (PyDict_CheckExact(locals))
-            err = PyDict_SetItem(locals, name, value);
-        else
-            err = PyObject_SetItem(locals, name, value);
-        Py_DECREF(name);
-        Py_XDECREF(value);
-        if (err != 0)
-            break;
-    }
-    Py_DECREF(all);
-    return err;
-}
-
-
-static int __pyx_import_star(PyObject* m) {
-
-    int i;
-    int ret = -1;
-    char* s;
-    PyObject *locals = 0;
-    PyObject *list = 0;
-#if PY_MAJOR_VERSION >= 3
-    PyObject *utf8_name = 0;
-#endif
-    PyObject *name;
-    PyObject *item;
-
-    locals = PyDict_New();              if (!locals) goto bad;
-    if (__Pyx_import_all_from(locals, m) < 0) goto bad;
-    list = PyDict_Items(locals);        if (!list) goto bad;
-
-    for(i=0; i<PyList_GET_SIZE(list); i++) {
-        name = PyTuple_GET_ITEM(PyList_GET_ITEM(list, i), 0);
-        item = PyTuple_GET_ITEM(PyList_GET_ITEM(list, i), 1);
-#if PY_MAJOR_VERSION >= 3
-        utf8_name = PyUnicode_AsUTF8String(name);
-        if (!utf8_name) goto bad;
-        s = PyBytes_AS_STRING(utf8_name);
-        if (__pyx_import_star_set(item, name, s) < 0) goto bad;
-        Py_DECREF(utf8_name); utf8_name = 0;
-#else
-        s = PyString_AsString(name);
-        if (!s) goto bad;
-        if (__pyx_import_star_set(item, name, s) < 0) goto bad;
-#endif
-    }
-    ret = 0;
-
-bad:
-    Py_XDECREF(locals);
-    Py_XDECREF(list);
-#if PY_MAJOR_VERSION >= 3
-    Py_XDECREF(utf8_name);
-#endif
-    return ret;
-}
-
-
-
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
@@ -2172,7 +1912,6 @@ static struct PyModuleDef __pyx_moduledef = {
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_ROOT, __pyx_k_ROOT, sizeof(__pyx_k_ROOT), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
-  {&__pyx_n_s__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
@@ -2282,7 +2021,6 @@ static int __pyx_pymod_exec_multi(PyObject *__pyx_pyinit_module)
 #endif
 {
   PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannyDeclarations
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m && __pyx_m == __pyx_pyinit_module) return 0;
@@ -2370,10 +2108,10 @@ static int __pyx_pymod_exec_multi(PyObject *__pyx_pyinit_module)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_5multi_PyMultiGauss) < 0) __PYX_ERR(1, 6, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5multi_PyMultiGauss) < 0) __PYX_ERR(1, 7, __pyx_L1_error)
   __pyx_type_5multi_PyMultiGauss.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "PyMultiGauss", (PyObject *)&__pyx_type_5multi_PyMultiGauss) < 0) __PYX_ERR(1, 6, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5multi_PyMultiGauss) < 0) __PYX_ERR(1, 6, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "PyMultiGauss", (PyObject *)&__pyx_type_5multi_PyMultiGauss) < 0) __PYX_ERR(1, 7, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5multi_PyMultiGauss) < 0) __PYX_ERR(1, 7, __pyx_L1_error)
   __pyx_ptype_5multi_PyMultiGauss = &__pyx_type_5multi_PyMultiGauss;
   /*--- Type import code ---*/
   /*--- Variable import code ---*/
@@ -2383,33 +2121,27 @@ static int __pyx_pymod_exec_multi(PyObject *__pyx_pyinit_module)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
 
-  /* "multi.pyx":4
- * 
+  /* "multi.pyx":5
  * from MultiGauss cimport MultiGauss
- * from ROOT import *             # <<<<<<<<<<<<<<
+ * #from ROOT import *
+ * import ROOT             # <<<<<<<<<<<<<<
  * 
  * cdef class PyMultiGauss:
  */
-  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_ROOT, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_n_s__3);
-  __Pyx_GIVEREF(__pyx_n_s__3);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s__3);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_ROOT, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_ROOT, __pyx_t_1) < 0) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__pyx_import_star(__pyx_t_2) < 0) __PYX_ERR(1, 4, __pyx_L1_error);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "multi.pyx":1
  * #distutils: language = c++             # <<<<<<<<<<<<<<
  * 
  * from MultiGauss cimport MultiGauss
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "map.to_py":201
  * 
@@ -2424,7 +2156,6 @@ static int __pyx_pymod_exec_multi(PyObject *__pyx_pyinit_module)
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
       __Pyx_AddTraceback("init multi", 0, __pyx_lineno, __pyx_filename);
@@ -3779,12 +3510,6 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
     return (PyErr_GivenExceptionMatches(err, exc_type1) || PyErr_GivenExceptionMatches(err, exc_type2));
 }
 #endif
-
-/* CStringEquals */
-static CYTHON_INLINE int __Pyx_StrEq(const char *s1, const char *s2) {
-    while (*s1 != '\0' && *s1 == *s2) { s1++; s2++; }
-    return *s1 == *s2;
-}
 
 /* CheckBinaryVersion */
 static int __Pyx_check_binary_version(void) {

@@ -13,9 +13,9 @@ datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities=['MagUp','MagDown']
 #polarities=['MagDown']
 particles=['K','Pi']
-sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffix_misid = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-sample_suffix_comb = {'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root','Lcpipi':'_Lcpipi_sw.root'}
+sample_suffix_misid = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root','Lcpipi':'_Lcpipi_sw_withCF.root'}
+sample_suffix_comb = {'iso':'_sw_noMISID_iso.root','Kenriched':'_sw_noMISID_Kenr.root','Lcpipi':'_sw_noMISID_Lcpipi.root'}
 
 
 def makeTemplateCombinatorial(polarity,sample):
@@ -35,13 +35,15 @@ def makeTemplateCombinatorial(polarity,sample):
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","Lcpipi"])
     print (opts,args)
     for o, a in opts:
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
             sample = 'Kenriched'
+        if o in ("--Lcpipi",):
+            sample = 'Lcpipi'
     
     #Plotting data and combinatorial bkg templates
     h_MagUpComb = makeTemplateCombinatorial('MagUp',sample)

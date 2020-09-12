@@ -1,7 +1,8 @@
 #distutils: language = c++
 
 from MultiGauss cimport MultiGauss
-from ROOT import *
+#from ROOT import *
+import ROOT
 
 cdef class PyMultiGauss:
     cdef MultiGauss* c_multig

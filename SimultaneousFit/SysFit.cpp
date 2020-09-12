@@ -21,28 +21,42 @@ SysFit::SysFit()
 	beta_s = 172;
 	gamma_s = 23;
 	BBeast = false;
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{8.E5,3.E3,2.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{6.E4,3.E3,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{2.0E4,3.E3,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{1.E4,10,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{1.E4,10,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.6E5,3.E4,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{3.1E4,10,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{4.0E4,1.E1,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{8.5E5,1.E5,2.E6}));
+	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{6.E4,3.E3,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{7.E3,1E2,2.E4}));
+	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{2.0E4,3.E3,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{3.0E3,1E2,1.E4}));
+	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{1.E4,10,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{4.E3,1E2,1.E4}));
+	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{1.E4,10,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{4.E3,1E2,1.E4}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.9E5,1.E4,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{2.8E4,1.E4,6.E4}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{2.0E4,5.E3,6.E4}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,-1.,1.}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstartau_Isolated",{0.05,-1.,1.}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncpha_Isolated",{0,-3.,3.}));
 
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncmu_Kenriched",{2E2,0,1.E3}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstarmu_Kenriched",{1.E3,0,1.E4}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstartau_Kenriched",{0.,1E-9,1}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,1E-9,1.}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstartau_Kenriched",{0.,-1,1}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,-1,1.}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{3.E3,0,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{2.E3,500,2.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Kenriched",{1.E3,10,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Kenriched",{1.E3,10,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Kenriched",{1.7E3,1.E2,5.E3}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcMISID_Kenriched",{1.7E3,100,1.E4}));
+
+	start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncmu_Lcpipi",{2E2,0,1.E3}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstarmu_Lcpipi",{1.E4,1.E3,2.E4}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstartau_Lcpipi",{0.38,-1,1}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nctau_Lcpipi",{0.,-1,1.}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Lcpipi",{1.E3,0,1.E4}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Lcpipi",{1.E2,0,1.E4}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Lcpipi",{1.E3,0,1.E4}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Lcpipi",{1.E3,0,1.E4}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Lcpipi",{5.E1,0,5.E2}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("NcMISID_Lcpipi",{5E2,0,1.E3}));
 }
 
 void SysFit::FitIsolated()
@@ -59,10 +73,18 @@ void SysFit::FitKenriched()
 	SelectChannel2fit(ch2fit);
 }
 
+void SysFit::FitLcpipi()
+{
+    FitType = "Single";
+    vector<string> ch2fit = {"Lcpipi"};
+    SelectChannel2fit(ch2fit);
+}
+
 void SysFit::DoSimultaneousFit()
 {
 	FitType = "Simultaneous";
-	vector<string> ch2fit = {"Isolated","Kenriched"};
+	vector<string> ch2fit = {"Isolated","Kenriched","Lcpipi"};
+	//vector<string> ch2fit = {"Kenriched","Lcpipi"};
 	SelectChannel2fit(ch2fit);
 }
 
@@ -177,11 +199,11 @@ vector<string> SysFit::GetCategory(map<string,vector<Double_t>> parameters)
 TString SysFit::GetComponentName(TString component)
 {
 	TString name = "";
-	if (component.Contains("h_mu_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #mu #nu";
+	if (component.Contains("_mu_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #mu #nu";
 	else if(component.Contains("h_starmu_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #mu #nu_{#mu}";
 	else if(component.Contains("h_starDs")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c}";
 	else if(component.Contains("h_startau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #tau #nu_{#tau}";
-	else if(component.Contains("h_tau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #tau #nu_{#tau}";
+	else if(component.Contains("_tau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #tau #nu_{#tau}";
 	else if(component.Contains("h_2charm")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c}";
 	else if(component.Contains("h_MISID")) name = "MISID";
 	else if(component.Contains("h_Combinatorial")) name =  "Combinatorial";
@@ -192,11 +214,11 @@ TString SysFit::GetComponentName(TString component)
 Int_t SysFit::GetComponentColor(TString component)
 {       
 	Int_t color=-99;
-	if (component.Contains("h_mu_")) color = kBlue;
+	if (component.Contains("_mu_")) color = kBlue;
 	else if(component.Contains("h_starmu_")) color = kViolet;
 	else if(component.Contains("h_startau_")) color = kMagenta;
 	else if(component.Contains("h_starDs")) color = kGreen+10;
-	else if(component.Contains("h_tau_"))color = kRed;
+	else if(component.Contains("_tau_"))color = kRed;
 	else if(component.Contains("h_2charm")) color = kGreen;
 	else if(component.Contains("h_MISID")) color = kYellow;
 	else if(component.Contains("h_Combinatorial")) color = kOrange+8;
@@ -219,11 +241,15 @@ Double_t SysFit::GetHistoNormalisation(string inputFile, string type)
 	//Read root file with histograms of samples
 	TFile histFile(inputFile.c_str());
 	TH1 *h_temp;
+	Bool_t ffcorr = GetFFcorrectionValue();
 	//Get the histo from the file and save in htemp
-//if(type.find("mu")!= std::string::npos || type.find("tau")!=std::string::npos)
+	
 	if (type=="mu" || type=="tau")
     {
-		histFile.GetObject(("h_w_"+type+"_mean").c_str(),h_temp);
+		if(ffcorr)
+			histFile.GetObject(("h_w_"+type+"_mean").c_str(),h_temp);
+		else
+			histFile.GetObject(("h_"+type).c_str(),h_temp);
 	}
 	else
 		histFile.GetObject(("h_"+type).c_str(),h_temp);
@@ -255,6 +281,7 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 	string category;
 	if (chname.find("Isolated") != std::string::npos) category = "Isolated";
 	if (chname.find("Kenriched") != std::string::npos) category = "Kenriched";
+	if (chname.find("Lcpipi") != std::string::npos) category = "Lcpipi";
 
 
 	//Code for shape variations for 2charm sample
@@ -262,19 +289,30 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 	{
 		sample.SetName("h_"+type);
 		sample.SetHistoName("h_"+type);
+		//sample.AddHistoSys(type+"_variation_"+chname,"h_"+type+"_1ml",inputFile,"", "h_"+type+"_1pl",inputFile,"");
 		sample.AddHistoSys(type+"_variation","h_"+type+"_1ml",inputFile,"", "h_"+type+"_1pl",inputFile,"");
 
+		//sample.AddHistoSys(type+"_quadratic_variation_"+chname,"h_"+type+"_1mq",inputFile,"", "h_"+type+"_1pq",inputFile,"");
 		sample.AddHistoSys(type+"_quadratic_variation","h_"+type+"_1mq",inputFile,"", "h_"+type+"_1pq",inputFile,"");
 	}
 	//Code for shape variation of samples != 2charm/starDs
-	if(shapeUncert && (type=="mu" || type=="tau"))
+	if(type=="mu" || type=="tau")
 	{
+		if(shapeUncert)
+		{
 		cout<<type<<endl;
 		sample.SetName("h_w_"+type+"_mean");
 		sample.SetHistoName("h_w_"+type+"_mean");
+		//sample.AddHistoSys(type+"_shape_unc_"+chname,"h_w_"+type+"_min",inputFile,"","h_w_"+type+"_max",inputFile,"");
 		sample.AddHistoSys(type+"_shape_unc","h_w_"+type+"_min",inputFile,"","h_w_"+type+"_max",inputFile,"");
+		}
+		else
+			{
+				sample.SetName("h_"+type);
+        		sample.SetHistoName("h_"+type);
+			}
 	}
-	if(!shapeUncert)
+	if(!shapeUncert && type!="mu" &&type!="tau")
 	{
 		sample.SetName("h_"+type);
 		sample.SetHistoName("h_"+type);
@@ -305,223 +343,439 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 
 void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units,string name_suffix, bool legend=kFALSE)
 {
-        kinemObserv->setRange(title,plotStart,plotEnd); //define the variable you want to plot
+	kinemObserv->setRange(title,plotStart,plotEnd); //define the variable you want to plot
 
 
-        //---Get the RooSumPdf. This is needed in order to plot the model from 6.14 onwards
-        RooAbsPdf* model_pdf = model->getPdf(idx->getLabel()); // This gets the pdf in the channel defined by the idx.
+	//---Get the RooSumPdf. This is needed in order to plot the model from 6.14 onwards
+	RooAbsPdf* model_pdf = model->getPdf(idx->getLabel()); // This gets the pdf in the channel defined by the idx.
 
-        RooArgSet* components_set = model_pdf->getComponents();
-        //cout<<"-------- components_set ----------"<<endl;
-       // components_set->Print();
-       // cout<<"----------------------------------"<<endl;
-        
-		TIterator* comp_it = components_set->createIterator();
+	RooArgSet* components_set = model_pdf->getComponents();
+	//cout<<"-------- components_set ----------"<<endl;
+	// components_set->Print();
+	// cout<<"----------------------------------"<<endl;
 
-        RooRealSumPdf* model_sumpdf = new RooRealSumPdf(); // this object will contain the model in a given channel, without the priors constraints
+	TIterator* comp_it = components_set->createIterator();
 
-        //--Look for the RooRealSumPdf that contains the model in the given channel
-        const char* component_name;
-        TObject* comp;
-	while (comp = (TObject*) comp_it->Next())
-        {
-                component_name = comp->GetName();
-                if (comp->InheritsFrom("RooRealSumPdf") && (TString(component_name).Contains("model")))
-                {
-                        //cout<<component_name<<endl;
-                        model_sumpdf = (RooRealSumPdf*) components_set->find(component_name);
-                }
-        }
-        
+	RooRealSumPdf* model_sumpdf = new RooRealSumPdf(); // this object will contain the model in a given channel, without the priors constraints
+
+	//--Look for the RooRealSumPdf that contains the model in the given channel
+	const char* component_name;
+	TObject* comp;
+	while ((comp = (TObject*) comp_it->Next()))
+	{
+		component_name = comp->GetName();
+		if (comp->InheritsFrom("RooRealSumPdf") && (TString(component_name).Contains("model")))
+		{
+			cout<<"Component name: "<<component_name<<endl;
+			model_sumpdf = (RooRealSumPdf*) components_set->find(component_name);
+		}
+	}
+
 	//Frame for plotting the fit
-        RooPlot *frame = new RooPlot();
+	RooPlot *frame = new RooPlot();
 	frame->SetName(TString(kinemObserv->GetName())+TString("_frame_")+idx->getLabel());
-        frame = kinemObserv->frame(RooFit::Title(title));
-        //Frame for plotting the pulls
-        RooPlot *pframe = new RooPlot();
+	frame = kinemObserv->frame(RooFit::Title(title));
+	//Frame for plotting the pulls
+	RooPlot *pframe = new RooPlot();
 	pframe->SetName(TString(kinemObserv->GetName())+TString("_pframe_")+idx->getLabel());
-        pframe = kinemObserv->frame("");
+	pframe = kinemObserv->frame("");
 
-        //---Take all the components with the name that starts with L_x
-        RooArgSet* active_components = model_sumpdf->getComponents();
-        std::vector<TString> active_components_names;
+	//---Take all the components with the name that starts with L_x
+	RooArgSet* active_components = model_sumpdf->getComponents();
+	std::vector<TString> active_components_names;
 
-        TIterator* active_comp_it  = active_components->createIterator();
-        TObject* active_comp;
+	TIterator* active_comp_it  = active_components->createIterator();
+	TObject* active_comp;
 
-        while (active_comp = (TObject*) active_comp_it->Next())
-        {
-                TString name(active_comp->GetName());
-                //cout<<name<<endl;
-                if(name.Contains("L_x"))
-                {
-                        active_components_names.push_back(name);
-                }
-        }
+	while ((active_comp = (TObject*) active_comp_it->Next()))
+	{
+		TString name(active_comp->GetName());
+		if(name.Contains("L_x"))
+		{
+			active_components_names.push_back(name);
+		}
+	}
 
-        TString TotComponents = "";
+	TString TotComponents = "";
 
 	//Plot the data points
-        //data->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
 	RooAbsData* channelData = (RooAbsData*) data->reduce(TString("channelCat==channelCat::")+TString(idx->getLabel()));
-  channelData->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
+	channelData->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 
 
-        cout<<"******************************************"<<endl;
-        for (int i = 0; i < active_components_names.size(); ++i)
-        {
-                //std::cout << active_components_names[i] << std::endl;
-				//cout<<endl;
-                TString component = "";
-                component+="*";
-                component+=active_components_names[i];
-                component+="*";
-                TotComponents+=component;
-                if(TotComponents!="")
-                        TotComponents+=",";
+	//cout<<"******************************************"<<endl;
+	for (int i = 0; i < active_components_names.size(); ++i)
+	{
+		if (TotComponents != "")
+		{
+			TotComponents+=",";
+		}
+		TotComponents+="*";
+		TotComponents+=active_components_names[i];
+		TotComponents+="*";
+		Int_t color = GetComponentColor(active_components_names[i]);
 
-                Int_t color = GetComponentColor(active_components_names[i]);
-                //cout<<color<<endl;
-                //cout<<component<<"     "<<TotComponents<<endl;
-                
-                //------- Plot each background component
-                //model_sumpdf->plotOn(frame, RooFit::Slice(*idx),RooFit::ProjWData(*idx,*data),RooFit::ProjectionRange("LbMuNu"),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(component),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot").Data()));
-                //------- Plot each background component stacking them up
-                model_sumpdf->plotOn(frame, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::ProjectionRange("LbMuNu"),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot").Data()));
-        }
-        //cout<<"******************************************"<<endl;
+		//------- Plot each background component stacking them up
+		model_sumpdf->plotOn(frame, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+	}
+	//cout<<"******************************************"<<endl;
 
-        //--------Plot the sum of the backgrounds
-        model_sumpdf->plotOn(frame, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::ProjectionRange("LbMuNu"),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kMagenta-3),RooFit::Components(TotComponents));
+	//--------Plot the sum of the backgrounds
+	model_sumpdf->plotOn(frame, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
 
-data->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
-        //-----Construct the pulls plot
-        RooHist *pulls = frame->pullHist();
+	//-----Construct the pulls plot
+	RooHist *pulls = frame->pullHist();
 	pulls->SetFillColor(kGray+1);
 	pulls->SetLineColor(kWhite);
 	pulls->SetMarkerSize(0.01);
 
+	data->plotOn(frame, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
 	//Build the legend
-        TCanvas *clegend = new TCanvas("clegend", "clegend");
-        TLegend leg(0.1,0.1,0.9,0.9);
-
-        if (strcmp(title,"q^{2}")==0)
+	if (strcmp(title,"q^{2}")==0)
+	{
+		Int_t CharmComp=0;
+        Int_t CharmStarComp=0;
+		TCanvas *clegend = new TCanvas("clegend", "clegend");
+		TLegend leg(0.1,0.1,0.9,0.9);
+		for (int i=0; i<active_components_names.size(); ++i)
 		{
-			std::vector<TGraph*> component_graphs;
-			Int_t CharmComp=0;
-			Int_t CharmStarComp=0;
-			//cout << active_components_names.size()<<endl;
-			for (int i=0; i<active_components_names.size(); ++i)
-			{
-				//cout<<endl;
-				//cout<<"*********************************"<<endl;
-				//cout<<active_components_names[i]<<endl;
-				//cout<<"*********************************"<<endl;
-				Int_t c = frame->numItems()-4 -i;
-				//cout<<c<<endl;
-				//cout<<"*********************************"<<endl;
-				//frame->getObject(c)->Print();
-				//cout<<"*********************************"<<endl;
-				//cout<<frame->numItems()<<endl;
-				//cout<<"*********************************"<<endl;
-				//cout<<endl;
-
-				//TGraph* graph = (TGraph*) frame->getObject(frame->numItems()-4-i);
-				TGraph* graph = (TGraph*) frame->getObject(c);
-				if(active_components_names[i].Contains("h_2charm-"))
-				{
-					CharmComp+=1;
-					if(CharmComp==1)
-					{
-						//cout<<active_components_names[i]<<endl;
-						leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
-					}
-					else
-						continue;
-				}
-				if(active_components_names[i].Contains("h_starDs-"))
-				{
-					CharmStarComp+=1;
-					if(CharmStarComp==1)
-					{
-						//cout<<active_components_names[i]<<endl;
-						leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
-					}
-					else
-						continue;
-				}
-				else
-					leg.AddEntry(graph, GetComponentName(active_components_names[i]), "f");
-			}
+			if(active_components_names[i].Contains("h_2charm-"))
+            {
+                CharmComp+=1;
+                if(CharmComp==1)
+                {
+					leg.AddEntry((TGraph*)frame->findObject(active_components_names[i]+TString("_plot").Data()),GetComponentName(active_components_names[i]),"F");
+                }
+            }
+			else if(active_components_names[i].Contains("h_starDs-"))
+            {
+                CharmStarComp+=1;
+                if(CharmStarComp==1)
+                {
+					leg.AddEntry((TGraph*)frame->findObject(active_components_names[i]+TString("_plot").Data()),GetComponentName(active_components_names[i]),"F");
+                }
+            }
+			else
+				leg.AddEntry((TGraph*)frame->findObject(active_components_names[i]+TString("_plot").Data()),GetComponentName(active_components_names[i]),"F");
 		}
+		leg.Draw();
+		clegend->Print(TString("plots_")+GetMCcathegory()+TString("/Legend.pdf"));
+	}
+	
+	//-----------Draw the fit result with the pulls plot below
+	TCanvas *c1 = new TCanvas("c1", "c1");
+	c1->Divide(1,2);
 
-	 //-----------Draw the fit result with the pulls plot below
-        TCanvas *c1 = new TCanvas("c1", "c1");
-        c1->Divide(1,2);
+	//----Dimensions of the single pads
+	double xmin_1 = 0.005;
+	double xmax_1 = 0.995;
+	double ymin_1 = 0.35;
+	double ymax_1 = 0.995;
+	double xmin_2 = .005;
+	double xmax_2 = .995;
+	double ymin_2 = .05;
+	double ymax_2 = .35;
 
-        //----Dimensions of the single pads
-        double xmin_1 = 0.005;
-        double xmax_1 = 0.995;
-        double ymin_1 = 0.35;
-        double ymax_1 = 0.995;
-        double xmin_2 = .005;
-        double xmax_2 = .995;
-        double ymin_2 = .05;
-        double ymax_2 = .35;
+	c1->cd(1)->SetPad(xmin_1, ymin_1, xmax_1, ymax_1 );
+	c1->cd(1)->SetBottomMargin(0);
+	c1->cd(1)->SetTopMargin(0.15);
+	c1->cd(1)->SetLeftMargin(0.14);
+	c1->cd(2)->SetPad(xmin_2, ymin_2, xmax_2, ymax_2 );
+	c1->cd(2)->SetTopMargin(0);
+	c1->cd(2)->SetBottomMargin(0.14/(ymax_2-ymin_2));
+	c1->cd(2)->SetLeftMargin(0.14);
 
-        c1->cd(1)->SetPad(xmin_1, ymin_1, xmax_1, ymax_1 );
-        c1->cd(1)->SetBottomMargin(0);
-        c1->cd(1)->SetTopMargin(0.15);
-        c1->cd(1)->SetLeftMargin(0.14);
-        c1->cd(2)->SetPad(xmin_2, ymin_2, xmax_2, ymax_2 );
-        c1->cd(2)->SetTopMargin(0);
-        c1->cd(2)->SetBottomMargin(0.14/(ymax_2-ymin_2));
-        c1->cd(2)->SetLeftMargin(0.14);
+	//-draw the bottom pad
+	c1->cd(2);
+	TPad *padbottom = new TPad("pullspad", "pullspad", 0., 0., 1., 0.3);
+	pframe->SetTitle("");
 
-        //-draw the bottom pad
-        c1->cd(2);
-        TPad *padbottom = new TPad("pullspad", "pullspad", 0., 0., 1., 0.3);
-        pframe->SetTitle("");
+	pframe->GetYaxis()->SetTitle("Pulls");
+	pframe->GetYaxis()->SetNdivisions(5);
+	pframe->GetXaxis()->SetNdivisions(frame->GetXaxis()->GetNdivisions());
+	pframe->GetYaxis()->SetTitleOffset(1.2*(ymax_2-ymin_2));
 
-        pframe->GetYaxis()->SetTitle("Pulls");
-        pframe->GetYaxis()->SetNdivisions(5);
-        pframe->GetXaxis()->SetNdivisions(frame->GetXaxis()->GetNdivisions());
-        pframe->GetYaxis()->SetTitleOffset(1.2*(ymax_2-ymin_2));
-
-        pframe->GetYaxis()->SetTitleSize(0.060/(ymax_2-ymin_2));//rescale the title and the label sizes after dividing the pad
-        pframe->GetYaxis()->SetLabelSize(0.060/(ymax_2-ymin_2));
-        pframe->GetXaxis()->SetLabelSize(0.060/(ymax_2-ymin_2));
-        pframe->GetXaxis()->SetTitleSize(0.060/(ymax_2-ymin_2));
+	pframe->GetYaxis()->SetTitleSize(0.060/(ymax_2-ymin_2));//rescale the title and the label sizes after dividing the pad
+	pframe->GetYaxis()->SetLabelSize(0.060/(ymax_2-ymin_2));
+	pframe->GetXaxis()->SetLabelSize(0.060/(ymax_2-ymin_2));
+	pframe->GetXaxis()->SetTitleSize(0.060/(ymax_2-ymin_2));
 	pframe->addPlotable(pulls, "B");
 
-        //pframe->SetMaximum(7.);
-        //pframe->SetMinimum(-7.);
+	//pframe->SetMaximum(7.);
+	//pframe->SetMinimum(-7.);
 
- pframe->Draw();
+	pframe->Draw();
 
-        //--draw the top pad
-        c1->cd(1);
-        frame->GetYaxis()->SetTitleSize(0.060/(ymax_1-ymin_1)); //rescale the title and the label sizes after dividing the pad
-        frame->GetYaxis()->SetLabelSize(0.060/(ymax_1-ymin_1));
-        frame->GetYaxis()->SetTitleOffset(1.2*(ymax_1-ymin_1));
-        frame->SetMinimum(0.01);
-        frame->Draw();
+	//--draw the top pad
+	c1->cd(1);
+	frame->GetYaxis()->SetTitleSize(0.060/(ymax_1-ymin_1)); //rescale the title and the label sizes after dividing the pad
+	frame->GetYaxis()->SetLabelSize(0.060/(ymax_1-ymin_1));
+	frame->GetYaxis()->SetTitleOffset(1.2*(ymax_1-ymin_1));
+	frame->SetMinimum(0.01);
+	frame->Draw();
 
-        TLatex* lhcb = new TLatex();
-        lhcb->SetTextSize(0.06);
-        lhcb->DrawLatexNDC(0.75, 0.90, "LHCb Preliminary");
-        if (strcmp(title,"q^{2}")==0)
-        {
-                clegend->cd();
-                leg.Draw();
-                clegend->Print(TString("plots_")+GetMCcathegory()+TString("/Legend.pdf"));
-                //clegend->Print("plots/Legend.C");
-        }
+	TLatex* lhcb = new TLatex();
+	lhcb->SetTextSize(0.06);
+	lhcb->DrawLatexNDC(0.75, 0.90, "LHCb Preliminary");
 
-        c1->Print(TString("plots_")+GetMCcathegory()+TString("/Fit_")+GetFitVarName(title)+TString("_")+TString(name_suffix)+TString("_")+GetFitType()+TString(".pdf"));
+	c1->Print(TString("plots_")+GetMCcathegory()+TString("/Fit_")+GetFitVarName(title)+TString("_")+TString(name_suffix)+TString("_")+GetFitType()+TString(".pdf"));
 
 }
 
+void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,string name_suffix)
+{
+	fitvar1->SetTitle(title1);
+	fitvar2->SetTitle(title2);
+	fitvar3->SetTitle(title3);
+
+	//---Get the RooSumPdf. This is needed in order to plot the model from 6.14 onwards
+	RooAbsPdf* model_pdf = model->getPdf(idx->getLabel()); // This gets the pdf in the channel defined by the idx.
+
+	RooArgSet* components_set = model_pdf->getComponents();
+	//cout<<"-------- components_set ----------"<<endl;
+	// components_set->Print();
+	// cout<<"----------------------------------"<<endl;
+
+	TIterator* comp_it = components_set->createIterator();
+
+	RooRealSumPdf* model_sumpdf = new RooRealSumPdf(); // this object will contain the model in a given channel, without the priors constraints
+
+	//--Look for the RooRealSumPdf that contains the model in the given channel
+	const char* component_name;
+	TObject* comp;
+	while ((comp = (TObject*) comp_it->Next()))
+	{
+		component_name = comp->GetName();
+		if (comp->InheritsFrom("RooRealSumPdf") && (TString(component_name).Contains("model")))
+		{
+			cout<<"Component name: "<<component_name<<endl;
+			model_sumpdf = (RooRealSumPdf*) components_set->find(component_name);
+		}
+	}
+
+	//Frame for plotting the fit variable 1
+	RooPlot *frame1 = new RooPlot();
+	frame1->SetName(TString(fitvar1->GetName())+TString("_frame_")+idx->getLabel());
+	frame1 = fitvar1->frame(RooFit::Title(title1));
+	
+	//Frame for plotting the fit variable 2
+	RooPlot *frame2 = new RooPlot();
+	frame2->SetName(TString(fitvar2->GetName())+TString("_frame_")+idx->getLabel());
+	frame2 = fitvar2->frame(RooFit::Title(title2));
+	
+	//Frame for plotting the fit variable 3
+	RooPlot *frame3 = new RooPlot();
+	frame3->SetName(TString(fitvar3->GetName())+TString("_frame_")+idx->getLabel());
+	frame3 = fitvar3->frame(RooFit::Title(title3));
+	
+	//Frame for plotting the pulls (fitvar1)
+	RooPlot *pframe1 = new RooPlot();
+	pframe1->SetName(TString(fitvar1->GetName())+TString("_pframe_")+idx->getLabel());
+	pframe1 = fitvar1->frame("");
+	
+	//Frame for plotting the pulls (fitvar2)
+	RooPlot *pframe2 = new RooPlot();
+	pframe2->SetName(TString(fitvar2->GetName())+TString("_pframe_")+idx->getLabel());
+	pframe2 = fitvar2->frame("");
+
+	//Frame for plotting the pulls (fitvar3)
+	RooPlot *pframe3 = new RooPlot();
+	pframe3->SetName(TString(fitvar3->GetName())+TString("_pframe_")+idx->getLabel());
+	pframe3 = fitvar3->frame("");
+	
+	//---Take all the components with the name that starts with L_x
+	RooArgSet* active_components = model_sumpdf->getComponents();
+	std::vector<TString> active_components_names;
+
+	TIterator* active_comp_it  = active_components->createIterator();
+	TObject* active_comp;
+
+	while ((active_comp = (TObject*) active_comp_it->Next()))
+	{
+		TString name(active_comp->GetName());
+		if(name.Contains("L_x"))
+		{
+			active_components_names.push_back(name);
+		}
+	}
+
+	TString TotComponents = "";
+
+	//Plot the data points
+	RooAbsData* channelData = (RooAbsData*) data->reduce(TString("channelCat==channelCat::")+TString(idx->getLabel()));
+	channelData->plotOn(frame1, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
+	channelData->plotOn(frame2, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
+	channelData->plotOn(frame3, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
+
+
+	//cout<<"******************************************"<<endl;
+	for (int i = 0; i < active_components_names.size(); ++i)
+	{
+		if (TotComponents != "")
+		{
+			TotComponents+=",";
+		}
+		TotComponents+="*";
+		TotComponents+=active_components_names[i];
+		TotComponents+="*";
+		Int_t color = GetComponentColor(active_components_names[i]);
+
+		//------- Plot each background component stacking them up
+		model_sumpdf->plotOn(frame1, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		//------- Plot each background component stacking them up
+		model_sumpdf->plotOn(frame2, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		//------- Plot each background component stacking them up
+		model_sumpdf->plotOn(frame3, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+	}
+	//cout<<"******************************************"<<endl;
+
+	//--------Plot the sum of the backgrounds
+	model_sumpdf->plotOn(frame1, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+	model_sumpdf->plotOn(frame2, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+	model_sumpdf->plotOn(frame3, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+
+	//-----Construct the pulls plot
+	RooHist *pulls1 = frame1->pullHist();
+	pulls1->SetFillColor(kGray+1);
+	pulls1->SetLineColor(kWhite);
+	pulls1->SetMarkerSize(0.01);
+	
+	RooHist *pulls2 = frame2->pullHist();
+	pulls2->SetFillColor(kGray+1);
+	pulls2->SetLineColor(kWhite);
+	pulls2->SetMarkerSize(0.01);
+	
+	RooHist *pulls3 = frame3->pullHist();
+	pulls3->SetFillColor(kGray+1);
+	pulls3->SetLineColor(kWhite);
+	pulls3->SetMarkerSize(0.01);
+
+	data->plotOn(frame1, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
+	data->plotOn(frame2, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
+	data->plotOn(frame3, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
+
+	
+	//-----------Draw the fit result with the pulls plot below
+	TCanvas *c1 = new TCanvas("c1", "c1",1500,600);
+	c1->Divide(4,2);
+
+	//----Dimensions of the single pads
+	double xmin_1[4] = {0.005,0.265,0.525,0.785};
+	double xmax_1[4] = {0.26,0.52,0.78,0.995};
+	double ymin_1 = 0.35;
+	double ymax_1 = 0.995;
+	double xmin_2[4] = {0.005,0.265,0.525,0.785};
+	double xmax_2[4] = {0.26,0.52,0.78,0.995};
+	double ymin_2 = .05;
+	double ymax_2 = .35;
+
+	
+	for(Int_t i=0;i<4;i++)
+	{
+		c1->cd(i+1)->SetPad(xmin_1[i], ymin_1, xmax_1[i], ymax_1 );
+		c1->cd(i+1)->SetBottomMargin(0);
+		c1->cd(i+1)->SetTopMargin(0.15);
+		c1->cd(i+1)->SetLeftMargin(0.14);
+	}
+	for(Int_t i=0;i<4;i++)
+	{
+		c1->cd(i+5)->SetPad(xmin_2[i], ymin_2, xmax_2[i], ymax_2 );
+		c1->cd(i+5)->SetTopMargin(0);
+		c1->cd(i+5)->SetBottomMargin(0.14/(ymax_2-ymin_2));
+		c1->cd(i+5)->SetLeftMargin(0.14);
+	}
+	//--draw the top pads
+	c1->cd(1);
+	frame1 = AdjustVarPlot(frame1, ymin_1, ymax_1, ymin_2, ymax_2);
+	frame1->Draw();
+	c1->cd(2);
+	frame2 = AdjustVarPlot(frame2, ymin_1, ymax_1, ymin_2, ymax_2);
+	frame2->Draw();
+
+	c1->cd(3);
+	frame3 = AdjustVarPlot(frame3, ymin_1, ymax_1, ymin_2, ymax_2);
+	frame3->Draw();
+	
+	TLatex* lhcb = new TLatex();
+	lhcb->SetTextSize(0.04);
+	lhcb->DrawLatexNDC(0.6, 0.90, "LHCb Preliminary");
+
+	//-draw the bottom pads
+	c1->cd(5);
+	TPad *padbottom1 = new TPad("pullspad1", "pullspad1", 0., 0., 1., 0.3);
+	pframe1 = AdjustPullsPlot(pframe1,frame1, ymin_1, ymax_1, ymin_2, ymax_2);
+	pframe1->addPlotable(pulls1, "B");
+	pframe1->Draw();
+	
+	c1->cd(6);
+	TPad *padbottom2 = new TPad("pullspad2", "pullspad2", 0., 0., 1., 0.3);
+	pframe2 = AdjustPullsPlot(pframe2, frame2, ymin_1, ymax_1, ymin_2, ymax_2);
+	pframe2->addPlotable(pulls2, "B");
+	pframe2->Draw();
+	
+	c1->cd(7);
+	TPad *padbottom3 = new TPad("pullspad3", "pullspad3", 0., 0., 1., 0.3);
+	pframe3 = AdjustPullsPlot(pframe3, frame3, ymin_1, ymax_1, ymin_2, ymax_2);
+	pframe3->addPlotable(pulls3, "B");
+	pframe3->Draw();
+
+	c1->cd(4);
+	TPad *padlegend = new TPad("padlegend", "padlegend", 0., 0., 1., 1.);
+	gStyle->SetLegendFont(42);
+	//Build the legend
+	Int_t CharmComp=0;
+	Int_t CharmStarComp=0;
+	TLegend *leg = new TLegend(0.1,0.05,0.9,0.7);
+	for (int i=0; i<active_components_names.size(); ++i)
+	{
+		if(active_components_names[i].Contains("h_2charm-"))
+		{
+			CharmComp+=1;
+			if(CharmComp==1)
+			{
+				leg->AddEntry((TGraph*)frame1->findObject(active_components_names[i]+TString("_plot").Data()),GetComponentName(active_components_names[i]),"F");
+			}
+		}
+		else if(active_components_names[i].Contains("h_starDs-"))
+		{
+			CharmStarComp+=1;
+			if(CharmStarComp==1)
+			{
+				leg->AddEntry((TGraph*)frame1->findObject(active_components_names[i]+TString("_plot").Data()),GetComponentName(active_components_names[i]),"F");
+			}
+		}
+		else
+			leg->AddEntry((TGraph*)frame1->findObject(active_components_names[i]+TString("_plot").Data()),GetComponentName(active_components_names[i]),"F");
+	}
+	leg->Draw();
+
+
+	c1->Print(TString("plots_")+GetMCcathegory()+TString("/FitVariables_")+TString(name_suffix)+TString("_")+GetFitType()+TString(".pdf"));
+
+}
+
+RooPlot* SysFit::AdjustVarPlot(RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2)
+{
+	frame->GetYaxis()->SetTitleSize(0.040/(ymax_1-ymin_1)); //rescale the title and the label sizes after dividing the pad
+    frame->GetYaxis()->SetLabelSize(0.025/(ymax_1-ymin_1));
+    frame->GetYaxis()->SetTitleOffset(1.6*(ymax_1-ymin_1));
+    frame->SetMinimum(0.01);
+	return frame;
+}
+
+RooPlot* SysFit::AdjustPullsPlot(RooPlot* pframe, RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2)
+{
+	pframe->SetTitle("");
+	pframe->GetYaxis()->SetTitle("Pulls");
+	pframe->GetYaxis()->SetNdivisions(5);
+	pframe->GetXaxis()->SetNdivisions(frame->GetXaxis()->GetNdivisions());
+	pframe->GetYaxis()->SetTitleOffset(1.6*(ymax_2-ymin_2));
+	pframe->GetYaxis()->SetTitleSize(0.040/(ymax_2-ymin_2));//rescale the title and the label sizes after dividing the pad
+	pframe->GetYaxis()->SetLabelSize(0.025/(ymax_2-ymin_2));
+	pframe->GetXaxis()->SetLabelSize(0.025/(ymax_2-ymin_2));
+	pframe->GetXaxis()->SetTitleSize(0.040/(ymax_2-ymin_2));
+	return pframe;
+}
 
 void SysFit::PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::ModelConfig *mc,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE)
 {
@@ -533,7 +787,7 @@ void SysFit::PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* da
 	RooRealSumPdf* model_sumpdf = new RooRealSumPdf(); // this object will contain the model in a given channel, without the priors constraints
 	const char* component_name;
 	TObject* comp;
-	while (comp = (TObject*) comp_it->Next())
+	while ((comp = (TObject*) comp_it->Next()))
 	{
 		component_name = comp->GetName();
 		if (comp->InheritsFrom("RooRealSumPdf") && (TString(component_name).Contains("model")))
@@ -578,7 +832,7 @@ void SysFit::PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* da
 	TIterator* active_comp_it  = active_components->createIterator();
 	TObject* active_comp;
 
-	while (active_comp = (TObject*) active_comp_it->Next())
+	while ((active_comp = (TObject*) active_comp_it->Next()))
 	{
 		TString name(active_comp->GetName());
 		//cout<<name<<endl;
@@ -864,12 +1118,6 @@ RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, st
 {
 	if (channel=="Kenriched")
 	{
-		/*
-		((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation")))->setVal(1.1231);
-		((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation")))->setConstant(kTRUE);
-		((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation")))->setVal(0.39470);
-		((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation")))->setConstant(kTRUE);
-		*/
 		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setVal(1E-15);
 		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setConstant(kTRUE);
 		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLcstartau_"+channel).c_str())))->setVal(1E-15);
@@ -879,6 +1127,11 @@ RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, st
 		if (IsGaussConstrained("Combinatorial"))
 			((RooRealVar*)(mc->GetNuisanceParameters()->find(("NcCombinatorial_"+channel).c_str())))->setConstant(kTRUE);
 	}
+	if (channel=="Lcpipi")
+    {   
+        ((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setVal(1E-15);
+        ((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setConstant(kTRUE);
+    }
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcmu_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNctau_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarmu_"+channel).c_str())))->setConstant(kTRUE);
@@ -914,10 +1167,17 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 	meas.SetLumiRelErr(0.05);
 
 	//Define a channel for each category
-	vector <string> channel_names = NameChannels();
+	vector <string> channel_names = NameChannels();	
 	string MCcat = GetMCcathegory();
 	Int_t nchannels = channel_names.size();
 	vector <Channel*> channels;
+
+	//Understand if FF corrections are or not activated
+	Bool_t ffcorr = GetFFcorrectionValue();
+	cout<<endl;
+	cout<<" FF corrections: "<<ffcorr<<endl;
+	cout<<endl;
+	
 	for(Int_t i=0; i<nchannels; i++)
 	{
 		channels.push_back(new Channel((string("RLc_kinematic_")+channel_names[i]).c_str()));
@@ -938,9 +1198,19 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 			if(category[j]!="tau" && category[j]!="mu")
 				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
 			if(category[j]=="tau")//NB:: To modify the 0 adding ShapeUnc
-				AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncmu_")+channel_names[i]]);
+			{
+				if(ffcorr)
+					AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncmu_")+channel_names[i]]);
+				else
+					AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncmu_")+channel_names[i]]);
+			}
 			if(category[j]=="mu")//NB:: To modify the 0 adding ShapeUnc
-				AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
+			{
+				if(ffcorr)
+					AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
+				else
+					AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
+			}
 		}
 		channels[i]->SetData("h_data",filename);
 		Data ch_data = channels[i]->GetData();
@@ -958,9 +1228,9 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 	cout << "-------------------------------------------------------------------------------" << endl;
 	// Print to the screen a text representation of the model
 	// just for minor debugging
-	cout << "-------------------------   Printing Tree   ------------------------------" << endl;
-	meas.PrintTree();
-	cout << "-------------------------------------------------------------------------------" << endl;
+	//cout << "-------------------------   Printing Tree   ------------------------------" << endl;
+	//meas.PrintTree();
+	//cout << "-------------------------------------------------------------------------------" << endl;
 
 	return meas;
 }
@@ -986,6 +1256,9 @@ RooStats::ModelConfig* SysFit::CreateModel(RooWorkspace* w)
 
 RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w)
 {
+	//Understand if FF corrections are or not activated
+	Bool_t ffcorr = GetFFcorrectionValue();	
+
 	RooSimultaneous *model_ = (RooSimultaneous*)mc->GetPdf();
 
 	//Fix the MC normalisation of the histos
@@ -1011,9 +1284,13 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	for(Int_t i=0; i<nchannels;i++)
 	{
 		x_vector.push_back((RooRealVar*) obs->find(("obs_z_RLc_kinematic_"+channel_names[i]).c_str()));
+		x_vector[i]->setUnit("[GeV^{2}/c^{4}]");
 		y_vector.push_back((RooRealVar*) obs->find(("obs_y_RLc_kinematic_"+channel_names[i]).c_str()));
+		y_vector[i]->setUnit("[MeV/c^{2}]");
 		z_vector.push_back((RooRealVar*) obs->find(("obs_x_RLc_kinematic_"+channel_names[i]).c_str()));
+		z_vector[i]->setUnit("[GeV^{2}/c^{4}]");
 	}
+
 
 
 	int num_channels = meas.GetChannels().size();
@@ -1021,20 +1298,9 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	//cout<<endl;
 
 	RooCategory *idx = (RooCategory*) obs->find("channelCat");
-	//idx->Print();
 	RooAbsData *data = (RooAbsData*) w->data("obsData");
-	//data->Print();
-	//RooPlot *frame = new RooPlot();
-	//frame = x_vector[0]->frame();
-	//data->plotOn(frame, RooFit::DrawOption("ZP"));
-	//TCanvas *c = new TCanvas("c","c");
-	//frame->Draw();
-	//c->SaveAs("plot.png");
 
-
-	//mc->GetNuisanceParameters()->Print("v");
 	int  nPlotsMax = 1000;
-	//cout <<" check expectedData by category"<<endl;
 	RooDataSet* simData=NULL;
 	RooSimultaneous* simPdf = NULL;
 	if(strcmp(mc->GetPdf()->ClassName(),"RooSimultaneous")==0){
@@ -1045,23 +1311,30 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	}
 
 	RooAbsPdf *pdf = model_->getPdf(idx->getLabel());
-	//cout<<"***********************"<<endl;
-	//cout<<endl;
-	//cout<<"   INTEGRAL PDF BEFORE FIT: "<< endl;
-	//pdf->getNormIntegral(*obs)->getVal()<<endl;
-	//cout<<pdf->createIntegral(*obs)->getVal()<<endl;
-	//cout<<endl;
-	//cout<<"***********************"<<endl;
 
 	RooSimultaneous *model = new RooSimultaneous("simPdf_modified","simPdf_modified",*idx);
 	RooAbsPdf* pdf_;
 	RooCustomizer* cust;
-	RooRealVar *alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_mu_shape_unc");
-	RooRealVar *alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_tau_shape_unc");
+	RooRealVar *alpha_mu_shape_unc;
+	RooRealVar *alpha_tau_shape_unc;
+	RooRealVar *RLcStar_iso;
+    RooRealVar *RLcStar_Lcpipi;
+	/*
+	if(GetFitType()=="Simultaneous")
+	{
+		RLcStar_iso = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Isolated");
+		RLcStar_Lcpipi = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Lcpipi");
+	}
+	*/
+	cout<<"-----FF corr: "<<ffcorr<<endl;
 
-
-	//RooRealVar* alpha = new RooRealVar("alpha","alpha", start_parameters["pha"][0], start_parameters["pha"][1], start_parameters["pha"][2]);
-	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -3., 3.);
+	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -100., 100.);
+	if (ffcorr)
+	{
+		alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_mu_shape_unc");
+		alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_tau_shape_unc");
+	}
+	RooRealVar* RLcStar = new RooRealVar("RLcStar","RLcStar", 0, -1., 1.);
 
 	for (Int_t i =0;i< nchannels;i++)
 	{
@@ -1069,20 +1342,38 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		idx->setIndex(i);
 		pdf_=model_->getPdf(idx->getLabel());
 		cust = new RooCustomizer(*pdf_,"cust");
-		cust->replaceArg(*alpha_mu_shape_unc,*alpha);
-		cust->replaceArg(*alpha_tau_shape_unc,*alpha);
+		/*
+		 * ---------- Make FF alpha parameters between tau and mu the same but different for the channels
+		RooRealVar* alpha = new RooRealVar((string("alpha_")+channel_names[i]).c_str(),(string("alpha_")+channel_names[i]).c_str(), 0, -100., 100.);
+		if (ffcorr)
+		{
+			alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_mu_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+			alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_tau_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+		}
+		*/
+
+/*
+		if(GetFitType()=="Simultaneous")
+		{
+			cust->replaceArg(*RLcStar_iso, *RLcStar);
+			cust->replaceArg(*RLcStar_Lcpipi, *RLcStar);
+		}
+		*/
+		
+		if(ffcorr)
+		{
+			cust->replaceArg(*alpha_mu_shape_unc,*alpha);
+			cust->replaceArg(*alpha_tau_shape_unc,*alpha);
+		}
 		model->addPdf((RooAbsPdf&)*cust->build(),idx->getLabel());
 	}
 
 	RooStats::HistFactory::HistFactorySimultaneous* model_hf = new RooStats::HistFactory::HistFactorySimultaneous(*model);
-	//model_hf->indexCat().Print();
 
 	RooAbsReal* nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
 
 	RooMinuit* minuit_hf = new RooMinuit(*nll_hf);
 	RooArgSet *temp = new RooArgSet();
-
-	//nll_hf->getParameters(temp)->Print("V");
 
 	minuit_hf->setErrorLevel(0.5);
 	minuit_hf->setStrategy(2);
@@ -1092,17 +1383,18 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 	for(Int_t i=0; i<nchannels;i++)
 	{
-		if(channel_names[i]=="Isolated")
-			blindResult(fitResult);
+		//if(channel_names[i]=="Isolated")
+		blindResult(fitResult,channel_names[i]);
 	}
 
 	std::cout <<"-------CHECK---------------------------------" <<fitResult->edm() << std::endl;
 	//Verbose printing: Basic info, values of constant parameters, initial and
 	// final values of floating parameters, global correlations
-	fitResult->Print("V");
+	//fitResult->Print("V");
 
 	//Summary printing: Basic info plus final values of floating fit parameters
-	//fitResult->Print();
+	fitResult->Print();
+	/*
 	for(Int_t i=0; i<nchannels;i++)
 	{ 
 		idx->setIndex(i);
@@ -1111,7 +1403,14 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		PlotFrame(z_vector[i],"q^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i]);
 		//PlotInBins(x_vector[i],"M_{miss}^{2}",data,mc,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
 		//PlotInBins(y_vector[i],"E_{l}",data,mc, model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
+	}*/
+
+	for(Int_t i=0; i<nchannels;i++)
+    { 
+        idx->setIndex(i);
+		PlotFitVariables(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",data,model,idx,channel_names[i]);
 	}
+
 	// Access list of final fit parameter values
 	if(fitResult->status()==0)
 		cout<<" Fit converged "<<endl;
@@ -1131,38 +1430,75 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 
 
-void SysFit::blindResult(RooFitResult *fitResult)
+void SysFit::blindResult(RooFitResult *fitResult,string name_suffix)
 {
-    RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLctau_Isolated");
-    RLc_fitresult->setRange(-999999,999999);
-    Double_t true_val = RLc_fitresult->getVal();
-    cout<<endl;
-    cout<<endl;
-    cout<<"------------------------------------------"<<endl;
-    if (true_val>0 )
-	    cout<< "DON'T WORRY! RLc is positive "<<endl;
-    if (true_val<=0 )
+    RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLctau_"+TString(name_suffix));
+	if(RLc_fitresult)
 	{
-	    cout<< "WORRY! RLc is either negative or zero! "<<endl;
-		cout<<"Unblinded result: "<< true_val<<" +/- "<<  RLc_fitresult->getError()<<endl;
+		RLc_fitresult->setRange(-999999,999999);
+		Double_t true_val = RLc_fitresult->getVal();
+		Double_t error =  RLc_fitresult->getError();
+		cout<<endl;
+		cout<<endl;
+		cout<<"------------------------------------------"<<endl;
+		if (true_val>0 )
+		{
+			cout<< "DON'T WORRY! RLc is positive "<<endl;
+			if ((true_val - 2*error)<0)
+				cout<<" the value is however consistent with 0" <<endl;
+			else
+				cout<<" and the value is not consistent with 0" <<endl;
+		}
+		if (true_val<=0 )
+		{
+			cout<< "WORRY! RLc is either negative or zero! "<<endl;
+			if ((true_val + 2*error)> 0)
+				cout<<" and the value is consistent with 0" <<endl;
+			else
+				cout<<" and the value is not consistent with 0" <<endl;
+			cout<<"Unblinded result: "<< true_val<<" +/- "<<  RLc_fitresult->getError()<<endl;
+		}
+
+		cout<<"------------------------------------------"<<endl;
+		cout<<endl;
+		cout<<endl;
+		RLc_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha).Uniform(0,100)))*TRandom3(beta).Uniform(0,100)*true_val+TRandom3(gamma).Uniform(0,100));
 	}
-		
-    cout<<"------------------------------------------"<<endl;
-    cout<<endl;
-    cout<<endl;
-    RLc_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha).Uniform(0,100)))*TRandom3(beta).Uniform(0,100)*true_val+TRandom3(gamma).Uniform(0,100));
-    RooRealVar* RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_Isolated");
-    RLcStar_fitresult->setRange(-999999,999999);
-    Double_t true_val_star=RLcStar_fitresult->getVal();
-    cout<<"------------------------------------------"<<endl;
-    if (true_val_star>0 )
-	    cout<< "DON'T WORRY! Also RLc* is positive "<<endl;
-    if (true_val_star<=0 )
-	    cout<< "WORRY! RLc* is either negative or zero! "<<endl;
-    cout<<"------------------------------------------"<<endl;
-    cout<<endl;
-    cout<<endl;
-    RLcStar_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha_s).Uniform(0,100)))*TRandom3(beta_s).Uniform(0,100)*RLcStar_fitresult->getVal()+TRandom3(gamma_s).Uniform(0,100));
+	 RooRealVar* RLcStar_fitresult;
+	//if(GetFitType()!="Simultaneous")
+    //	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
+	//else
+	//	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcStar");
+   	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
+	if(RLcStar_fitresult)
+	{
+		RLcStar_fitresult->setRange(-999999,999999);
+		Double_t true_val_star=RLcStar_fitresult->getVal();
+		Double_t error_star =  RLcStar_fitresult->getError();
+		cout<<"------------------------------------------"<<endl;
+		if (true_val_star>0 )
+		{
+			cout<< "DON'T WORRY! RLc* is positive "<<endl;
+			if ((true_val_star - 2*error_star)<0)
+                cout<<" the value is however consistent with 0" <<endl;
+            else
+                cout<<" and the value is not consistent with 0" <<endl;
+			//cout<<"Unblinded result: "<< true_val_star<<" +/- "<<  RLcStar_fitresult->getError()<<endl;
+		}
+		if (true_val_star<=0 )
+		{
+			cout<< "WORRY! RLc* is either negative or zero! "<<endl;
+			if ((true_val_star + 2*error_star)> 0)
+                cout<<" and the value is consistent with 0" <<endl;
+            else
+                cout<<" and the value is not consistent with 0" <<endl;
+			cout<<"Unblinded result: "<< true_val_star<<" +/- "<<  RLcStar_fitresult->getError()<<endl;
+		}
+		cout<<"------------------------------------------"<<endl;
+		cout<<endl;
+		cout<<endl;
+		RLcStar_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha_s).Uniform(0,100)))*TRandom3(beta_s).Uniform(0,100)*RLcStar_fitresult->getVal()+TRandom3(gamma_s).Uniform(0,100));
+	}
 }
 
 void SysFit::SaveFitResults(string fname, RooFitResult *fitResult)
@@ -1182,12 +1518,17 @@ void SysFit::SaveFitResults(string fname, RooFitResult *fitResult)
 	outfile.close();
 }
 
-void SysFit::CheckDiscrepancyWrtLastRLcValue(string fname)
+void SysFit::CheckDiscrepancyWrtLastRLcValue(string fname, string channelName)
 {
 	ifstream fin;
 	fin.open(fname);
 	string search="RLctau_Isolated";
-	string search2="RLcstartau_Isolated";
+	string search2;
+	//if(GetFitType()=="Simultaneous")
+	//	search2="RLcStar";
+	//else
+	search2="RLcstartau_"+channelName;
+	cout<<GetFitType()<<" "<<search2<<endl;
 	if(fin)
 		cout<<"File Found"<<endl;
 	bool isFound=0;

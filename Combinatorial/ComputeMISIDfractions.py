@@ -25,9 +25,9 @@ datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities=['MagUp','MagDown']
 particles=['K','Pi']
 
-sample_suffix =  {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root','Lcpipi':'_Lcpipi_sw.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
+sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root','Lcpipi':'_Lcpipi_sw_withCF.root'}
 
 def ComputeMISIDfraction_NoCF(particle, sample):
     nmisid = {'MagUp':0.0,'MagDown':0.0}
@@ -133,13 +133,15 @@ def ComputeMISIDfraction_WithCF(particle, sample):
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","Lcpipi"])
     print (opts,args)
     for o, a in opts:
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
             sample = 'Kenriched'
+        if o in ("--Lcpipi",):
+            sample = 'Lcpipi'
 
     print('>>>>   Processing '+sample+' sample')
     for particle in particles:

@@ -25,7 +25,7 @@ import os,sys,getopt,time
 #Modified anti-isolated region k enriched definition: (Lb_ISOLATION_BDT>"+str(ISOBDTcut)+"&& Lb_ISOLATION_BDT2>" +str(ISOBDT2cut)+")&&((Lb_ISOLATION_PIDK>4.&&(Lb_ISOLATION_CHARGE==mu_ID/13 ||(Lb_ISOLATION_CHARGE==-mu_ID/13 && Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK<0.))) || (Lb_ISOLATION_PIDK2>4.&&(Lb_ISOLATION_CHARGE2==mu_ID/13 ||(Lb_ISOLATION_CHARGE2==-mu_ID/13 && Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2<0.))))
 
 
-suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
 
 datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 
@@ -249,13 +249,15 @@ def AddMISIDweightNoCF(ifile, ofile,sample,polarity, particle):
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","Lcpipi"])
     print (opts,args)
     for o, a in opts:
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
             sample = 'Kenriched'
+        if o in ("--Lcpipi",):
+            sample = 'Lcpipi'
 
     print (sample)
 

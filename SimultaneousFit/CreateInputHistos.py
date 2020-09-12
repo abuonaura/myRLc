@@ -36,16 +36,17 @@ def GetFileList(category,MCtype):
             startfiles={'data':['Data/Lb_Data_MagUp_preselected_iso_sw.root','Data/Lb_Data_MagDown_preselected_iso_sw.root'],
                         'MISID':['MISID/OppositeSign/K_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/K_sample_MagUp_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_iso_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_iso_sw_withCF.root'],
                         'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_iso.root','CombinatorialBkg/CombinatorialBkg_MagDown_iso.root'],
-                        'mu':['MC_TrackerOnly/Lb_Lcmunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lcmunu_MagDown_preselected_iso.root'],
-                        'tau':['MC_TrackerOnly/Lb_Lctaunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lctaunu_MagDown_preselected_iso.root'],
-                        '2charm':['MC_TrackerOnly/Lb_LcDs_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_LcDs_MagDown_preselected_iso.root'],
-                        'starDs':['MC_TrackerOnly/Lb_Lc2625Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625Ds_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593Ds_MagDown_preselected_iso.root'],
-                        'starmu':['MC_TrackerOnly/Lb_Lc2625munu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625munu_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593munu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593munu_MagDown_preselected_iso.root'],
-                        'startau':['MC_TrackerOnly/Lb_Lc2625taunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2625taunu_MagDown_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593taunu_MagUp_preselected_iso.root','MC_TrackerOnly/Lb_Lc2593taunu_MagDown_preselected_iso.root']}
+                        'mu':['MC_TrackerOnly/Lb_Lcmunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lcmunu_MagDown_preselected_iso_LbCorr.root'],
+                        'tau':['MC_TrackerOnly/Lb_Lctaunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lctaunu_MagDown_preselected_iso_LbCorr.root'],
+                        '2charm':['MC_TrackerOnly/Lb_LcDs_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_LcDs_MagDown_preselected_iso_LbCorr.root'],
+                        'starDs':['MC_TrackerOnly/Lb_Lc2625Ds_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625Ds_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593Ds_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593Ds_MagDown_preselected_iso_LbCorr.root'],
+                        'starmu':['MC_TrackerOnly/Lb_Lc2625munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625munu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagDown_preselected_iso_LbCorr.root'],
+                        'startau':['MC_TrackerOnly/Lb_Lc2625taunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625taunu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagDown_preselected_iso_LbCorr.root']}
 
     
     if category=='Kenriched':
-        startfiles ={'data':['Data/Lb_Data_MagUp_preselected_Kenr_sw.root','Data/Lb_Data_MagDown_preselected_Kenr_sw.root'],
+        if MCtype=='MCfull':
+            startfiles ={'data':['Data/Lb_Data_MagUp_preselected_Kenr_sw.root','Data/Lb_Data_MagDown_preselected_Kenr_sw.root'],
             'MISID':['MISID/OppositeSign/K_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/K_sample_MagDown_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_Kenr_sw_withCF.root'],
             'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_Kenr.root','CombinatorialBkg/CombinatorialBkg_MagDown_Kenr.root'],
             'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_Kenr_LbCorr.root'],
@@ -54,6 +55,29 @@ def GetFileList(category,MCtype):
             'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_Kenr_LbCorr.root'],
             'starDs':['MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_Kenr_LbCorr.root'],
             'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_Kenr_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_Kenr_LbCorr.root']
+            }
+        if MCtype=='MCTrackerOnly':
+            startfiles ={'data':['Data/Lb_Data_MagUp_preselected_Kenr_sw.root','Data/Lb_Data_MagDown_preselected_Kenr_sw.root'],
+            'MISID':['MISID/OppositeSign/K_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/K_sample_MagDown_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_Kenr_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_Kenr_sw_withCF.root'],
+            'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_Kenr.root','CombinatorialBkg/CombinatorialBkg_MagDown_Kenr.root'],
+            'mu':['MC_TrackerOnly/Lb_Lcmunu_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lcmunu_MagDown_preselected_Kenr_LbCorr.root'],
+            'tau':['MC_TrackerOnly/Lb_Lctaunu_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lctaunu_MagDown_preselected_Kenr_LbCorr.root'],
+            '2charm':['MC_TrackerOnly/Lb_LcDs_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_LcDs_MagDown_preselected_Kenr_LbCorr.root'],
+            'starmu':['MC_TrackerOnly/Lb_Lc2625munu_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2625munu_MagDown_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagDown_preselected_Kenr_LbCorr.root'],
+            'starDs':['MC_TrackerOnly/Lb_Lc2625Ds_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2593Ds_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2625Ds_MagDown_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2593Ds_MagDown_preselected_Kenr_LbCorr.root'],
+            'startau':['MC_TrackerOnly/Lb_Lc2625taunu_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagUp_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2625taunu_MagDown_preselected_Kenr_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagDown_preselected_Kenr_LbCorr.root']
+            }
+    if category=='Lcpipi':
+        if MCtype=='MCfull':
+            startfiles ={'data':['Data/Lb_Data_MagUp_preselected_Lcpipi_sw.root','Data/Lb_Data_MagDown_preselected_Lcpipi_sw.root'],
+            'MISID':['MISID/OppositeSign/K_sample_MagUp_Lcpipi_sw_withCF.root','MISID/OppositeSign/K_sample_MagDown_Lcpipi_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagUp_Lcpipi_sw_withCF.root','MISID/OppositeSign/Pi_sample_MagDown_Lcpipi_sw_withCF.root'],
+            'Combinatorial': ['CombinatorialBkg/CombinatorialBkg_MagUp_Lcpipi.root','CombinatorialBkg/CombinatorialBkg_MagDown_Lcpipi.root'],
+            'mu':['MC_full_new/Lb_Lcmunu_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lcmunu_MagDown_full_preselected_Lcpipi_LbCorr.root'],
+            'tau':['MC_full_new/Lb_Lctaunu_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lctaunu_MagDown_full_preselected_Lcpipi_LbCorr.root'],
+            '2charm':['MC_full_new/Lb_LcDs_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_LcDs_MagDown_full_preselected_Lcpipi_LbCorr.root'],
+            'starmu':['MC_full_new/Lb_Lc2625munu_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2625munu_MagDown_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2593munu_MagDown_full_preselected_Lcpipi_LbCorr.root'],
+            'starDs':['MC_full_new/Lb_Lc2625Ds_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2625Ds_MagDown_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2593Ds_MagDown_full_preselected_Lcpipi_LbCorr.root'],
+            'startau':['MC_full_new/Lb_Lc2625taunu_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagUp_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2625taunu_MagDown_full_preselected_Lcpipi_LbCorr.root','MC_full_new/Lb_Lc2593taunu_MagDown_full_preselected_Lcpipi_LbCorr.root']
             }
 
     return startfiles

@@ -8,7 +8,7 @@ from ROOT import RooStats
 from ROOT import RooFit as RF
 from ROOT import RooRealVar, RooGaussian, RooDataSet, RooArgList, RooTreeData
 
-suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root'}
+suffix = {'full':'.root', 'iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
 
 def GetDataset(t, *var):
     ds = r.RooDataSet("ds","ds",t,r.RooArgSet(*var))

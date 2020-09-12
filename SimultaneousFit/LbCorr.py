@@ -7,12 +7,20 @@ Modified by: Annarita Buonaura
 import ROOT as r
 import math as m
 import array
+import argparse
 
 samples = ['Lcmunu','Lctaunu','LcDs','Lc2625munu','Lc2625taunu','Lc2625Ds','Lc2593munu','Lc2593taunu','Lc2593Ds']
 polarities = ['MagUp','MagDown']
-categories = ['iso','Kenr']
+categories = ['iso','Kenr','Lcpipi']
+#categories = ['Kenr','Lcpipi']
 
-filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
+def init():
+    ap = argparse.ArgumentParser(description='Add Lb production corrections')
+    ap.add_argument('--MCfull',dest='MCfull', help="Process MC full simulation samples", required=False, default=False, action='store_true')
+    ap.add_argument('--MCTrackerOnly',dest='MCTO', help="Process MC TrackerOnly simulation samples", required=False, default=False, action='store_true')
+    args = ap.parse_args()
+    return args
+
 
 def getDistr():
     coefFile = r.TFile.Open("PTETAweights_2016_Aug18_250b_L0M.root")
@@ -51,11 +59,17 @@ def correctLb(fileName,treeName):
     fileCorr.Close()
     
 
-def correct_all_new():
+def correct_all_new(MCtype):
     for category in categories:
         for sample in samples:
             for polarity in polarities:
-                fname = filedir+'Lb_'+sample+'_'+polarity+'_full_preselected_'+category+'.root'
+                if MCtype=='MCfull':
+                    filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
+                    fname = filedir+'Lb_'+sample+'_'+polarity+'_full_preselected_'+category+'.root'
+                if MCtype=='MCTrackerOnly':
+                    filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'
+                    fname = filedir+'Lb_'+sample+'_'+polarity+'_preselected_'+category+'.root'
+
                 print(fname)
                 correctLb(fname,'DecayTree')
 
@@ -156,4 +170,15 @@ def draw():
     legend.Draw();
     return c, hMCN,hMC,hData,legend
     
-        
+if __name__== "__main__":
+    args = init()
+    if args.MCfull==True:
+        MCtype = 'MCfull'
+    if args.MCTO==True:
+        MCtype = 'MCTrackerOnly'
+
+    print('MCtype: ', MCtype)
+    correct_all_new(MCtype)
+
+
+

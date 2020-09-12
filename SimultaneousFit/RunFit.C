@@ -3,7 +3,7 @@
 #include <TROOT.h>
 #include <vector>
 
-void RunFit(string MCcat,string FitType,Bool_t rebuild=true)
+void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true)
 {
     cout<<rebuild<<endl;
 
@@ -21,10 +21,14 @@ void RunFit(string MCcat,string FitType,Bool_t rebuild=true)
 	a.SetMCcathegory(MCcat);
 	if (FitType=="Kenriched")
 		a.FitKenriched();
+	if (FitType=="Lcpipi")
+		a.FitLcpipi();
 	if (FitType=="Isolated")
 		a.FitIsolated();
 	if (FitType=="Simultaneous")
 		a.DoSimultaneousFit();
+
+	a.ActivateFFCorrections(ffcorr);
 
 	//Get name of channels for the fit (Isolated/Kenriched)
 	vector<string> names = a.NameChannels();
@@ -59,7 +63,10 @@ void RunFit(string MCcat,string FitType,Bool_t rebuild=true)
 			}
 			else if(category[j]=="mu" || category[j]=="tau")
 			{
-				a.ActivateShapeUncertainties(category[j],true);
+				if (ffcorr)
+					a.ActivateShapeUncertainties(category[j],true);
+				else
+					a.ActivateShapeUncertainties(category[j],false);
 			}
 		}
 	}
@@ -73,9 +80,13 @@ void RunFit(string MCcat,string FitType,Bool_t rebuild=true)
 
 	for (Int_t i =0; i<names.size();i++)
     {
-		string outfilename = string("FitResults_")+names[i]+string("_")+MCcat+string(".txt");
+		string outfilename;
+		if(FitType=="Simultaneous")
+			outfilename = string("FitResults_")+names[i]+string("_")+MCcat+string("_Simultanous.txt");
+		else
+			outfilename = string("FitResults_")+names[i]+string("_")+MCcat+string(".txt");
         a.SaveFitResults(outfilename,fitResult);
-        a.CheckDiscrepancyWrtLastRLcValue(outfilename);
+        a.CheckDiscrepancyWrtLastRLcValue(outfilename, FitType);
 	}
 
 }

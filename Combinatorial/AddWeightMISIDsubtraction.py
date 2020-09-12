@@ -19,12 +19,10 @@ datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 polarities=['MagUp','MagDown']
 particles=['K','Pi']
 
-sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root'}
-sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root'}
-suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root'}
+sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root','Lcpipi':'_Lcpipi_sw.root'}
+suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
+sample_suffixCF = {'iso':'_iso_sw_withCF.root','Kenriched':'_Kenr_sw_withCF.root','Lcpipi':'_Lcpipi_sw_withCF.root'}
 
-ISOBDTcut = 0.35
-ISOBDT2cut = 0.2
 
 h_data = r.TH3F('h_data',';E_{#mu} (MeV);q^{2} (MeV^{2});Mmiss^{2} (MeV^{2})',10,0,2600,4,-2E6,14E6,10,-2E6,14E6)
 
@@ -148,13 +146,15 @@ def AddMISIDweights(ifile,ofile, fractionfile,sample):
 
 if __name__ == '__main__':
     restart = False
-    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","restart"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","Lcpipi","restart"])
     print (opts,args)
     for o, a in opts:
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
             sample = 'Kenriched'
+        if o in ("--Lcpipi",):
+            sample = 'Lcpipi'
         if o in ("--restart",):
             restart = True
     print(sample)

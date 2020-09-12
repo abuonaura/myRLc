@@ -233,6 +233,26 @@ bool isKenriched(double Lb_ISOLATION_BDT, double ISOBDTcut, double Lb_ISOLATION_
     else
       return false;
 }
+
+bool isLcpipi(bool isKenriched, double Lb_ISOLATION_BDT, double ISOBDTcut, double Lb_ISOLATION_BDT2, double ISOBDT2cut, double mLc12, double mTOT, double Type, double Type2, double NNghost, double NNghost2, double charge, double charge2)
+{
+    if (Type==3 && NNghost<0.2 && Type2==3 && NNghost2<0.2)
+    {
+        if(Lb_ISOLATION_BDT>ISOBDTcut && Lb_ISOLATION_BDT2>ISOBDT2cut && isKenriched==false && charge==-charge2)
+        {
+            if(mLc12<2700)
+            {
+                return true;
+                }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}
 '''
 
 func_doublecharm = '''
@@ -280,7 +300,7 @@ double ComputeMbodyWeight(bool mbody, double Lb_TrueHadron_D0_PX, double Lb_True
 '''
 
 
-def CheckIsolation(df,inputFile,ISOBDTcut, ISOBDT2cut):
+def CheckIsolation(df,inputFile,dt,ISOBDTcut, ISOBDT2cut):
     #Masses pi, K, p, mu, Lc
     m_pi = 139.57018 #+/- 0.00035 MeV (PDG)
     m_K = 493.677 #+/- 0.016 MeV (PDG)
@@ -293,7 +313,10 @@ def CheckIsolation(df,inputFile,ISOBDTcut, ISOBDT2cut):
     df1 = df1.Define("pLc12_x","Lc_PX+Lb_ISOLATION_PX+Lb_ISOLATION_PX2")
     df1 = df1.Define("pLc12_y","Lc_PY+Lb_ISOLATION_PY+Lb_ISOLATION_PY2")
     df1 = df1.Define("pLc12_z","Lc_PZ+Lb_ISOLATION_PZ+Lb_ISOLATION_PZ2")
-    df1 = df1.Define("mLc12","TMath::Sqrt(TMath::Power(ELc+E1pi+E2pi,2)+TMath::Power(pLc12_x,2)+TMath::Power(pLc12_y,2)+TMath::Power(pLc12_z,2))")
+    df1 = df1.Define("mLc12","TMath::Sqrt(TMath::Power(ELc+E1pi+E2pi,2)-(TMath::Power(pLc12_x,2)+TMath::Power(pLc12_y,2)+TMath::Power(pLc12_z,2)))")
+    h = df1.Histo1D(('h_mLc12','',100,2000,5000),'mLc12')
+    h.Draw()
+    h.SaveAs('plots/mLc12_'+dt+'.png')
     df1 = df1.Define("muCharge","GetMuCharge(mu_ID)")
     df1 = df1.Define("PIDdiff","Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK")
     df1 = df1.Define("PIDdiff2","Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2")
@@ -307,11 +330,16 @@ def CheckIsolation(df,inputFile,ISOBDTcut, ISOBDT2cut):
     df1 = df1.Define("pTOT_y","pLc12_y+mu_PY")
     df1 = df1.Define("pTOT_z","pLc12_z+mu_PZ")
     df1 = df1.Define("mTOT","TMath::Sqrt(TMath::Power(Etot,2)-pTOT_x*pTOT_x - pTOT_y*pTOT_y - pTOT_z*pTOT_z)")
+    #Lcpipi tot energy (both anti-iso particle are pions)
+    df1 = df1.Define("Etot1","ELc+E1pi+E2pi+Emu")
+    df1 = df1.Define("mTOT1","TMath::Sqrt(TMath::Power(Etot1,2)-pTOT_x*pTOT_x - pTOT_y*pTOT_y - pTOT_z*pTOT_z)")
     df1 = df1.Define("isKenriched","isKenriched(Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT,"+str(ISOBDT2cut)+", mLc12, mTOT, m1,  m2, Lb_ISOLATION_Type, Lb_ISOLATION_Type2, Lb_ISOLATION_NNghost, Lb_ISOLATION_NNghost2)")
+    df1 = df1.Define("isLcpipi","isLcpipi(isKenriched,Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT,"+str(ISOBDT2cut)+", mLc12, mTOT1, Lb_ISOLATION_Type, Lb_ISOLATION_Type2, Lb_ISOLATION_NNghost, Lb_ISOLATION_NNghost2, Lb_ISOLATION_CHARGE, Lb_ISOLATION_CHARGE2)")
     df1 = df1.Define("isIsolated","Lb_ISOLATION_BDT<"+str(ISOBDTcut))
     column_name_vector = r.std.vector('string')()
     column_name_vector.push_back("isKenriched")
     column_name_vector.push_back("isIsolated")
+    column_name_vector.push_back("isLcpipi")
     df1.Snapshot("DecayTree",inputFile[0:-5]+'_Isolation.root',column_name_vector)
     return 
 
@@ -451,7 +479,7 @@ if __name__ == "__main__":
 
             df0 = r.RDataFrame(t)
             
-            CheckIsolation(df0,inputFile,ISOBDTcut, ISOBDT2cut)
+            CheckIsolation(df0,inputFile,dt,ISOBDTcut, ISOBDT2cut)
             fIso = r.TFile(inputFile[0:-5]+'_Isolation.root')
             tIso = fIso.Get(tname2)
             t.AddFriend(tIso)
@@ -497,6 +525,7 @@ if __name__ == "__main__":
             column_name_vector.push_back("FinalSel")
             column_name_vector.push_back("isKenriched")
             column_name_vector.push_back("isIsolated")
+            column_name_vector.push_back("isLcpipi")
             if dt in ['LcDs','Lc2625Ds','Lc2593Ds']:
                 column_name_vector.push_back("twobody")
                 column_name_vector.push_back("mbody")
@@ -515,6 +544,11 @@ if __name__ == "__main__":
                 df6 = df3.Filter("FinalSel==true&&isKenriched==true")
                 print("Writing the Kenriched tree ...")
                 df6.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_Kenr.root')
+                print("Tree written.")
+                
+                df7 = df3.Filter("FinalSel==true&&isLcpipi==true")
+                print("Writing the Lcpipi tree ...")
+                df7.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_Lcpipi.root')
                 print("Tree written.")
 
             if efficiencies==True:

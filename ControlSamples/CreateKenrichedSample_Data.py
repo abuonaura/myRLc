@@ -30,7 +30,9 @@ m_Lc = 2286.46 #+/- 0.14 MeV (PDG)
 
 def EvaluateCutEfficiency(t,ot):
     start = t.GetEntries()
-    end = ot.GetEntries()
+ofname = datadir+'ControlSamples/'+fname[0:-5]+'_Kenr.root'
+
+    of = r.TFile(ofname,'recreate')    end = ot.GetEntries()
     eff = end*1./start
     return eff
 

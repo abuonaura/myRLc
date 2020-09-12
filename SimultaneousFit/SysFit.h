@@ -65,6 +65,7 @@ class SysFit{
 
 		void DoSimultaneousFit();
 		void FitIsolated();
+		void FitLcpipi();
 		void FitKenriched();
 		string GetFitType(){return FitType;}
 		void SetMCcathegory(string MCcat) {MCcathegory = MCcat;}
@@ -73,6 +74,8 @@ class SysFit{
 		vector<string> NameChannels() {return channel_names;} //return Isolated/Kenriched
 		
 		void AllowBarlowBeaston() {BBeast = true;} //if this function is called the BarlowBeaston fit is turned on
+		void ActivateFFCorrections(Bool_t value){FFcorr=value;} //if this function is called the file with the Form Factor correction for mu/tau is read
+		Bool_t GetFFcorrectionValue(){return FFcorr;}
 		void ActivateShapeUncertainties(string, Bool_t);
 		Bool_t IsShapeUncertain(string);
 		void ActivateGaussConstraint(string, Bool_t);
@@ -108,8 +111,14 @@ class SysFit{
 		void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
 		void PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::ModelConfig *mc,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
 
+		RooPlot* AdjustVarPlot(RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
+		RooPlot* AdjustPullsPlot(RooPlot* pframe, RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
+
+		void PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,string name_suffix);
+
+
 		void SaveFitResults(string,RooFitResult *fitResult);	
-		void CheckDiscrepancyWrtLastRLcValue(string fname);
+		void CheckDiscrepancyWrtLastRLcValue(string fname, string chName);
 
 	private:
 
@@ -125,6 +134,7 @@ class SysFit{
 	string FitType; //Single, Simultaneous
 
 	Bool_t BBeast;
+	Bool_t FFcorr;
 	
 
 	map<string,map<string,vector<Double_t>>> start_parameters;
@@ -137,7 +147,7 @@ RooStats::HistFactory::Measurement measure;
 	RooWorkspace *wspace;
 	RooStats::ModelConfig* model;
 
-	void blindResult(RooFitResult*);
+	void blindResult(RooFitResult*,string name_suffix);
 
 };
 

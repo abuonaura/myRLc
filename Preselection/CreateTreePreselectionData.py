@@ -123,7 +123,7 @@ def RemoveDDstar(df):
 
 def FinalSelection(df):
     df['FinalSel']= False
-    df.loc[df.Preselection & df.PassBDT & df.NoDDstar,'FinalSel']=True
+    df.loc[df.Preselection & df.PassBDT,'FinalSel']=True
     return df
 
 ISOBDTcut =0.35
@@ -187,6 +187,25 @@ def CheckIfIsIsolated(df):
     df.loc[df.Lb_ISOLATION_BDT<ISOBDTcut,'isIsolated']=True
     return df
 
+def CheckIfIsLcpipi(df):
+    df1 = df[(df.Lb_ISOLATION_Type==3) & (df.Lb_ISOLATION_Type2==3) & (df.Lb_ISOLATION_NNghost<0.2) & (df.Lb_ISOLATION_NNghost2<0.2)].copy()
+    df1 = df1[(df1.Lb_ISOLATION_BDT>ISOBDTcut) & (df1.Lb_ISOLATION_BDT2>ISOBDT2cut) & (df1.Lb_ISOLATION_CHARGE==-df1.Lb_ISOLATION_CHARGE2) & (df1.isKenriched==False)]
+    df1['isLcpipi'] = False    
+    df1['E1pi'] = np.sqrt(df1["Lb_ISOLATION_PX"]**2 + df1['Lb_ISOLATION_PY']**2 + df1['Lb_ISOLATION_PZ']**2 + m_pi**2)
+    df1['E2pi'] = np.sqrt(df1["Lb_ISOLATION_PX2"]**2 + df1['Lb_ISOLATION_PY2']**2 + df1['Lb_ISOLATION_PZ2']**2 + m_pi**2)
+    df1['ELc'] =np.sqrt(df1['Lc_PX']**2+df1['Lc_PY']**2+df1['Lc_PZ']**2 + m_Lc**2)
+    df1['pLc12_x'] = df1['Lc_PX']+df1["Lb_ISOLATION_PX"]+df1["Lb_ISOLATION_PX2"]
+    df1['pLc12_y'] = df1['Lc_PY']+df1["Lb_ISOLATION_PY"]+df1["Lb_ISOLATION_PY2"]
+    df1['pLc12_z'] = df1['Lc_PZ']+df1["Lb_ISOLATION_PZ"]+df1["Lb_ISOLATION_PZ2"]
+    df1['mLc12'] = np.sqrt((df1['ELc']+df1['E1pi']+df1['E2pi'])**2 -
+                           (df1['pLc12_x']**2+df1['pLc12_y']**2+df1['pLc12_z']**2))
+    df1.loc[df1['mLc12']<2700,'isLcpipi']= True 
+    df1=df1.drop(df1.loc[:, 'E1pi':'mLc12'].columns,axis=1)
+    dfT = pd.merge(df,df1['isLcpipi'],how='left',left_index=True, right_index=True)
+    #print(dfT['isKenriched'].dtype)
+    dfT.loc[dfT['isLcpipi'].isnull(),'isLcpipi']=False
+    dfT['isLcpipi'] = dfT['isLcpipi'].astype('bool')
+    return dfT
 
 def CreatePreselectionTree(dtype,polarity):
     df_list = GetDataframes(dtype,polarity)
@@ -195,6 +214,7 @@ def CreatePreselectionTree(dtype,polarity):
     dflist_final_Full = []
     dflist_final_Iso = []
     dflist_final_Kenr = []
+    dflist_final_Lcpipi = []
     dflist_bdt = LoadBDTdf(dtype,polarity)
     print('Total number of dataframes to analyse: ', len(df_list))
     for n, df in enumerate(df_list):
@@ -223,7 +243,7 @@ def CreatePreselectionTree(dtype,polarity):
         #print('Cut on BDT: ')
         df2 = PassBDT(df2,BDTcut)
         #print('DDstar cut: ')
-        df2 = RemoveDDstar(df2)
+        #df2 = RemoveDDstar(df2)
         #print('Final selection')
         df2 = FinalSelection(df2)
         #print('IsKenriched')
@@ -231,6 +251,8 @@ def CreatePreselectionTree(dtype,polarity):
         #print(dfT['isKenriched'].dtype)
         #print('IsISolated')
         dfT = CheckIfIsIsolated(dfT)
+        #print('IsLcpipi')
+        dfT = CheckIfIsLcpipi(dfT)
 
        
         #Create Kenr dataframe
@@ -245,6 +267,11 @@ def CreatePreselectionTree(dtype,polarity):
         #dfIso = dfIso.drop(dfIso.loc[:,'L0':'isIsolated'].columns,axis=1)
         dflist_final_Iso.append(dfIso)
         
+        #Create Lcpipi dataframe
+        dfLcpipi =  dfT.copy()
+        dfLcpipi = dfLcpipi.loc[(dfLcpipi.FinalSel==True) & (dfLcpipi.isIsolated==False) & (dfLcpipi.isLcpipi==True) & (dfLcpipi.isKenriched==False)]
+        dflist_final_Lcpipi.append(dfLcpipi)
+        
         #create Full dataframe
         dfFull =  dfT.copy()
         dfFull = dfFull.loc[dfFull.FinalSel==True]
@@ -257,7 +284,7 @@ def CreatePreselectionTree(dtype,polarity):
     print('concatenating..')
     finalDf = pd.concat(dflist_final)
     finalDf.to_root(filedir+'Data/Lb_'+dtype+'_'+polarity+'_Df_preselection.root','DecayTree')
-    
+    '''    
     #Create Full root file
     print('Creating full preselected file: ')
     finalDf_Full = pd.concat(dflist_final_Full)
@@ -271,13 +298,20 @@ def CreatePreselectionTree(dtype,polarity):
     finalDf_Iso.to_root(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_iso.root','DecayTree')
     ofname = ComputeSweights(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_iso.root',dtype,polarity,'iso')
     print('Created: '+ofname)
+
     #Create Kenr root file
     print('Creating Kenriched preselected file: ')
     finalDf_Kenr = pd.concat(dflist_final_Kenr)
     finalDf_Kenr.to_root(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_Kenr.root','DecayTree')
     ofname = ComputeSweights(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_Kenr.root',dtype,polarity,'Kenriched')
     print('Created: '+ofname)
-    
+    '''
+    #Create Lcpipi root file
+    print('Creating Lcpipi preselected file: ')
+    finalDf_Lcpipi = pd.concat(dflist_final_Lcpipi)
+    finalDf_Lcpipi.to_root(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_Lcpipi.root','DecayTree')
+    ofname = ComputeSweights(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_Lcpipi.root',dtype,polarity,'Lcpipi')
+    print('Created: '+ofname)
     #merge all the results together
 
     #return finalDf, finalDf_Full, finalDf_Iso, finalDf_Kenr
