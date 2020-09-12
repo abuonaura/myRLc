@@ -8,8 +8,7 @@
 *.table
 *.csv
 *.pyc
+*.so
 */.ipynb_checkpoints/
-*/SimultaneousFit/multiGauss/build/
-*/SimultaneousFit/multiGauss/multi.cpython-36m-x86_64-linux-gnu.so
-*/SimultaneousFit/multiGauss/multi.so
-*/Preselection/__pycache__/
+*/build/
+*/__pycache__/
