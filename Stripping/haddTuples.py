@@ -8,7 +8,7 @@ parser.add_argument('jobID',help = 'folder number')
 parser.add_argument('jobname', choices=['Lb_Lcmunu', 'Lb_Lctaunu','Lb_LcDs','Lb_Lc2625taunu','Lb_Lc2625munu', 'Lb_Lc2593taunu', 'Lb_Lc2593munu','Lb_Lc2625Ds','Lb_Lc2593Ds','Lb_Data','Lb_FakeMu','Lb_DataSS','Lb_FakeMuSS'], help = 'name of the sample')
 parser.add_argument('polarity',choices=['MagUp','MagDown'], help = 'sample polarity')
 parser.add_argument('dtype',choices=['Data','MC','MCtrackeronly'], help = 'type: data or MC files')
-parser.add_argument('filename',choices=['tupleoutMC_trackeronly.root','tupleout.root'], help = 'name of the tree')
+parser.add_argument('filename', help = 'name of the tree')
 
 args = parser.parse_args()
 
@@ -49,8 +49,10 @@ print ('\nJob %s: Found %s outputs in %s subjobs.' % (jobID, nfiles2add, nsubjob
 print('.... Hadding files ...')
 
 #Create name output file
-
-outfile = gangadir+'Datasets/'+dtype+'/'+jobname+'_'+polarity+'.root'
+if dtype=='MC':
+	outfile = '/disk/lhcb_data2/RLcMuonic2016/'+dtype+'_full_new/'+jobname+'_'+polarity+'.root'
+if dtype=='MCtrackeronly':
+	outfile = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'+jobname+'_'+polarity+'.root'
 print(outfile)
 
 logfile='HaddLog_'+jobname+'_'+polarity+'.txt'

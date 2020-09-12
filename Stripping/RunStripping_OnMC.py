@@ -14,8 +14,8 @@ DaVinci().HistogramFile = 'DV_stripping_histos.root'
 #DaVinci().HistogramFile = 'DV_stripping_histos_LbLcmunu_fullsim.root'
 #DaVinci().HistogramFile = 'DV_stripping_histos_LbLcmunu_trackeronly.root'
 DaVinci().EvtMax = -1                         
-#DaVinci().EvtMax = 10000
-DaVinci().PrintFreq = 1000
+#DaVinci().EvtMax = 5000
+DaVinci().PrintFreq = 5000
 DaVinci().DataType  = "2016"
 DaVinci().Simulation = True
 DaVinci().Lumi =  not DaVinci().Simulation
@@ -23,7 +23,10 @@ DaVinci().ProductionType = "Stripping"
 DaVinci().InputType = "DST"
 #DaVinci().TupleFile = "LbLcmunu_fullsim.root"
 #DaVinci().TupleFile = "LbLcmunu_trackeronly.root"
-DaVinci().TupleFile = "tupleoutMC_trackeronly.root"
+#DaVinci().TupleFile = "LbLcDs_fullsim.root"
+
+DaVinci().TupleFile = "tupleoutMC.root"
+#DaVinci().TupleFile = "tupleoutMC_trackeronly.root"
 
 # change the column size of timing table                                                                             
 from Configurables import TimingAuditor, SequencerTimerTool
@@ -37,8 +40,9 @@ if DaVinci().EvtMax !=-1:
 #------ Lb_Lcmunu full sim
 #	DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_Lcmunu/FullSim/00066927_00000004_1.lctaunu.safestrip.dst']
 #------ Lb_Lcmunu trackeronly
-	DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_Lcmunu/TrackerOnly/00089847_00000022_1.lctaunu.safestrip.dst']
-
+#	DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_Lcmunu/TrackerOnly/00089847_00000022_1.lctaunu.safestrip.dst']
+#------ Lb_LcDs full sim
+   DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_LcDs/FullSim/00067063_00000002_1.lctaunu.safestrip.dst']
 
 
 
@@ -303,7 +307,7 @@ DaVinci().appendToMainSequence( [tupleB] )
 from Configurables import TupleToolApplyIsolationMC
 tupleB.Lb.addTool(TupleToolApplyIsolationMC, name="TupleToolApplyIsolationMC")
 tupleB.Lb.TupleToolApplyIsolationMC.WeightsFile="weights.xml"
-tupleB.Lb.ToolList+=["TupleToolApplyIsolation/TupleToolApplyIsolationMC"]
+tupleB.Lb.ToolList+=["TupleToolApplyIsolationMC/TupleToolApplyIsolationMC"]
 
              
 #*************************************                        

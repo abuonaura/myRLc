@@ -10,7 +10,7 @@ parser.add_argument('--polarity', choices=['MagUp', 'MagDown'],
 parser.add_argument('--test', action='store_true',
 				                    help='Run over one file locally')
 parser.add_argument('--full', action='store_true',
-				                    help='Run over all MC samples')
+				                    help='Run over full MC samples')
 
 args = parser.parse_args()
 
@@ -32,6 +32,7 @@ event = {'Lb_Lcmunu':'15874003',
 	 'Lb_Lc2625Ds':'15896005',
 	 'Lb_Lc2593Ds':'15896600'
 	 }
+samples = ['Lcmunu','Lctaunu','LcDs','Lc2593munu','Lc2593taunu','Lc2593Ds','Lc2625munu','Lc2625taunu','Lc2625Ds']
 polarities = ['MagUp','MagDown']
 
 def createjob(sample,polarity,bkPath):
@@ -40,9 +41,9 @@ def createjob(sample,polarity,bkPath):
 
 	j = Job()
 	j.name = sample+'_'+polarity
-	j.comment = 'Added vars for L0/HLT1 emul'
+	j.comment = 'Added true vars for ISOLATED particles'
 	myApp = GaudiExec()
-	myApp.directory = "/home/hep/buonaura/DaVinciGridLn/DaVinciDev_v42r6p1/"
+	myApp.directory = "/home/hep/buonaura/DaVinciDev/DaVinciDev_v42r6p1/"
 	j.application = myApp
 	j.application.options = ['RunStripping_OnMC.py']
 	j.application.platform = 'x86_64-centos7-gcc62-opt'
@@ -59,16 +60,18 @@ def createjob(sample,polarity,bkPath):
 	return
 
 if fullsim==False:
-	#for sample in event.keys():
-		#for polarity in polarities:
-			bkPath = '/MC/2016/Beam6500GeV-2016-'+polarity+'-TrackerOnly-Nu1.6-25ns-Pythia8/Sim09f/Reco16/Stripping28r1Filtered/'+event[sample]+'/LCTAUNU.SAFESTRIP.DST'
+	for sample in samples:
+		print(sample)
+		for polarity in polarities:
+			print(polarity)
+			bkPath = '/MC/2016/Beam6500GeV-2016-'+polarity+'-TrackerOnly-Nu1.6-25ns-Pythia8/Sim09f/Reco16/Stripping28r1Filtered/'+event['Lb_'+sample]+'/LCTAUNU.SAFESTRIP.DST'
 			print(bkPath)
 			createjob(sample,polarity, bkPath)
 else:
-	#for sample in event.keys():
-	#	for polarity in polarities:
-	bkPath = '/MC/2016/Beam6500GeV-2016-'+polarity+'-Nu1.6-25ns-Pythia8/Sim09c/Trig0x6138160F/Reco16/Turbo03/Stripping28Filtered/'+event[sample]+'/LCTAUNU.SAFESTRIP.DST'
-	createjob(sample,polarity, bkPath)
+	for sample in samples:
+		for polarity in polarities:
+			bkPath = '/MC/2016/Beam6500GeV-2016-'+polarity+'-Nu1.6-25ns-Pythia8/Sim09c/Trig0x6138160F/Reco16/Turbo03/Stripping28Filtered/'+event['Lb_'+sample]+'/LCTAUNU.SAFESTRIP.DST'
+			createjob(sample,polarity, bkPath)
 
 
 
