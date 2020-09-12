@@ -10,5 +10,5 @@
 *.pyc
 *.so
 */.ipynb_checkpoints/
-*/build/
+*/build/*/
 */__pycache__/
