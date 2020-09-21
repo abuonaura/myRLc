@@ -21,18 +21,14 @@ SysFit::SysFit()
 	beta_s = 172;
 	gamma_s = 23;
 	BBeast = false;
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{8.5E5,1.E5,2.E6}));
-	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{6.E4,3.E3,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{7.E3,1E2,2.E4}));
-	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{2.0E4,3.E3,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{3.0E3,1E2,1.E4}));
-	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{1.E4,10,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{4.E3,1E2,1.E4}));
-	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{1.E4,10,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{4.E3,1E2,1.E4}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.9E5,1.E4,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{2.8E4,1.E4,6.E4}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{2.0E4,5.E3,6.E4}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{8.E5,3.E3,2.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{14.E3,1E2,2.E5}));
+    start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{6.0E3,1E2,1.E5}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{4.E3,1E2,1.E5}));
+    start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{4.E3,1E2,1.E5}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.6E5,3.E4,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{3.1E4,10,1.E6}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{4.0E4,1.E1,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,-1.,1.}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstartau_Isolated",{0.05,-1.,1.}));
 
@@ -49,7 +45,7 @@ SysFit::SysFit()
 
 	start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncmu_Lcpipi",{2E2,0,1.E3}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstarmu_Lcpipi",{1.E4,1.E3,2.E4}));
-    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstartau_Lcpipi",{0.38,-1,1}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstartau_Lcpipi",{0.5,-1,1}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nctau_Lcpipi",{0.,-1,1.}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Lcpipi",{1.E3,0,1.E4}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Lcpipi",{1.E2,0,1.E4}));
@@ -303,8 +299,7 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 		cout<<type<<endl;
 		sample.SetName("h_w_"+type+"_mean");
 		sample.SetHistoName("h_w_"+type+"_mean");
-		//sample.AddHistoSys(type+"_shape_unc_"+chname,"h_w_"+type+"_min",inputFile,"","h_w_"+type+"_max",inputFile,"");
-		sample.AddHistoSys(type+"_shape_unc","h_w_"+type+"_min",inputFile,"","h_w_"+type+"_max",inputFile,"");
+		sample.AddHistoSys(type+"_shape_unc_"+chname,"h_w_"+type+"_min",inputFile,"","h_w_"+type+"_max",inputFile,"");
 		}
 		else
 			{
@@ -339,6 +334,477 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 
 	if(BBeast) sample.ActivateStatError();
 	(*chan)->AddSample(sample);
+}
+
+
+
+RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, string channel)
+{
+	if (channel=="Kenriched")
+	{
+		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setVal(1E-15);
+		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setConstant(kTRUE);
+		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLcstartau_"+channel).c_str())))->setVal(1E-15);
+		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLcstartau_"+channel).c_str())))->setConstant(kTRUE);
+		if (IsGaussConstrained("MISID"))
+			((RooRealVar*)(mc->GetNuisanceParameters()->find(("NcMISID_"+channel).c_str())))->setConstant(kTRUE);
+		if (IsGaussConstrained("Combinatorial"))
+			((RooRealVar*)(mc->GetNuisanceParameters()->find(("NcCombinatorial_"+channel).c_str())))->setConstant(kTRUE);
+	}
+	if (channel=="Lcpipi")
+    {   
+        ((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setVal(1E-15);
+        ((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setConstant(kTRUE);
+    }
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcmu_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNctau_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarmu_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstartau_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-mbody_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-2body_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-mbody_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-2body_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcMISID_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcCombinatorial_"+channel).c_str())))->setConstant(kTRUE);
+	
+	return mc;
+}
+
+RooStats::ModelConfig* SysFit::FixYields(RooStats::ModelConfig *mc, string sample, string channel)
+{
+	((RooRealVar*)(mc->GetNuisanceParameters()->find(("Nc"+sample+"_"+channel).c_str())))->setConstant(kTRUE);
+	return mc;
+}
+
+
+RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
+{       
+
+	//Define the measurement
+	Measurement meas("RLc","Rb");
+	//Define where to save the workspace
+	meas.SetOutputFilePrefix("results/RLc");
+	//Tell histfactory not to run the fit itself
+	meas.SetExportOnly(kTRUE);
+	//Set the luminosity
+	meas.SetLumi(1.0);
+	meas.SetLumiRelErr(0.05);
+
+	//Define a channel for each category
+	vector <string> channel_names = NameChannels();	
+	string MCcat = GetMCcathegory();
+	Int_t nchannels = channel_names.size();
+	vector <Channel*> channels;
+
+	//Understand if FF corrections are or not activated
+	Bool_t ffcorr = GetFFcorrectionValue();
+	cout<<endl;
+	cout<<" FF corrections: "<<ffcorr<<endl;
+	cout<<endl;
+	
+	for(Int_t i=0; i<nchannels; i++)
+	{
+		channels.push_back(new Channel((string("RLc_kinematic_")+channel_names[i]).c_str()));
+		channels[i]->SetStatErrorConfig(1e-5, "Poisson");
+		map<string,vector<Double_t>> start_param = GetStartParameters(channel_names[i]);
+		vector<string> category = GetCategory(start_param);
+		vector<string> param_names = GetParametersName(start_param);
+		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+MCcat+string(".root");
+		string filename1 = string("RootFiles/DemoHistosLattice_")+channel_names[i]+string("_")+MCcat+string(".root");
+
+		//Add the samples to the channels
+		for(Int_t j=0; j<category.size(); j++)
+		{
+			cout<<category[j]<<endl;
+			cout<<IsShapeUncertain(category[j])<<endl;
+			if(category[j]=="tau")//NB:: To modify the 0 adding ShapeUnc
+			{
+				if(ffcorr)
+					AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncmu_")+channel_names[i]]);
+				else
+					AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncmu_")+channel_names[i]]);
+			}
+			else if(category[j]=="mu")//NB:: To modify the 0 adding ShapeUnc
+			{
+				if(ffcorr)
+					AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
+				else
+					AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
+			}
+			else if(category[j]=="startau")
+				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncstarmu_")+channel_names[i]]);
+			else
+				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
+
+		}
+		channels[i]->SetData("h_data",filename);
+		Data ch_data = channels[i]->GetData();
+		ch_data.SetName("h_data_"+channel_names[i]);
+		cout<<")****** "<<ch_data.GetName()<<endl;
+		meas.AddChannel(*channels[i]);
+		//Define the parameter of interest
+		meas.SetPOI("RLctau_"+channel_names[i]);
+		meas.SetPOI("RLcstartau_"+channel_names[i]);
+ 
+	}
+	cout << endl;
+	cout << "----------------------   Collecting histograms   ------------------------------" << endl;
+	meas.CollectHistograms();
+	cout << "-------------------------------------------------------------------------------" << endl;
+	// Print to the screen a text representation of the model
+	// just for minor debugging
+	//cout << "-------------------------   Printing Tree   ------------------------------" << endl;
+	//meas.PrintTree();
+	//cout << "-------------------------------------------------------------------------------" << endl;
+
+	return meas;
+}
+
+
+RooWorkspace* SysFit::CreateWorkspace(RooStats::HistFactory::Measurement meas)
+{
+	//build a workspace with a pdf and a modelconfig
+	RooWorkspace *w = RooStats::HistFactory::MakeModelAndMeasurementFast(meas);
+	cout<<"--------------------- Workspace created -------------------"<<endl;
+	//w->Print();
+	//cout<<"-----------------------------------------------------------"<<endl;
+	return w;
+}
+
+
+RooStats::ModelConfig* SysFit::CreateModel(RooWorkspace* w)
+{
+	//Get the model manually
+	RooStats::ModelConfig *mc = (RooStats::ModelConfig*) w->obj("ModelConfig");
+	return mc;
+}
+
+RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w)
+{
+	//Understand if FF corrections are or not activated
+	Bool_t ffcorr = GetFFcorrectionValue();	
+
+	RooSimultaneous *model_ = (RooSimultaneous*)mc->GetPdf();
+
+	//Fix the MC normalisation of the histos
+	cout << "-------------------------   Fixing parameters   ------------------------------" << endl;
+	//mc->GetNuisanceParameters()->Print();
+	((RooRealVar*)(mc->GetNuisanceParameters()->find("Lumi")))->setConstant(kTRUE);
+	vector <string> channel_names = NameChannels();
+	Int_t nchannels = channel_names.size();
+	for(Int_t i=0; i<nchannels; i++)
+		SetChannelConstants(mc,channel_names[i]);
+
+	cout << "-------------------------------------------------------------------------------" << endl;
+
+
+	//Tell the name of the obervables
+	RooArgSet *obs = (RooArgSet*) mc->GetObservables();
+	//obs->Print();
+
+	std::vector<RooRealVar*> x_vector;
+	std::vector<RooRealVar*> y_vector;
+	std::vector<RooRealVar*> z_vector;
+
+	for(Int_t i=0; i<nchannels;i++)
+	{
+		x_vector.push_back((RooRealVar*) obs->find(("obs_z_RLc_kinematic_"+channel_names[i]).c_str()));
+		x_vector[i]->setUnit("[GeV^{2}/c^{4}]");
+		y_vector.push_back((RooRealVar*) obs->find(("obs_y_RLc_kinematic_"+channel_names[i]).c_str()));
+		y_vector[i]->setUnit("[MeV/c^{2}]");
+		z_vector.push_back((RooRealVar*) obs->find(("obs_x_RLc_kinematic_"+channel_names[i]).c_str()));
+		z_vector[i]->setUnit("[GeV^{2}/c^{4}]");
+	}
+
+
+
+	int num_channels = meas.GetChannels().size();
+	//cout<< " num_channels = "<<num_channels<<endl;
+	//cout<<endl;
+
+	RooCategory *idx = (RooCategory*) obs->find("channelCat");
+	RooAbsData *data = (RooAbsData*) w->data("obsData");
+
+	int  nPlotsMax = 1000;
+	RooDataSet* simData=NULL;
+	RooSimultaneous* simPdf = NULL;
+	if(strcmp(mc->GetPdf()->ClassName(),"RooSimultaneous")==0){
+		cout <<"Is a simultaneous PDF"<<endl;
+		simPdf = (RooSimultaneous *)(mc->GetPdf());
+	} else {
+		cout <<"Is not a simultaneous PDF"<<endl;
+	}
+
+	RooAbsPdf *pdf = model_->getPdf(idx->getLabel());
+
+	RooSimultaneous *model = new RooSimultaneous("simPdf_modified","simPdf_modified",*idx);
+	RooAbsPdf* pdf_;
+	RooCustomizer* cust;
+	RooRealVar *alpha_mu_shape_unc;
+	RooRealVar *alpha_tau_shape_unc;
+	RooRealVar *RLcStar_iso;
+    RooRealVar *RLcStar_Lcpipi;
+	/*
+	if(GetFitType()=="Simultaneous")
+	{
+		RLcStar_iso = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Isolated");
+		RLcStar_Lcpipi = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Lcpipi");
+	}
+	*/
+	cout<<"-----FF corr: "<<ffcorr<<endl;
+
+
+	//RooRealVar* alpha = new RooRealVar("alpha","alpha", start_parameters["pha"][0], start_parameters["pha"][1], start_parameters["pha"][2]);
+	RooRealVar* RLcStar = new RooRealVar("RLcStar","RLcStar", 0, -1., 1.);
+
+	for (Int_t i =0;i< nchannels;i++)
+	{
+		//cout<<i<<endl;
+		idx->setIndex(i);
+		pdf_=model_->getPdf(idx->getLabel());
+		cust = new RooCustomizer(*pdf_,"cust");
+		RooRealVar* alpha = new RooRealVar((string("alpha_")+channel_names[i]).c_str(),(string("alpha_")+channel_names[i]).c_str(), 0, -100., 100.);
+		if (ffcorr)
+		{
+			alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_mu_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+			alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_tau_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+		}
+
+/*
+		if(GetFitType()=="Simultaneous")
+		{
+			cust->replaceArg(*RLcStar_iso, *RLcStar);
+			cust->replaceArg(*RLcStar_Lcpipi, *RLcStar);
+		}
+		*/
+		
+		if(ffcorr)
+		{
+			cust->replaceArg(*alpha_mu_shape_unc,*alpha);
+			cust->replaceArg(*alpha_tau_shape_unc,*alpha);
+		}
+		model->addPdf((RooAbsPdf&)*cust->build(),idx->getLabel());
+	}
+
+	RooStats::HistFactory::HistFactorySimultaneous* model_hf = new RooStats::HistFactory::HistFactorySimultaneous(*model);
+
+	RooAbsReal* nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
+
+	RooMinuit* minuit_hf = new RooMinuit(*nll_hf);
+	RooArgSet *temp = new RooArgSet();
+
+	minuit_hf->setErrorLevel(0.5);
+	minuit_hf->setStrategy(2);
+	minuit_hf->fit("smh");
+
+	RooFitResult *fitResult=minuit_hf->save("TempResult","TempResult");
+
+	for(Int_t i=0; i<nchannels;i++)
+	{
+		//if(channel_names[i]=="Isolated")
+		blindResult(fitResult,channel_names[i]);
+	}
+
+	std::cout <<"-------CHECK---------------------------------" <<fitResult->edm() << std::endl;
+	//Verbose printing: Basic info, values of constant parameters, initial and
+	// final values of floating parameters, global correlations
+	//fitResult->Print("V");
+
+	//Summary printing: Basic info plus final values of floating fit parameters
+	fitResult->Print();
+	/*
+	for(Int_t i=0; i<nchannels;i++)
+	{ 
+		idx->setIndex(i);
+		PlotFrame(x_vector[i],"M_{miss}^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
+		PlotFrame(y_vector[i],"E_{l}",data,model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
+		PlotFrame(z_vector[i],"q^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i]);
+		//PlotInBins(x_vector[i],"M_{miss}^{2}",data,mc,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
+		//PlotInBins(y_vector[i],"E_{l}",data,mc, model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
+	}*/
+
+	for(Int_t i=0; i<nchannels;i++)
+    { 
+        idx->setIndex(i);
+		PlotFitVariables(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",data,model,idx,channel_names[i]);
+	}
+
+	// Access list of final fit parameter values
+	if(fitResult->status()==0)
+		cout<<" Fit converged "<<endl;
+	else
+		cout<<"!!!! ATTENTION !!!!    Fit NON CONVERGING!  "<<endl;
+
+	cout << "final value of floating parameters" << endl ;
+	fitResult->floatParsFinal().Print("s") ;
+
+
+	
+	//RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLtau");
+	//Double_t fitOut[] = {RLc_fitresult->getVal(),RLc_fitresult->errorVar()->getVal()};
+
+	return fitResult;
+}
+
+
+
+void SysFit::blindResult(RooFitResult *fitResult,string name_suffix)
+{
+    RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLctau_"+TString(name_suffix));
+	if(RLc_fitresult)
+	{
+		RLc_fitresult->setRange(-999999,999999);
+		Double_t true_val = RLc_fitresult->getVal();
+		Double_t error =  RLc_fitresult->getError();
+		cout<<endl;
+		cout<<endl;
+		cout<<"------------------------------------------"<<endl;
+		if (true_val>0 )
+		{
+			cout<< "DON'T WORRY! RLc is positive "<<endl;
+			if ((true_val - 2*error)<0)
+				cout<<" the value is however consistent with 0" <<endl;
+			else
+				cout<<" and the value is not consistent with 0" <<endl;
+		}
+		if (true_val<=0 )
+		{
+			cout<< "WORRY! RLc is either negative or zero! "<<endl;
+			if ((true_val + 2*error)> 0)
+				cout<<" and the value is consistent with 0" <<endl;
+			else
+				cout<<" and the value is not consistent with 0" <<endl;
+			cout<<"Unblinded result: "<< true_val<<" +/- "<<  RLc_fitresult->getError()<<endl;
+		}
+
+		cout<<"------------------------------------------"<<endl;
+		cout<<endl;
+		cout<<endl;
+		RLc_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha).Uniform(0,100)))*TRandom3(beta).Uniform(0,100)*true_val+TRandom3(gamma).Uniform(0,100));
+	}
+	 RooRealVar* RLcStar_fitresult;
+	//if(GetFitType()!="Simultaneous")
+    //	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
+	//else
+	//	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcStar");
+   	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
+	if(RLcStar_fitresult)
+	{
+		RLcStar_fitresult->setRange(-999999,999999);
+		Double_t true_val_star=RLcStar_fitresult->getVal();
+		Double_t error_star =  RLcStar_fitresult->getError();
+		cout<<"------------------------------------------"<<endl;
+		if (true_val_star>0 )
+		{
+			cout<< "DON'T WORRY! RLc* is positive "<<endl;
+			if ((true_val_star - 2*error_star)<0)
+                cout<<" the value is however consistent with 0" <<endl;
+            else
+                cout<<" and the value is not consistent with 0" <<endl;
+			//cout<<"Unblinded result: "<< true_val_star<<" +/- "<<  RLcStar_fitresult->getError()<<endl;
+		}
+		if (true_val_star<=0 )
+		{
+			cout<< "WORRY! RLc* is either negative or zero! "<<endl;
+			if ((true_val_star + 2*error_star)> 0)
+                cout<<" and the value is consistent with 0" <<endl;
+            else
+                cout<<" and the value is not consistent with 0" <<endl;
+			cout<<"Unblinded result: "<< true_val_star<<" +/- "<<  RLcStar_fitresult->getError()<<endl;
+		}
+		cout<<"------------------------------------------"<<endl;
+		cout<<endl;
+		cout<<endl;
+		RLcStar_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha_s).Uniform(0,100)))*TRandom3(beta_s).Uniform(0,100)*RLcStar_fitresult->getVal()+TRandom3(gamma_s).Uniform(0,100));
+	}
+}
+
+void SysFit::SaveFitResults(string fname, RooFitResult *fitResult)
+{
+	ofstream outfile;
+	outfile.open(fname,std::ios::app);
+	time_t t = time(0);   // get time now
+    tm* now = localtime(&t);
+	//outfile<<" Results of fit performed on: "<<now->tm_mday<<"-"<<(now->tm_mon + 1)<<"-"<<(now->tm_year + 1900)<<"\n"; 
+	auto pars = fitResult->floatParsFinal();
+	RooRealVar *p;
+	for (Int_t i=0; i<pars.getSize();i++)
+	{
+		p = (RooRealVar *)pars.at(i);
+		outfile<<p->getTitle()<<" "<<p->getVal()<<" "<<p->getError()<<" "<<now->tm_mday<<"  "<<(now->tm_mon + 1)<<"  "<<(now->tm_year + 1900)<<" "<<(now->tm_hour)<<":"<<(now->tm_min)<<endl;
+	}
+	outfile.close();
+}
+
+void SysFit::CheckDiscrepancyWrtLastRLcValue(string fname, string channelName)
+{
+	ifstream fin;
+	fin.open(fname);
+	string search="RLctau_Isolated";
+	string search2;
+	//if(GetFitType()=="Simultaneous")
+	//	search2="RLcStar";
+	//else
+	search2="RLcstartau_"+channelName;
+	cout<<GetFitType()<<" "<<search2<<endl;
+	if(fin)
+		cout<<"File Found"<<endl;
+	bool isFound=0;
+	string temp;
+	double RLcTemp=0., sigmaRLcTemp=0.;
+	int day=0, month=0, year=0;
+	string time;
+	vector<double> RLc, sigmaRLc, RLcSt, sigmaRLcSt;
+	vector<int> RLcD, RLcM, RLcY, RLcStD, RLcStM, RLcStY;
+	vector<string> RLcTime, RLcStTime;
+	while(fin>>temp>>RLcTemp>>sigmaRLcTemp>>day>>month>>year>>time)
+	{
+		if(temp.compare(search)==0)
+		{
+			RLc.push_back(RLcTemp);
+            sigmaRLc.push_back(sigmaRLcTemp);
+			RLcD.push_back(day);
+			RLcM.push_back(month);
+			RLcY.push_back(year);
+			RLcTime.push_back(time);
+		}
+		if(temp.compare(search2)==0)
+		{
+			RLcSt.push_back(RLcTemp);
+            sigmaRLcSt.push_back(sigmaRLcTemp);
+			RLcStD.push_back(day);
+			RLcStM.push_back(month);
+			RLcStY.push_back(year);
+			RLcStTime.push_back(time);
+		}
+	}
+	cout<<"-------------- RLc ----------------"<<endl;
+	for (int i=0; i<RLc.size();i++)
+	{
+		cout<<RLc.at(i)<<" "<<sigmaRLc.at(i)<<" "<<RLcD.at(i)<<"-"<<RLcM.at(i)<<"-"<<RLcY.at(i)<<" "<<RLcTime.at(i)<<endl;
+	}
+	double DeltaRLc=0, DeltaSigmaRLc=0;
+	if(RLc.size()>1)
+	{
+		DeltaRLc = RLc.at(RLc.size()-1) - RLc.at(RLc.size()-2);
+		DeltaSigmaRLc = sigmaRLc.at(sigmaRLc.size()-1) - sigmaRLc.at(sigmaRLc.size()-2);
+		cout<<"Difference in RLc fitted (blinded) value: "<<DeltaRLc<<" and sigma: " <<DeltaSigmaRLc<<endl;
+		cout<<"Compared results of RLc obtained on: "<<RLcD.at(RLc.size()-1)<<"-"<<RLcM.at(RLc.size()-1)<<"-"<<RLcY.at(RLc.size()-1)<<" at "<<RLcTime.at(RLc.size()-1)<<"  and  RLc obtained on: "<<RLcD.at(RLc.size()-2)<<"-"<<RLcM.at(RLc.size()-2)<<"-"<<RLcY.at(RLc.size()-2)<<" at "<<RLcTime.at(RLc.size()-2)<<endl;
+	}
+	cout<<"-------------- RLcStar ----------------"<<endl;
+	for (int i=0; i<RLcSt.size();i++)
+	{
+		cout<<RLcSt.at(i)<<" "<<sigmaRLcSt.at(i)<<" "<<RLcStD.at(i)<<"-"<<RLcStM.at(i)<<"-"<<RLcStY.at(i)<<" "<<RLcStTime.at(i)<<endl;
+	}
+	double DeltaRLcSt=0, DeltaSigmaRLcSt=0;
+	if(RLcSt.size()>1)
+	{
+		DeltaRLcSt = RLcSt.at(RLcSt.size()-1) - RLcSt.at(RLcSt.size()-2);
+		DeltaSigmaRLcSt = sigmaRLcSt.at(sigmaRLcSt.size()-1) - sigmaRLcSt.at(sigmaRLcSt.size()-2);
+		cout<<"Difference in RLcStar fitted (blinded) value: "<<DeltaRLcSt<<" and sigma: " <<DeltaSigmaRLcSt<<endl;
+		cout<<"Compared results of RLcStar obtained on: "<<RLcStD.at(RLcSt.size()-1)<<"-"<<RLcStM.at(RLcSt.size()-1)<<"-"<<RLcStY.at(RLcSt.size()-1)<<" at "<<RLcStTime.at(RLcSt.size()-1)<<"  and  RLcStar obtained on: "<<RLcStD.at(RLcSt.size()-2)<<"-"<<RLcStM.at(RLcSt.size()-2)<<"-"<<RLcStY.at(RLcSt.size()-2)<<" at "<<RLcStTime.at(RLcSt.size()-2)<<endl;
+	}
+
 }
 
 void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units,string name_suffix, bool legend=kFALSE)
@@ -1112,479 +1578,3 @@ void SysFit::PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* da
 }
 
 
-
-
-RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, string channel)
-{
-	if (channel=="Kenriched")
-	{
-		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setVal(1E-15);
-		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setConstant(kTRUE);
-		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLcstartau_"+channel).c_str())))->setVal(1E-15);
-		((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLcstartau_"+channel).c_str())))->setConstant(kTRUE);
-		if (IsGaussConstrained("MISID"))
-			((RooRealVar*)(mc->GetNuisanceParameters()->find(("NcMISID_"+channel).c_str())))->setConstant(kTRUE);
-		if (IsGaussConstrained("Combinatorial"))
-			((RooRealVar*)(mc->GetNuisanceParameters()->find(("NcCombinatorial_"+channel).c_str())))->setConstant(kTRUE);
-	}
-	if (channel=="Lcpipi")
-    {   
-        ((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setVal(1E-15);
-        ((RooRealVar*)(mc->GetParametersOfInterest()->find(("RLctau_"+channel).c_str())))->setConstant(kTRUE);
-    }
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcmu_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNctau_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarmu_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstartau_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-mbody_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-2body_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-mbody_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-2body_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcMISID_"+channel).c_str())))->setConstant(kTRUE);
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcCombinatorial_"+channel).c_str())))->setConstant(kTRUE);
-	
-	return mc;
-}
-
-RooStats::ModelConfig* SysFit::FixYields(RooStats::ModelConfig *mc, string sample, string channel)
-{
-	((RooRealVar*)(mc->GetNuisanceParameters()->find(("Nc"+sample+"_"+channel).c_str())))->setConstant(kTRUE);
-	return mc;
-}
-
-
-RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
-{       
-
-	//Define the measurement
-	Measurement meas("RLc","Rb");
-	//Define where to save the workspace
-	meas.SetOutputFilePrefix("results/RLc");
-	//Tell histfactory not to run the fit itself
-	meas.SetExportOnly(kTRUE);
-	//Set the luminosity
-	meas.SetLumi(1.0);
-	meas.SetLumiRelErr(0.05);
-
-	//Define a channel for each category
-	vector <string> channel_names = NameChannels();	
-	string MCcat = GetMCcathegory();
-	Int_t nchannels = channel_names.size();
-	vector <Channel*> channels;
-
-	//Understand if FF corrections are or not activated
-	Bool_t ffcorr = GetFFcorrectionValue();
-	cout<<endl;
-	cout<<" FF corrections: "<<ffcorr<<endl;
-	cout<<endl;
-	
-	for(Int_t i=0; i<nchannels; i++)
-	{
-		channels.push_back(new Channel((string("RLc_kinematic_")+channel_names[i]).c_str()));
-		channels[i]->SetStatErrorConfig(1e-5, "Poisson");
-		map<string,vector<Double_t>> start_param = GetStartParameters(channel_names[i]);
-		vector<string> category = GetCategory(start_param);
-		vector<string> param_names = GetParametersName(start_param);
-		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+MCcat+string(".root");
-		string filename1 = string("RootFiles/DemoHistosLattice_")+channel_names[i]+string("_")+MCcat+string(".root");
-
-		//Add the samples to the channels
-		for(Int_t j=0; j<category.size(); j++)
-		{
-			cout<<category[j]<<endl;
-			cout<<IsShapeUncertain(category[j])<<endl;
-			if(category[j]=="pha")
-				continue;
-			if(category[j]!="tau" && category[j]!="mu")
-				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
-			if(category[j]=="tau")//NB:: To modify the 0 adding ShapeUnc
-			{
-				if(ffcorr)
-					AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncmu_")+channel_names[i]]);
-				else
-					AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncmu_")+channel_names[i]]);
-			}
-			if(category[j]=="mu")//NB:: To modify the 0 adding ShapeUnc
-			{
-				if(ffcorr)
-					AddSample(category[j],filename1,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
-				else
-					AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
-			}
-		}
-		channels[i]->SetData("h_data",filename);
-		Data ch_data = channels[i]->GetData();
-		ch_data.SetName("h_data_"+channel_names[i]);
-		cout<<")****** "<<ch_data.GetName()<<endl;
-		meas.AddChannel(*channels[i]);
-		//Define the parameter of interest
-		meas.SetPOI("RLctau_"+channel_names[i]);
-		meas.SetPOI("RLcstartau_"+channel_names[i]);
- 
-	}
-	cout << endl;
-	cout << "----------------------   Collecting histograms   ------------------------------" << endl;
-	meas.CollectHistograms();
-	cout << "-------------------------------------------------------------------------------" << endl;
-	// Print to the screen a text representation of the model
-	// just for minor debugging
-	//cout << "-------------------------   Printing Tree   ------------------------------" << endl;
-	//meas.PrintTree();
-	//cout << "-------------------------------------------------------------------------------" << endl;
-
-	return meas;
-}
-
-
-RooWorkspace* SysFit::CreateWorkspace(RooStats::HistFactory::Measurement meas)
-{
-	//build a workspace with a pdf and a modelconfig
-	RooWorkspace *w = RooStats::HistFactory::MakeModelAndMeasurementFast(meas);
-	cout<<"--------------------- Workspace created -------------------"<<endl;
-	//w->Print();
-	//cout<<"-----------------------------------------------------------"<<endl;
-	return w;
-}
-
-
-RooStats::ModelConfig* SysFit::CreateModel(RooWorkspace* w)
-{
-	//Get the model manually
-	RooStats::ModelConfig *mc = (RooStats::ModelConfig*) w->obj("ModelConfig");
-	return mc;
-}
-
-RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w)
-{
-	//Understand if FF corrections are or not activated
-	Bool_t ffcorr = GetFFcorrectionValue();	
-
-	RooSimultaneous *model_ = (RooSimultaneous*)mc->GetPdf();
-
-	//Fix the MC normalisation of the histos
-	cout << "-------------------------   Fixing parameters   ------------------------------" << endl;
-	//mc->GetNuisanceParameters()->Print();
-	((RooRealVar*)(mc->GetNuisanceParameters()->find("Lumi")))->setConstant(kTRUE);
-	vector <string> channel_names = NameChannels();
-	Int_t nchannels = channel_names.size();
-	for(Int_t i=0; i<nchannels; i++)
-		SetChannelConstants(mc,channel_names[i]);
-
-	cout << "-------------------------------------------------------------------------------" << endl;
-
-
-	//Tell the name of the obervables
-	RooArgSet *obs = (RooArgSet*) mc->GetObservables();
-	//obs->Print();
-
-	std::vector<RooRealVar*> x_vector;
-	std::vector<RooRealVar*> y_vector;
-	std::vector<RooRealVar*> z_vector;
-
-	for(Int_t i=0; i<nchannels;i++)
-	{
-		x_vector.push_back((RooRealVar*) obs->find(("obs_z_RLc_kinematic_"+channel_names[i]).c_str()));
-		x_vector[i]->setUnit("[GeV^{2}/c^{4}]");
-		y_vector.push_back((RooRealVar*) obs->find(("obs_y_RLc_kinematic_"+channel_names[i]).c_str()));
-		y_vector[i]->setUnit("[MeV/c^{2}]");
-		z_vector.push_back((RooRealVar*) obs->find(("obs_x_RLc_kinematic_"+channel_names[i]).c_str()));
-		z_vector[i]->setUnit("[GeV^{2}/c^{4}]");
-	}
-
-
-
-	int num_channels = meas.GetChannels().size();
-	//cout<< " num_channels = "<<num_channels<<endl;
-	//cout<<endl;
-
-	RooCategory *idx = (RooCategory*) obs->find("channelCat");
-	RooAbsData *data = (RooAbsData*) w->data("obsData");
-
-	int  nPlotsMax = 1000;
-	RooDataSet* simData=NULL;
-	RooSimultaneous* simPdf = NULL;
-	if(strcmp(mc->GetPdf()->ClassName(),"RooSimultaneous")==0){
-		cout <<"Is a simultaneous PDF"<<endl;
-		simPdf = (RooSimultaneous *)(mc->GetPdf());
-	} else {
-		cout <<"Is not a simultaneous PDF"<<endl;
-	}
-
-	RooAbsPdf *pdf = model_->getPdf(idx->getLabel());
-
-	RooSimultaneous *model = new RooSimultaneous("simPdf_modified","simPdf_modified",*idx);
-	RooAbsPdf* pdf_;
-	RooCustomizer* cust;
-	RooRealVar *alpha_mu_shape_unc;
-	RooRealVar *alpha_tau_shape_unc;
-	RooRealVar *RLcStar_iso;
-    RooRealVar *RLcStar_Lcpipi;
-	/*
-	if(GetFitType()=="Simultaneous")
-	{
-		RLcStar_iso = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Isolated");
-		RLcStar_Lcpipi = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Lcpipi");
-	}
-	*/
-	cout<<"-----FF corr: "<<ffcorr<<endl;
-
-	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -100., 100.);
-	if (ffcorr)
-	{
-		alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_mu_shape_unc");
-		alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_tau_shape_unc");
-	}
-	RooRealVar* RLcStar = new RooRealVar("RLcStar","RLcStar", 0, -1., 1.);
-
-	for (Int_t i =0;i< nchannels;i++)
-	{
-		//cout<<i<<endl;
-		idx->setIndex(i);
-		pdf_=model_->getPdf(idx->getLabel());
-		cust = new RooCustomizer(*pdf_,"cust");
-		/*
-		 * ---------- Make FF alpha parameters between tau and mu the same but different for the channels
-		RooRealVar* alpha = new RooRealVar((string("alpha_")+channel_names[i]).c_str(),(string("alpha_")+channel_names[i]).c_str(), 0, -100., 100.);
-		if (ffcorr)
-		{
-			alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_mu_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
-			alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_tau_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
-		}
-		*/
-
-/*
-		if(GetFitType()=="Simultaneous")
-		{
-			cust->replaceArg(*RLcStar_iso, *RLcStar);
-			cust->replaceArg(*RLcStar_Lcpipi, *RLcStar);
-		}
-		*/
-		
-		if(ffcorr)
-		{
-			cust->replaceArg(*alpha_mu_shape_unc,*alpha);
-			cust->replaceArg(*alpha_tau_shape_unc,*alpha);
-		}
-		model->addPdf((RooAbsPdf&)*cust->build(),idx->getLabel());
-	}
-
-	RooStats::HistFactory::HistFactorySimultaneous* model_hf = new RooStats::HistFactory::HistFactorySimultaneous(*model);
-
-	RooAbsReal* nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
-
-	RooMinuit* minuit_hf = new RooMinuit(*nll_hf);
-	RooArgSet *temp = new RooArgSet();
-
-	minuit_hf->setErrorLevel(0.5);
-	minuit_hf->setStrategy(2);
-	minuit_hf->fit("smh");
-
-	RooFitResult *fitResult=minuit_hf->save("TempResult","TempResult");
-
-	for(Int_t i=0; i<nchannels;i++)
-	{
-		//if(channel_names[i]=="Isolated")
-		blindResult(fitResult,channel_names[i]);
-	}
-
-	std::cout <<"-------CHECK---------------------------------" <<fitResult->edm() << std::endl;
-	//Verbose printing: Basic info, values of constant parameters, initial and
-	// final values of floating parameters, global correlations
-	//fitResult->Print("V");
-
-	//Summary printing: Basic info plus final values of floating fit parameters
-	fitResult->Print();
-	/*
-	for(Int_t i=0; i<nchannels;i++)
-	{ 
-		idx->setIndex(i);
-		PlotFrame(x_vector[i],"M_{miss}^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
-		PlotFrame(y_vector[i],"E_{l}",data,model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
-		PlotFrame(z_vector[i],"q^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i]);
-		//PlotInBins(x_vector[i],"M_{miss}^{2}",data,mc,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
-		//PlotInBins(y_vector[i],"E_{l}",data,mc, model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
-	}*/
-
-	for(Int_t i=0; i<nchannels;i++)
-    { 
-        idx->setIndex(i);
-		PlotFitVariables(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",data,model,idx,channel_names[i]);
-	}
-
-	// Access list of final fit parameter values
-	if(fitResult->status()==0)
-		cout<<" Fit converged "<<endl;
-	else
-		cout<<"!!!! ATTENTION !!!!    Fit NON CONVERGING!  "<<endl;
-
-	cout << "final value of floating parameters" << endl ;
-	fitResult->floatParsFinal().Print("s") ;
-
-
-	
-	//RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLtau");
-	//Double_t fitOut[] = {RLc_fitresult->getVal(),RLc_fitresult->errorVar()->getVal()};
-
-	return fitResult;
-}
-
-
-
-void SysFit::blindResult(RooFitResult *fitResult,string name_suffix)
-{
-    RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLctau_"+TString(name_suffix));
-	if(RLc_fitresult)
-	{
-		RLc_fitresult->setRange(-999999,999999);
-		Double_t true_val = RLc_fitresult->getVal();
-		Double_t error =  RLc_fitresult->getError();
-		cout<<endl;
-		cout<<endl;
-		cout<<"------------------------------------------"<<endl;
-		if (true_val>0 )
-		{
-			cout<< "DON'T WORRY! RLc is positive "<<endl;
-			if ((true_val - 2*error)<0)
-				cout<<" the value is however consistent with 0" <<endl;
-			else
-				cout<<" and the value is not consistent with 0" <<endl;
-		}
-		if (true_val<=0 )
-		{
-			cout<< "WORRY! RLc is either negative or zero! "<<endl;
-			if ((true_val + 2*error)> 0)
-				cout<<" and the value is consistent with 0" <<endl;
-			else
-				cout<<" and the value is not consistent with 0" <<endl;
-			cout<<"Unblinded result: "<< true_val<<" +/- "<<  RLc_fitresult->getError()<<endl;
-		}
-
-		cout<<"------------------------------------------"<<endl;
-		cout<<endl;
-		cout<<endl;
-		RLc_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha).Uniform(0,100)))*TRandom3(beta).Uniform(0,100)*true_val+TRandom3(gamma).Uniform(0,100));
-	}
-	 RooRealVar* RLcStar_fitresult;
-	//if(GetFitType()!="Simultaneous")
-    //	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
-	//else
-	//	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcStar");
-   	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
-	if(RLcStar_fitresult)
-	{
-		RLcStar_fitresult->setRange(-999999,999999);
-		Double_t true_val_star=RLcStar_fitresult->getVal();
-		Double_t error_star =  RLcStar_fitresult->getError();
-		cout<<"------------------------------------------"<<endl;
-		if (true_val_star>0 )
-		{
-			cout<< "DON'T WORRY! RLc* is positive "<<endl;
-			if ((true_val_star - 2*error_star)<0)
-                cout<<" the value is however consistent with 0" <<endl;
-            else
-                cout<<" and the value is not consistent with 0" <<endl;
-			//cout<<"Unblinded result: "<< true_val_star<<" +/- "<<  RLcStar_fitresult->getError()<<endl;
-		}
-		if (true_val_star<=0 )
-		{
-			cout<< "WORRY! RLc* is either negative or zero! "<<endl;
-			if ((true_val_star + 2*error_star)> 0)
-                cout<<" and the value is consistent with 0" <<endl;
-            else
-                cout<<" and the value is not consistent with 0" <<endl;
-			cout<<"Unblinded result: "<< true_val_star<<" +/- "<<  RLcStar_fitresult->getError()<<endl;
-		}
-		cout<<"------------------------------------------"<<endl;
-		cout<<endl;
-		cout<<endl;
-		RLcStar_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha_s).Uniform(0,100)))*TRandom3(beta_s).Uniform(0,100)*RLcStar_fitresult->getVal()+TRandom3(gamma_s).Uniform(0,100));
-	}
-}
-
-void SysFit::SaveFitResults(string fname, RooFitResult *fitResult)
-{
-	ofstream outfile;
-	outfile.open(fname,std::ios::app);
-	time_t t = time(0);   // get time now
-    tm* now = localtime(&t);
-	//outfile<<" Results of fit performed on: "<<now->tm_mday<<"-"<<(now->tm_mon + 1)<<"-"<<(now->tm_year + 1900)<<"\n"; 
-	auto pars = fitResult->floatParsFinal();
-	RooRealVar *p;
-	for (Int_t i=0; i<pars.getSize();i++)
-	{
-		p = (RooRealVar *)pars.at(i);
-		outfile<<p->getTitle()<<" "<<p->getVal()<<" "<<p->getError()<<" "<<now->tm_mday<<"  "<<(now->tm_mon + 1)<<"  "<<(now->tm_year + 1900)<<" "<<(now->tm_hour)<<":"<<(now->tm_min)<<endl;
-	}
-	outfile.close();
-}
-
-void SysFit::CheckDiscrepancyWrtLastRLcValue(string fname, string channelName)
-{
-	ifstream fin;
-	fin.open(fname);
-	string search="RLctau_Isolated";
-	string search2;
-	//if(GetFitType()=="Simultaneous")
-	//	search2="RLcStar";
-	//else
-	search2="RLcstartau_"+channelName;
-	cout<<GetFitType()<<" "<<search2<<endl;
-	if(fin)
-		cout<<"File Found"<<endl;
-	bool isFound=0;
-	string temp;
-	double RLcTemp=0., sigmaRLcTemp=0.;
-	int day=0, month=0, year=0;
-	string time;
-	vector<double> RLc, sigmaRLc, RLcSt, sigmaRLcSt;
-	vector<int> RLcD, RLcM, RLcY, RLcStD, RLcStM, RLcStY;
-	vector<string> RLcTime, RLcStTime;
-	while(fin>>temp>>RLcTemp>>sigmaRLcTemp>>day>>month>>year>>time)
-	{
-		if(temp.compare(search)==0)
-		{
-			RLc.push_back(RLcTemp);
-            sigmaRLc.push_back(sigmaRLcTemp);
-			RLcD.push_back(day);
-			RLcM.push_back(month);
-			RLcY.push_back(year);
-			RLcTime.push_back(time);
-		}
-		if(temp.compare(search2)==0)
-		{
-			RLcSt.push_back(RLcTemp);
-            sigmaRLcSt.push_back(sigmaRLcTemp);
-			RLcStD.push_back(day);
-			RLcStM.push_back(month);
-			RLcStY.push_back(year);
-			RLcStTime.push_back(time);
-		}
-	}
-	cout<<"-------------- RLc ----------------"<<endl;
-	for (int i=0; i<RLc.size();i++)
-	{
-		cout<<RLc.at(i)<<" "<<sigmaRLc.at(i)<<" "<<RLcD.at(i)<<"-"<<RLcM.at(i)<<"-"<<RLcY.at(i)<<" "<<RLcTime.at(i)<<endl;
-	}
-	double DeltaRLc=0, DeltaSigmaRLc=0;
-	if(RLc.size()>1)
-	{
-		DeltaRLc = RLc.at(RLc.size()-1) - RLc.at(RLc.size()-2);
-		DeltaSigmaRLc = sigmaRLc.at(sigmaRLc.size()-1) - sigmaRLc.at(sigmaRLc.size()-2);
-		cout<<"Difference in RLc fitted (blinded) value: "<<DeltaRLc<<" and sigma: " <<DeltaSigmaRLc<<endl;
-		cout<<"Compared results of RLc obtained on: "<<RLcD.at(RLc.size()-1)<<"-"<<RLcM.at(RLc.size()-1)<<"-"<<RLcY.at(RLc.size()-1)<<" at "<<RLcTime.at(RLc.size()-1)<<"  and  RLc obtained on: "<<RLcD.at(RLc.size()-2)<<"-"<<RLcM.at(RLc.size()-2)<<"-"<<RLcY.at(RLc.size()-2)<<" at "<<RLcTime.at(RLc.size()-2)<<endl;
-	}
-	cout<<"-------------- RLcStar ----------------"<<endl;
-	for (int i=0; i<RLcSt.size();i++)
-	{
-		cout<<RLcSt.at(i)<<" "<<sigmaRLcSt.at(i)<<" "<<RLcStD.at(i)<<"-"<<RLcStM.at(i)<<"-"<<RLcStY.at(i)<<" "<<RLcStTime.at(i)<<endl;
-	}
-	double DeltaRLcSt=0, DeltaSigmaRLcSt=0;
-	if(RLcSt.size()>1)
-	{
-		DeltaRLcSt = RLcSt.at(RLcSt.size()-1) - RLcSt.at(RLcSt.size()-2);
-		DeltaSigmaRLcSt = sigmaRLcSt.at(sigmaRLcSt.size()-1) - sigmaRLcSt.at(sigmaRLcSt.size()-2);
-		cout<<"Difference in RLcStar fitted (blinded) value: "<<DeltaRLcSt<<" and sigma: " <<DeltaSigmaRLcSt<<endl;
-		cout<<"Compared results of RLcStar obtained on: "<<RLcStD.at(RLcSt.size()-1)<<"-"<<RLcStM.at(RLcSt.size()-1)<<"-"<<RLcStY.at(RLcSt.size()-1)<<" at "<<RLcStTime.at(RLcSt.size()-1)<<"  and  RLcStar obtained on: "<<RLcStD.at(RLcSt.size()-2)<<"-"<<RLcStM.at(RLcSt.size()-2)<<"-"<<RLcStY.at(RLcSt.size()-2)<<" at "<<RLcStTime.at(RLcSt.size()-2)<<endl;
-	}
-
-}
