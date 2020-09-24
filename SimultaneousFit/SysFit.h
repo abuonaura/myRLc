@@ -63,6 +63,10 @@ class SysFit{
 		SysFit();
 		~SysFit() {;}
 
+		void CorrectSweights(Bool_t value){swcorr=value;}
+		Bool_t CorrectSweightsValue(){return swcorr;}
+		string GetSweightHistFileName(){return swfname;}
+		void SetSweightHistFileName(string fname){swfname = fname;}
 		void DoSimultaneousFit();
 		void FitIsolated();
 		void FitLcpipi();
@@ -95,6 +99,7 @@ class SysFit{
 		TString GetFitVarName(TString); 
 		
 		Double_t GetHistoNormalisation(string, string); //Takes the normalization factor of each histogram to 1 (1./h->Integral())
+		void CreateSweightCorrectHistos(string, string,string, vector<string>);
 
 		RooStats::ModelConfig* SetChannelConstants(RooStats::ModelConfig*, string);
 		
@@ -104,9 +109,10 @@ class SysFit{
 		RooWorkspace *CreateWorkspace(RooStats::HistFactory::Measurement);
 		RooStats::ModelConfig* CreateModel(RooWorkspace* );
 		RooStats::ModelConfig* FixYields(RooStats::ModelConfig*, string, string);
+		RooStats::ModelConfig* SetAlphaStartingPoints(RooStats::ModelConfig*);
 
 
-		RooFitResult* Fit(RooStats::ModelConfig*, RooStats::HistFactory::Measurement, RooWorkspace *); //Perform the fit
+		RooFitResult* Fit(RooStats::ModelConfig*, RooStats::HistFactory::Measurement, RooWorkspace *, Bool_t); //Perform the fit
 		//void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::HistFactory::HistFactorySimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
 		void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
 		void PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::ModelConfig *mc,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
@@ -114,10 +120,13 @@ class SysFit{
 		RooPlot* AdjustVarPlot(RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
 		RooPlot* AdjustPullsPlot(RooPlot* pframe, RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
 
-		void PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,string name_suffix);
+		//void PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,string name_suffix);
+		void PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,std::map<std::string,RooDataHist*> data ,RooSimultaneous* model, RooCategory* idx,string name_suffix);
 
 
+		RooStats::ModelConfig* LoadFitResults(string fname, RooStats::ModelConfig* mc, string channelName);
 		void SaveFitResults(string,RooFitResult *fitResult);	
+		void StoreFitResults(string,RooFitResult *fitResult);	
 		void CheckDiscrepancyWrtLastRLcValue(string fname, string chName);
 
 	private:
@@ -135,6 +144,7 @@ class SysFit{
 
 	Bool_t BBeast;
 	Bool_t FFcorr;
+	Bool_t swcorr;
 	
 
 	map<string,map<string,vector<Double_t>>> start_parameters;
@@ -146,6 +156,8 @@ class SysFit{
 RooStats::HistFactory::Measurement measure;
 	RooWorkspace *wspace;
 	RooStats::ModelConfig* model;
+
+	string swfname;
 
 	void blindResult(RooFitResult*,string name_suffix);
 

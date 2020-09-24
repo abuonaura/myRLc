@@ -29,13 +29,13 @@ SysFit::SysFit()
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.6E5,3.E4,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{3.1E4,10,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{4.0E4,1.E1,1.E6}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,-1.,1.}));
-	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstartau_Isolated",{0.05,-1.,1.}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,0.,1.}));
+	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstartau_Isolated",{0.05,0.,1.}));
 
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncmu_Kenriched",{2E2,0,1.E3}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstarmu_Kenriched",{1.E3,0,1.E4}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstartau_Kenriched",{0.,-1,1}));
-	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,-1,1.}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Ncstartau_Kenriched",{0.,0.,1}));
+	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nctau_Kenriched",{0.,0.,1.}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Kenriched",{3.E3,0,1.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Kenriched",{2.E3,500,2.E4}));
 	start_parameters["Kenriched"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Kenriched",{1.E3,10,1.E4}));
@@ -45,8 +45,8 @@ SysFit::SysFit()
 
 	start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncmu_Lcpipi",{2E2,0,1.E3}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstarmu_Lcpipi",{1.E4,1.E3,2.E4}));
-    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstartau_Lcpipi",{0.5,-1,1}));
-    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nctau_Lcpipi",{0.,-1,1.}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Ncstartau_Lcpipi",{0.5,0.,1}));
+    start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nctau_Lcpipi",{0.,0,1.}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Lcpipi",{1.E3,0,1.E4}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Lcpipi",{1.E2,0,1.E4}));
     start_parameters["Lcpipi"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Lcpipi",{1.E3,0,1.E4}));
@@ -197,10 +197,12 @@ TString SysFit::GetComponentName(TString component)
 	TString name = "";
 	if (component.Contains("_mu_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #mu #nu";
 	else if(component.Contains("h_starmu_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #mu #nu_{#mu}";
-	else if(component.Contains("h_starDs")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c}";
+	else if(component.Contains("h_starDs-2body")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c}";
+	else if(component.Contains("h_starDs-mbody")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c} X";
 	else if(component.Contains("h_startau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #tau #nu_{#tau}";
 	else if(component.Contains("_tau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #tau #nu_{#tau}";
-	else if(component.Contains("h_2charm")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c}";
+	else if(component.Contains("h_2charm-2body")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c}";
+	else if(component.Contains("h_2charm-mbody")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c} X";
 	else if(component.Contains("h_MISID")) name = "MISID";
 	else if(component.Contains("h_Combinatorial")) name =  "Combinatorial";
 
@@ -212,10 +214,12 @@ Int_t SysFit::GetComponentColor(TString component)
 	Int_t color=-99;
 	if (component.Contains("_mu_")) color = kBlue;
 	else if(component.Contains("h_starmu_")) color = kViolet;
-	else if(component.Contains("h_startau_")) color = kMagenta;
-	else if(component.Contains("h_starDs")) color = kGreen+10;
+	else if(component.Contains("h_startau_")) color = kMagenta-9;
+	else if(component.Contains("h_starDs-2body")) color = kAzure+2;
+	else if(component.Contains("h_starDs-mbody")) color = kAzure+10;
 	else if(component.Contains("_tau_"))color = kRed;
-	else if(component.Contains("h_2charm")) color = kGreen;
+	else if(component.Contains("h_2charm-2body")) color = kGreen;
+	else if(component.Contains("h_2charm-mbody")) color = kGreen+3;
 	else if(component.Contains("h_MISID")) color = kYellow;
 	else if(component.Contains("h_Combinatorial")) color = kOrange+8;
 	return color;
@@ -262,16 +266,143 @@ Double_t SysFit::GetHistoNormalisation(string inputFile, string type)
 }
 
 
+void SysFit::CreateSweightCorrectHistos(string inputFile, string inputFile2,string newfilename, vector<string> category)
+{
+    //Read root file with histograms of samples
+    Bool_t ffcorr = GetFFcorrectionValue();
+    TFile *oldhistFile = new TFile(inputFile.c_str(),"READ");
+    TFile *oldhistFile2 = new TFile(inputFile2.c_str(),"READ");
 
+    TH3* h_data;
+    TH3* sweightcorrhisto;
+
+    h_data = (TH3*)oldhistFile->Get("h_data");
+
+    TFile *newhistFile = new TFile(newfilename.c_str(),"Recreate");
+    cout<<"new file name: "<<newfilename<<endl;
+    sweightcorrhisto = (TH3*)h_data->Clone("h_data_swcorr");
+    sweightcorrhisto->SetDirectory(0);
+    sweightcorrhisto->Reset();
+
+    double corr_num, corr_den;
+
+    for (unsigned int xbin_idx=1; xbin_idx<=h_data->GetXaxis()->GetNbins(); xbin_idx++)
+    {
+        for (unsigned int ybin_idx=1; ybin_idx<=h_data->GetYaxis()->GetNbins(); ybin_idx++)
+        {
+            for (unsigned int zbin_idx=1; zbin_idx<=h_data->GetZaxis()->GetNbins(); zbin_idx++)
+            {
+                corr_num = h_data->GetBinContent(xbin_idx,ybin_idx,zbin_idx);
+                corr_den = h_data->GetBinError(xbin_idx,ybin_idx,zbin_idx)*h_data->GetBinError(xbin_idx,ybin_idx,zbin_idx);
+                if(corr_den==0.)
+                {
+                    corr_num = 1.;
+                    corr_den = 1.;
+                }
+                //cout<<corr_num<<"   "<<corr_den<<"    "<<corr_num/corr_den<<endl;
+                 sweightcorrhisto->SetBinContent(xbin_idx,ybin_idx,zbin_idx,corr_num/corr_den);
+                 sweightcorrhisto->SetBinError(xbin_idx,ybin_idx,zbin_idx,0.);
+            }
+        }
+    }
+    sweightcorrhisto->Write();
+    h_data->Sumw2();
+    h_data->Multiply(sweightcorrhisto);
+    h_data->Write();
+
+	for(Int_t j=0; j<category.size(); j++)
+    {
+        //Get the histo from the file and save in htemp
+        if (category[j]!="2charm-mbody"&&category[j]!="starDs-mbody"&&category[j]!="mu"&&category[j]!="tau")
+        {
+            TH3* h_temp;
+            oldhistFile->GetObject(("h_"+category[j]).c_str(),h_temp);
+            if(h_temp==NULL)
+                cout<<"-------- hetemp Null! ----"<<endl;
+
+            h_temp->Sumw2();
+            h_temp->Multiply(sweightcorrhisto);
+            h_temp->Write();
+        }
+        else if(category[j]=="2charm-mbody" || category[j]=="starDs-mbody")
+        {
+            std::vector<TH3*>* h_temp = new std::vector<TH3*>{};
+            vector<string> suffix = {"1pl","1ml","1pq","1mq"};
+            h_temp->push_back((TH3*)oldhistFile->Get(("h_"+category[j]).c_str()));
+            for(Int_t a = 0; a<suffix.size();a++)
+            {
+                h_temp->push_back((TH3*)oldhistFile->Get(("h_"+category[j]+"_"+suffix[a]).c_str()));
+            }
+            for(Int_t a = 0; a<h_temp->size();a++)
+            {
+                cout<<a<<endl;
+                if(h_temp->at(a)==NULL)
+                    cout<<"-------- hetemp Null! ----"<<endl;
+                h_temp->at(a)->Sumw2();
+                h_temp->at(a)->Multiply(sweightcorrhisto);
+                h_temp->at(a)->Write();
+            }
+
+        }
+		else if(category[j]=="mu" || category[j]=="tau")
+        {
+            if(ffcorr)
+            {
+                std::vector<TH3*>* h_temp = new std::vector<TH3*>{};
+                vector<string> suffix = {"mean","max","min"};
+                for(Int_t a = 0; a<suffix.size();a++)
+                {
+                    h_temp->push_back((TH3*)oldhistFile2->Get(("h_w_"+category[j]+"_"+suffix[a]).c_str()));
+                    if(h_temp->at(a)==NULL)
+                        cout<<"-------- hetemp Null! ----"<<category[j]<<"  "<<suffix[a]<<endl;
+                    h_temp->at(a)->Sumw2();
+                    h_temp->at(a)->Multiply(sweightcorrhisto);
+                    h_temp->at(a)->Write();
+                }
+            }
+            else
+            {
+                TH3* h_temp;
+                oldhistFile->GetObject(("h_"+category[j]).c_str(),h_temp);
+                h_temp->Sumw2();
+                h_temp->Multiply(sweightcorrhisto);
+                h_temp->Write();
+            }
+
+
+        }
+    }
+    newhistFile->Close();
+    oldhistFile->Close();
+    oldhistFile2->Close();
+
+}
+
+
+
+/*
 void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool GaussConstraints, const bool BBeast, Channel** chan, vector<Double_t> params, vector<Double_t> mu_params={0})
 {
 	//Define the sample
 	Sample sample;
+
+	//set the file from where to take the MC normalisation
+	string MCnormFile = inputFile;
+	
 	//set the file from where to take the template
+	if(CorrectSweightsValue()==true)
+        inputFile = GetSweightHistFileName();
 	sample.SetInputFile(inputFile);
-	cout<<inputFile<<endl;
+
+	cout<<"---------------------------"<<endl;
+	cout<<"File from which the normalisation is read: "<<MCnormFile<<endl;
+	cout<<"File from which the template is read: "<<inputFile<<endl;
+	cout<<"---------------------------"<<endl;
+
 	//get the normalisation factor to 1
-	Double_t mcNorms = GetHistoNormalisation(inputFile, type);
+	Double_t mcNorms = GetHistoNormalisation(MCnormFile, type);
+
+
 	//Get the name of the channel
 	string chname =(*chan)->GetName();
 	string category;
@@ -285,10 +416,7 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 	{
 		sample.SetName("h_"+type);
 		sample.SetHistoName("h_"+type);
-		//sample.AddHistoSys(type+"_variation_"+chname,"h_"+type+"_1ml",inputFile,"", "h_"+type+"_1pl",inputFile,"");
 		sample.AddHistoSys(type+"_variation","h_"+type+"_1ml",inputFile,"", "h_"+type+"_1pl",inputFile,"");
-
-		//sample.AddHistoSys(type+"_quadratic_variation_"+chname,"h_"+type+"_1mq",inputFile,"", "h_"+type+"_1pq",inputFile,"");
 		sample.AddHistoSys(type+"_quadratic_variation","h_"+type+"_1mq",inputFile,"", "h_"+type+"_1pq",inputFile,"");
 	}
 	//Code for shape variation of samples != 2charm/starDs
@@ -335,8 +463,89 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
 	if(BBeast) sample.ActivateStatError();
 	(*chan)->AddSample(sample);
 }
+*/
 
+void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool GaussConstraints, const bool BBeast, Channel** chan, vector<Double_t> params, vector<Double_t> mu_params={0})
+{
+	//Define the sample
+    Sample sample;
 
+    //set the file from where to take the MC normalisation
+    string MCnormFile = inputFile;
+
+    //set the file from where to take the template
+	string TemplateFile = inputFile;
+    if(CorrectSweightsValue()==true)
+      TemplateFile = GetSweightHistFileName();
+    sample.SetInputFile(TemplateFile);
+
+    cout<<"---------------------------"<<endl;
+    cout<<"File from which the normalisation is read: "<<MCnormFile<<endl;
+    cout<<"File from which the template is read: "<<TemplateFile<<endl;
+    cout<<"---------------------------"<<endl;
+
+    //get the normalisation factor to 1
+    Double_t mcNorms = GetHistoNormalisation(MCnormFile, type);
+
+	//Get the name of the channel
+    string chname =(*chan)->GetName();
+    string category;
+    if (chname.find("Isolated") != std::string::npos) category = "Isolated";
+    if (chname.find("Kenriched") != std::string::npos) category = "Kenriched";
+    if (chname.find("Lcpipi") != std::string::npos) category = "Lcpipi";
+
+	if(!shapeUncert)
+	{
+			sample.SetName("h_"+type);
+            sample.SetHistoName("h_"+type);
+	}
+	else
+	{
+		if(type=="2charm-mbody"||type=="starDs-mbody")
+		{
+			sample.SetName("h_"+type);
+			sample.SetHistoName("h_"+type);
+			sample.AddHistoSys(type+"_variation","h_"+type+"_1ml",TemplateFile,"", "h_"+type+"_1pl",TemplateFile,"");
+			sample.AddHistoSys(type+"_quadratic_variation","h_"+type+"_1mq",TemplateFile,"", "h_"+type+"_1pq",TemplateFile,"");
+		}
+		if(type=="mu"||type=="tau")
+		{
+			sample.SetName("h_w_"+type+"_mean");
+			sample.SetHistoName("h_w_"+type+"_mean");
+			sample.AddHistoSys(type+"_shape_unc","h_w_"+type+"_min",TemplateFile,"","h_w_"+type+"_max",TemplateFile,"");
+		}
+	}
+
+	//set a sample to be "normalised by theory" (its normalisation scales with luminosity)
+    sample.SetNormalizeByTheory(kFALSE);
+
+	//Normalise sample to 1 (FOR ALL samples)
+	sample.AddNormFactor("mcNc"+type+"_"+category,mcNorms,1e-20,1.);
+
+	//Add additional normalisation factors
+	if(type=="tau")
+	{
+		sample.AddNormFactor("Ncmu_"+category,mu_params[0],mu_params[1],mu_params[2]); //normalisation to the start params of the Lc muon sample
+		sample.AddNormFactor("RLc"+type+"_"+category, params[0],params[1],params[2]); //times the value of RLc
+	}
+	else if(type=="startau")
+    {
+        sample.AddNormFactor("Ncstarmu_"+category,mu_params[0],mu_params[1],mu_params[2]); //normalisation to the star params of the Lambda_c* muon sample
+        sample.AddNormFactor("RLc"+type+"_"+category, params[0],params[1],params[2]); //times the value of RLc star
+    }
+	else
+		sample.AddNormFactor("Nc"+type+"_"+category, params[0],params[1],params[2]); //normalisation to starting parameters (for all other samples)
+
+	//----- Add Gaussian Constraint for MISID/Combinatorial for control fit part
+    if (GaussConstraints && chname=="RLc_kinematic_Kenriched")
+    {
+        Double_t w = GetWeightGaussConstraint(type);
+        sample.AddOverallSys("NormUnc_"+type+"_"+category,1.,w);
+    }
+
+    if(BBeast) sample.ActivateStatError();
+    (*chan)->AddSample(sample);
+}
 
 RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, string channel)
 {
@@ -376,6 +585,14 @@ RooStats::ModelConfig* SysFit::FixYields(RooStats::ModelConfig *mc, string sampl
 	return mc;
 }
 
+RooStats::ModelConfig* SysFit::SetAlphaStartingPoints(RooStats::ModelConfig *mc)
+{
+	((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation")))->setVal(0.5);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_starDs-mbody_variation")))->setVal(-0.2);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation")))->setVal(0.4);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_starDs-mbody_quadratic_variation")))->setVal(-0.3);
+	return mc;
+}
 
 RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 {       
@@ -411,6 +628,21 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 		vector<string> param_names = GetParametersName(start_param);
 		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+MCcat+string(".root");
 		string filename1 = string("RootFiles/DemoHistosLattice_")+channel_names[i]+string("_")+MCcat+string(".root");
+
+		if(CorrectSweightsValue())
+        {
+            //Creating name for histograms with sweight correction
+            string start = filename;
+            string from = ".root";
+            string to = "_swcorr.root";
+            size_t start_pos = start.find(from);
+            string newfilename = start.replace(start_pos, from.length(), to);
+            SetSweightHistFileName(newfilename);
+
+            CreateSweightCorrectHistos(filename, filename1, newfilename,category);
+        }
+
+
 
 		//Add the samples to the channels
 		for(Int_t j=0; j<category.size(); j++)
@@ -453,9 +685,9 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 	cout << "-------------------------------------------------------------------------------" << endl;
 	// Print to the screen a text representation of the model
 	// just for minor debugging
-	//cout << "-------------------------   Printing Tree   ------------------------------" << endl;
-	//meas.PrintTree();
-	//cout << "-------------------------------------------------------------------------------" << endl;
+	cout << "-------------------------   Printing Tree   ------------------------------" << endl;
+	meas.PrintTree();
+	cout << "-------------------------------------------------------------------------------" << endl;
 
 	return meas;
 }
@@ -479,7 +711,7 @@ RooStats::ModelConfig* SysFit::CreateModel(RooWorkspace* w)
 	return mc;
 }
 
-RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w)
+RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w, Bool_t plotonly)
 {
 	//Understand if FF corrections are or not activated
 	Bool_t ffcorr = GetFFcorrectionValue();	
@@ -487,7 +719,7 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	RooSimultaneous *model_ = (RooSimultaneous*)mc->GetPdf();
 
 	//Fix the MC normalisation of the histos
-	cout << "-------------------------   Fixing parameters   ------------------------------" << endl;
+	cout << "-------------------------------   Fixing parameters   ------------------------------" << endl;
 	//mc->GetNuisanceParameters()->Print();
 	((RooRealVar*)(mc->GetNuisanceParameters()->find("Lumi")))->setConstant(kTRUE);
 	vector <string> channel_names = NameChannels();
@@ -495,7 +727,22 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	for(Int_t i=0; i<nchannels; i++)
 		SetChannelConstants(mc,channel_names[i]);
 
-	cout << "-------------------------------------------------------------------------------" << endl;
+	cout << "------------------------------------------------------------------------------------" << endl;
+
+
+	cout << "------------------------------Setting Alpha Starting Values-------------------------" << endl;
+	SetAlphaStartingPoints(mc);
+	
+	cout << "------------------Printig fit nuisance parameters starting values ------------------" << endl;
+	//Print the values of the nuisance parameters befor the fit
+	RooRealVar *tempVar; //dummy pointer
+    TIterator *iterpars = mc->GetNuisanceParameters()->createIterator();
+    while((tempVar = (RooRealVar*) iterpars->Next())) {
+      TString theName = tempVar->GetName();
+	  Double_t value = tempVar->getValV();
+	  cout<<" Parameter "<<theName<<" starting from "<<value<<endl;
+	}
+	cout << "------------------------------------------------------------------------------------" << endl;
 
 
 	//Tell the name of the obervables
@@ -540,22 +787,30 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	RooSimultaneous *model = new RooSimultaneous("simPdf_modified","simPdf_modified",*idx);
 	RooAbsPdf* pdf_;
 	RooCustomizer* cust;
+
+	//Put together the alphas from the FF corrections
 	RooRealVar *alpha_mu_shape_unc;
 	RooRealVar *alpha_tau_shape_unc;
-	RooRealVar *RLcStar_iso;
-    RooRealVar *RLcStar_Lcpipi;
-	/*
-	if(GetFitType()=="Simultaneous")
-	{
-		RLcStar_iso = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Isolated");
-		RLcStar_Lcpipi = (RooRealVar*) mc->GetParametersOfInterest()->find("RLcstartau_Lcpipi");
-	}
-	*/
+	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -100., 100.);
+    if (ffcorr)
+    {
+        alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_mu_shape_unc");
+        alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_tau_shape_unc");
+    }
+
+	//Put together the alphas from the mbody shape variations for LcXc and Lc*Xc
+	RooRealVar *alphal_2charm;
+    RooRealVar *alphal_starDs;
+    RooRealVar *alphaq_2charm;
+    RooRealVar *alphaq_starDs;
+    RooRealVar* alpha_linear = new RooRealVar("alpha_linear","alpha_linear", 0, -10., 10.);
+    RooRealVar* alpha_quadratic = new RooRealVar("alpha_quadratic","alpha_quadratic", 0, -10., 10.);
+    alphal_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation");
+    alphal_starDs = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_starDs-mbody_variation");
+    alphaq_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation");
+    alphaq_starDs = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_starDs-mbody_quadratic_variation");
+
 	cout<<"-----FF corr: "<<ffcorr<<endl;
-
-
-	//RooRealVar* alpha = new RooRealVar("alpha","alpha", start_parameters["pha"][0], start_parameters["pha"][1], start_parameters["pha"][2]);
-	RooRealVar* RLcStar = new RooRealVar("RLcStar","RLcStar", 0, -1., 1.);
 
 	for (Int_t i =0;i< nchannels;i++)
 	{
@@ -563,66 +818,111 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		idx->setIndex(i);
 		pdf_=model_->getPdf(idx->getLabel());
 		cust = new RooCustomizer(*pdf_,"cust");
-		RooRealVar* alpha = new RooRealVar((string("alpha_")+channel_names[i]).c_str(),(string("alpha_")+channel_names[i]).c_str(), 0, -100., 100.);
-		if (ffcorr)
-		{
-			alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_mu_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
-			alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_tau_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
-		}
+		/*
+         * ---------- Make FF alpha parameters between tau and mu the same but different for the channels
+        RooRealVar* alpha = new RooRealVar((string("alpha_")+channel_names[i]).c_str(),(string("alpha_")+channel_names[i]).c_str(), 0, -100., 100.);
+        if (ffcorr)
+        {
+            alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_mu_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+            alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_tau_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+        }
+        */
 
-/*
-		if(GetFitType()=="Simultaneous")
-		{
-			cust->replaceArg(*RLcStar_iso, *RLcStar);
-			cust->replaceArg(*RLcStar_Lcpipi, *RLcStar);
-		}
-		*/
-		
 		if(ffcorr)
 		{
 			cust->replaceArg(*alpha_mu_shape_unc,*alpha);
 			cust->replaceArg(*alpha_tau_shape_unc,*alpha);
 		}
+		//Set the linear alphas for the LcXc and LcXcStar templates to be one parameter
+        cust->replaceArg(*alphal_2charm,*alpha_linear);
+        cust->replaceArg(*alphal_starDs,*alpha_linear);
+        //Set the quadratic alphas for the LcXc and LcXcStar templates to be one parameter
+        cust->replaceArg(*alphaq_2charm,*alpha_quadratic);
+        cust->replaceArg(*alphaq_starDs,*alpha_quadratic);
+
 		model->addPdf((RooAbsPdf&)*cust->build(),idx->getLabel());
 	}
 
-	RooStats::HistFactory::HistFactorySimultaneous* model_hf = new RooStats::HistFactory::HistFactorySimultaneous(*model);
-
-	RooAbsReal* nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
-
-	RooMinuit* minuit_hf = new RooMinuit(*nll_hf);
-	RooArgSet *temp = new RooArgSet();
-
-	minuit_hf->setErrorLevel(0.5);
-	minuit_hf->setStrategy(2);
-	minuit_hf->fit("smh");
-
-	RooFitResult *fitResult=minuit_hf->save("TempResult","TempResult");
-
-	for(Int_t i=0; i<nchannels;i++)
+	if(plotonly==false)
 	{
-		//if(channel_names[i]=="Isolated")
-		blindResult(fitResult,channel_names[i]);
+		cout<<" ------------------------- Starting fitting procedure ------------------------"<<endl;
+		RooStats::HistFactory::HistFactorySimultaneous* model_hf = new RooStats::HistFactory::HistFactorySimultaneous(*model);
+
+		RooAbsReal* nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
+
+		RooMinuit* minuit_hf = new RooMinuit(*nll_hf);
+		RooArgSet *temp = new RooArgSet();
+
+		minuit_hf->setErrorLevel(0.5);
+		minuit_hf->setStrategy(2);
+		minuit_hf->fit("smh");
+
+		RooFitResult *fitResult=minuit_hf->save("TempResult","TempResult");
+
+		for(Int_t i=0; i<nchannels;i++)
+		{
+			string resultfname = "FitResultsUnblinded_"+channel_names[i]+".txt";
+			SaveFitResults(resultfname, fitResult);
+		}
+
+
+		for(Int_t i=0; i<nchannels;i++)
+		{
+			//if(channel_names[i]=="Isolated")
+			blindResult(fitResult,channel_names[i]);
+		}
+
+		//cout <<"-------------------------- PRINT VERBOSE RESULTS -----------------------------" <<endl;
+		//Verbose printing: Basic info, values of constant parameters, initial and
+		// final values of floating parameters, global correlations
+		//fitResult->Print("V");
+		//cout <<"------------------------------------------------------------------------------" <<endl;
+
+		//Summary printing: Basic info plus final values of floating fit parameters
+		cout <<"-------------------------- PRINT SUMMARY RESULTS ------------------------------" <<endl;
+		fitResult->Print();
+		cout <<"------------------------------------------------------------------------------" <<endl;
+		return fitResult;
+	}
+	else
+	{
+		// Creation of the data datahists for plotting, and the inverse of the sWeight correction for the model.
+		std::vector<TH3D> plotting_TH3D_vector;
+		std::vector<RooDataHist> plotting_datahist_vector;
+
+		for(Int_t i=0; i<nchannels;i++)
+		{
+			string resultfname = "FitResultsUnblinded_"+channel_names[i]+".txt";
+			LoadFitResults(resultfname, mc, channel_names[i]);
+			string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+GetMCcathegory()+string(".root");
+
+			TFile* datatemplatefile = new TFile((filename).c_str(),"read");
+
+			plotting_TH3D_vector.push_back(*((TH3D*) (datatemplatefile->Get("h_data"))->Clone(("TH1"+channel_names[i]).c_str())));
+			datatemplatefile->Close();
+			plotting_datahist_vector.push_back(RooDataHist(("plotting_datahist_channel"+channel_names[i]).c_str(),("plotting_datahist_channel"+channel_names[i]).c_str(),RooArgList(*z_vector[i],*y_vector[i],*x_vector[i]),&plotting_TH3D_vector[i]));
+		}
+
+		std::map<std::string,RooDataHist*> datahist_map_plotting;
+		for (unsigned int i=0; i<num_channels; i++)
+		{
+			idx->setIndex(i);
+			datahist_map_plotting.insert(std::pair<std::string,RooDataHist*>(std::string(idx->getLabel()),&plotting_datahist_vector[i]));
+		}
+
+		for(Int_t i=0; i<nchannels;i++)
+		{ 
+			idx->setIndex(i);
+			PlotFitVariables(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",datahist_map_plotting,model,idx,channel_names[i]);
+		}
+
+		//iPlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,std::map<std::string,RooDataHist*> data,RooSimultaneous* model, RooCategory* idx,string name_suffix)
+		return 0;
+
 	}
 
-	std::cout <<"-------CHECK---------------------------------" <<fitResult->edm() << std::endl;
-	//Verbose printing: Basic info, values of constant parameters, initial and
-	// final values of floating parameters, global correlations
-	//fitResult->Print("V");
 
-	//Summary printing: Basic info plus final values of floating fit parameters
-	fitResult->Print();
 	/*
-	for(Int_t i=0; i<nchannels;i++)
-	{ 
-		idx->setIndex(i);
-		PlotFrame(x_vector[i],"M_{miss}^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
-		PlotFrame(y_vector[i],"E_{l}",data,model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
-		PlotFrame(z_vector[i],"q^{2}",data,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i]);
-		//PlotInBins(x_vector[i],"M_{miss}^{2}",data,mc,model,idx,-2,14,"[GeV^{2}/c^{4}]",channel_names[i],kTRUE);
-		//PlotInBins(y_vector[i],"E_{l}",data,mc, model,idx,0,2600,"[MeV/c^{2}]",channel_names[i]);
-	}*/
-
 	for(Int_t i=0; i<nchannels;i++)
     { 
         idx->setIndex(i);
@@ -637,15 +937,14 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 	cout << "final value of floating parameters" << endl ;
 	fitResult->floatParsFinal().Print("s") ;
+	*/
 
 
 	
 	//RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLtau");
 	//Double_t fitOut[] = {RLc_fitresult->getVal(),RLc_fitresult->errorVar()->getVal()};
 
-	return fitResult;
 }
-
 
 
 void SysFit::blindResult(RooFitResult *fitResult,string name_suffix)
@@ -683,11 +982,8 @@ void SysFit::blindResult(RooFitResult *fitResult,string name_suffix)
 		RLc_fitresult->setVal(std::pow(-1,Int_t(TRandom3(alpha).Uniform(0,100)))*TRandom3(beta).Uniform(0,100)*true_val+TRandom3(gamma).Uniform(0,100));
 	}
 	 RooRealVar* RLcStar_fitresult;
-	//if(GetFitType()!="Simultaneous")
-    //	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
-	//else
-	//	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcStar");
-   	RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
+   	
+	 RLcStar_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLcstartau_"+TString(name_suffix));
 	if(RLcStar_fitresult)
 	{
 		RLcStar_fitresult->setRange(-999999,999999);
@@ -719,7 +1015,68 @@ void SysFit::blindResult(RooFitResult *fitResult,string name_suffix)
 	}
 }
 
+RooStats::ModelConfig* SysFit::LoadFitResults(string fname, RooStats::ModelConfig* mc, string channelName)
+{
+	ifstream infile;
+	infile.open(fname);
+	string search="RLctau_"+channelName;
+	cout<< "string search: "<<search<<endl;
+	string search2="RLcstartau_"+channelName;
+	cout<< "string search: "<<search2<<endl;
+	string search3 = "alpha_linear";
+	string search4 = "alpha_quadratic";
+	string search5 = "alpha";
+	string name;
+	Double_t value=0., error=0.;
+	while(infile>>name>>value>>error)
+	{
+		if(name.compare(search)!=0 && name.compare(search2)!=0 && name.compare(search3)!=0 && name.compare(search4)!=0&& name.compare(search5)!=0)
+		{	
+			cout<<name<<endl;
+			if((RooRealVar*)(mc->GetNuisanceParameters()->find(name.c_str())))
+				((RooRealVar*)(mc->GetNuisanceParameters()->find(name.c_str())))->setVal(value);
+			else
+			{
+				cout<<" Looking at channel: "<< channelName<<" parameter "<< name<< " not found. Leaving as it is"<<endl;
+			}
+		}
+		else if (name.compare(search)==0 || name.compare(search2)==0)
+			((RooRealVar*)(mc->GetParametersOfInterest()->find(name.c_str())))->setVal(value);
+		else if(name.compare(search3)==0)
+		{	
+			((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation")))->setVal(value);
+			((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_starDs-mbody_variation")))->setVal(value);
+		}
+		else if(name.compare(search4)==0)
+		{	
+			((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation")))->setVal(value);
+			((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_starDs-mbody_quadratic_variation")))->setVal(value);
+		}
+		else if(name.compare(search5)==0)
+		{
+			cout<< "   "<<name<<endl;
+			((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_mu_shape_unc")))->setVal(value);
+            ((RooRealVar*)(mc->GetNuisanceParameters()->find("alpha_tau_shape_unc")))->setVal(value);
+		}
+	}
+	return mc;
+}
+
 void SysFit::SaveFitResults(string fname, RooFitResult *fitResult)
+{
+	ofstream outfile;
+	outfile.open(fname,std::ios::trunc);
+	auto pars = fitResult->floatParsFinal();
+	RooRealVar *p;
+	for (Int_t i=0; i<pars.getSize();i++)
+	{
+		p = (RooRealVar *)pars.at(i);
+		outfile<<p->getTitle()<<" "<<p->getVal()<<" "<<p->getError()<<" "<<endl;
+	}
+	outfile.close();
+}
+
+void SysFit::StoreFitResults(string fname, RooFitResult *fitResult)
 {
 	ofstream outfile;
 	outfile.open(fname,std::ios::app);
@@ -988,7 +1345,8 @@ void SysFit::PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* dat
 
 }
 
-void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,string name_suffix)
+//void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,string name_suffix)
+void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,std::map<std::string,RooDataHist*> data,RooSimultaneous* model, RooCategory* idx,string name_suffix)
 {
 	fitvar1->SetTitle(title1);
 	fitvar2->SetTitle(title2);
@@ -1068,7 +1426,8 @@ void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar
 	TString TotComponents = "";
 
 	//Plot the data points
-	RooAbsData* channelData = (RooAbsData*) data->reduce(TString("channelCat==channelCat::")+TString(idx->getLabel()));
+	//RooAbsData* channelData = (RooAbsData*) data->reduce(TString("channelCat==channelCat::")+TString(idx->getLabel()));
+	RooAbsData* channelData = data[idx->getLabel()];
 	channelData->plotOn(frame1, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 	channelData->plotOn(frame2, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 	channelData->plotOn(frame3, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
@@ -1087,18 +1446,24 @@ void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar
 		Int_t color = GetComponentColor(active_components_names[i]);
 
 		//------- Plot each background component stacking them up
-		model_sumpdf->plotOn(frame1, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		//model_sumpdf->plotOn(frame1, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		model_sumpdf->plotOn(frame1, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
 		//------- Plot each background component stacking them up
-		model_sumpdf->plotOn(frame2, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		//model_sumpdf->plotOn(frame2, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		model_sumpdf->plotOn(frame2, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
 		//------- Plot each background component stacking them up
-		model_sumpdf->plotOn(frame3, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		//model_sumpdf->plotOn(frame3, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::ProjWData(*idx,*channelData),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
+		model_sumpdf->plotOn(frame3, RooFit::Slice(*idx, TString(idx->getLabel())),RooFit::DrawOption("F"),RooFit::LineColor(color),RooFit::FillColor(color),RooFit::Components(TotComponents),RooFit::MoveToBack(), RooFit::Name(active_components_names[i]+TString("_plot")));
 	}
 	//cout<<"******************************************"<<endl;
 
 	//--------Plot the sum of the backgrounds
-	model_sumpdf->plotOn(frame1, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
-	model_sumpdf->plotOn(frame2, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
-	model_sumpdf->plotOn(frame3, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+//	model_sumpdf->plotOn(frame1, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+//	model_sumpdf->plotOn(frame2, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+//	model_sumpdf->plotOn(frame3, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::ProjWData(*idx,*data),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+	model_sumpdf->plotOn(frame1, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+	model_sumpdf->plotOn(frame2, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
+	model_sumpdf->plotOn(frame3, RooFit::Slice(*idx,TString(idx->getLabel())),RooFit::DrawOption("F"),RooFit::FillStyle(3004),RooFit::FillColor(kBlack));
 
 	//-----Construct the pulls plot
 	RooHist *pulls1 = frame1->pullHist();
@@ -1116,9 +1481,14 @@ void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar
 	pulls3->SetLineColor(kWhite);
 	pulls3->SetMarkerSize(0.01);
 
-	data->plotOn(frame1, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
-	data->plotOn(frame2, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
-	data->plotOn(frame3, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
+	 data[idx->getLabel()]->plotOn(frame1, RooFit::DrawOption("ZP"));
+	 data[idx->getLabel()]->plotOn(frame2, RooFit::DrawOption("ZP"));
+	 data[idx->getLabel()]->plotOn(frame3, RooFit::DrawOption("ZP"));
+
+
+	//data->plotOn(frame1, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
+	//data->plotOn(frame2, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
+	//data->plotOn(frame3, RooFit::DrawOption("ZP"), RooFit::DataError( RooAbsData::Poisson), RooFit::Cut(TString("channelCat==channelCat::")+TString(idx->getLabel())));
 
 	
 	//-----------Draw the fit result with the pulls plot below
@@ -1194,6 +1564,7 @@ void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar
 	TLegend *leg = new TLegend(0.1,0.05,0.9,0.7);
 	for (int i=0; i<active_components_names.size(); ++i)
 	{
+		/*
 		if(active_components_names[i].Contains("h_2charm-"))
 		{
 			CharmComp+=1;
@@ -1211,6 +1582,7 @@ void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar
 			}
 		}
 		else
+		*/
 			leg->AddEntry((TGraph*)frame1->findObject(active_components_names[i]+TString("_plot").Data()),GetComponentName(active_components_names[i]),"F");
 	}
 	leg->Draw();

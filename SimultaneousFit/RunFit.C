@@ -44,8 +44,6 @@ void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true
 		for(Int_t j=0; j<category.size(); j++)
         {
             cout<<"category: "<<category[j]<<endl;
-            if (category[j]=="pha")
-                continue;
 			
 			//Do not use gauss constraints for any category
             a.ActivateGaussConstraint(category[j],false);
@@ -72,20 +70,29 @@ void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true
 	}
 
 	//Perform fit
+	a.CorrectSweights(true);
 	RooStats::HistFactory::Measurement m = a.CreateMeasurement();
     RooWorkspace* w = a.CreateWorkspace(m);
 
     RooStats::ModelConfig* mc = a.CreateModel(w);
-    RooFitResult *fitResult = a.Fit(mc, m, w);
+    RooFitResult *fitResult = a.Fit(mc, m, w, false);
+
+	//Produce plot
+	a.CorrectSweights(false);
+    RooStats::HistFactory::Measurement m1 = a.CreateMeasurement();
+    RooWorkspace* w1 = a.CreateWorkspace(m1);
+
+    RooStats::ModelConfig* mc1 = a.CreateModel(w1);
+    RooFitResult *fitResult1 = a.Fit(mc1, m1, w1, true);
 
 	for (Int_t i =0; i<names.size();i++)
     {
 		string outfilename;
 		if(FitType=="Simultaneous")
-			outfilename = string("FitResults_")+names[i]+string("_")+MCcat+string("_Simultanous.txt");
+			outfilename = string("StoredTxtFitResults/StoredFitResults_")+names[i]+string("_")+MCcat+string("_Simultaneous.txt");
 		else
-			outfilename = string("FitResults_")+names[i]+string("_")+MCcat+string(".txt");
-        a.SaveFitResults(outfilename,fitResult);
+			outfilename = string("StoredTxtFitResults/StoredFitResults_")+names[i]+string("_")+MCcat+string(".txt");
+        a.StoreFitResults(outfilename,fitResult);
         a.CheckDiscrepancyWrtLastRLcValue(outfilename, FitType);
 	}
 

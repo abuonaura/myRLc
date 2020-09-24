@@ -122,12 +122,12 @@ def TruthMatch(tree):
         flag = False
     return flag
 
-def Weight_MultibodyCharm_linear(tree,alpha1):
-    weight = 1+2*alpha1*getattr(tree,'w_mbody')
+def Weight_MultibodyCharm_linear(w_mbody,alpha1):
+    weight = 1+2*alpha1*w_mbody
     return weight
 
-def Weight_MultibodyCharm_quadratic(tree,alpha2):
-    weight = (1-alpha2)+8*alpha2*getattr(tree,'w_mbody')*getattr(tree,'w_mbody')
+def Weight_MultibodyCharm_quadratic(w_mbody,alpha2):
+    weight = (1-alpha2)+8*alpha2*w_mbody*w_mbody
     return weight
 
 def Weight_Combinatorial(tree,HighMassCorrection):
@@ -231,10 +231,10 @@ def FillHistograms(category, MCtype):
                         n2charm_mbody+=1
                         h_mbody.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight)
                         if t.w_mbody>-1000 and t.w_mbody!=1:
-                            h_mbody_1pl.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_linear(t,1))
-                            h_mbody_1ml.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_linear(t,-1))
-                            h_mbody_1pq.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_quadratic(t,1))
-                            h_mbody_1mq.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_quadratic(t,-1))
+                            h_mbody_1pl.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_linear(t.w_mbody,1))
+                            h_mbody_1ml.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_linear(t.w_mbody,-1))
+                            h_mbody_1pq.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_quadratic(t.w_mbody,1))
+                            h_mbody_1mq.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight*Weight_MultibodyCharm_quadratic(t.w_mbody,-1))
             h_mbody_1pl = ScaleHisto(h_mbody_1pl,h_mbody.Integral())
             h_mbody_1ml = ScaleHisto(h_mbody_1ml,h_mbody.Integral())
             h_mbody_1pq = ScaleHisto(h_mbody_1pq,h_mbody.Integral())
