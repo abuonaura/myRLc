@@ -278,4 +278,3 @@ if __name__== "__main__":
         SetNonNullBinContent(h)
     outputFile.Write()
     outputFile.Close()
-
