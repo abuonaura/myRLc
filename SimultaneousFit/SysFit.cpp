@@ -21,6 +21,8 @@ SysFit::SysFit()
 	beta_s = 172;
 	gamma_s = 23;
 	BBeast = false;
+	Twobodyconstraint=false;
+	Mbodyconstraint=false;
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncmu_Isolated",{8.E5,3.E3,2.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-2body_Isolated",{14.E3,1E2,2.E5}));
     start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nc2charm-mbody_Isolated",{6.0E3,1E2,1.E5}));
@@ -123,15 +125,6 @@ map<string,vector<Double_t>> SysFit::GetStartParameters(string ch_name)
 	
 	return params;
 }
-
-/*
-void SysFit::SetStartParameters(map<string,vector<Double_t> > parameters)
-{
-	for(std::map<std::string,std::vector<Double_t> > ::iterator iP= parameters.begin(); iP != parameters.end();++iP)
-	{
-		start_parameters[iP->first.substr(2)][0] = iP->second[0];
-	}
-}*/
 
 void SysFit::SetStartParameters(RooFitResult *fitResult, string ch_name)
 {
@@ -446,6 +439,16 @@ void SysFit::AddSample(string type, string inputFile, bool shapeUncert, bool Gau
         sample.AddNormFactor("Ncstarmu_"+category,mu_params[0],mu_params[1],mu_params[2]); //normalisation to the star params of the Lambda_c* muon sample
         sample.AddNormFactor("RLc"+type+"_"+category, params[0],params[1],params[2]); //times the value of RLc star
     }
+	else if(type=="starDs-2body"&&Twobodyconstraint==true)
+	{
+		sample.AddNormFactor("Nc2charm-2body_"+category,params[0],params[1],params[2]); //normalisation to the star params of the Lambda_cXc-2body sample
+		sample.AddNormFactor("NcRatio2body",ratio2body,1e-9,1.);
+	}
+	else if(type=="starDs-mbody"&&Mbodyconstraint==true)
+	{
+		sample.AddNormFactor("Nc2charm-mbody_"+category,params[0],params[1],params[2]); //normalisation to the star params of the Lambda_cXc-2body sample
+		sample.AddNormFactor("NcRatioMbody",ratioMbody,1e-9,1.);
+	}
 	else
 		sample.AddNormFactor("Nc"+type+"_"+category, params[0],params[1],params[2]); //normalisation to starting parameters (for all other samples)
 
@@ -488,6 +491,8 @@ RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, st
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-2body_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcMISID_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcCombinatorial_"+channel).c_str())))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find("NcRatio2body")))->setConstant(kTRUE);
+	((RooRealVar*)(mc->GetNuisanceParameters()->find("NcRatioMbody")))->setConstant(kTRUE);
 	
 	return mc;
 }
@@ -578,10 +583,14 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 			}
 			else if(category[j]=="startau")
 				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]],start_param[string("Ncstarmu_")+channel_names[i]]);
+			else if(category[j]=="starDs-2body"&& Twobodyconstraint==true)
+				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[string("Nc2charm-2body_")+channel_names[i]]);
+			else if(category[j]=="starDs-mbody"&& Mbodyconstraint==true)
+				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[string("Nc2charm-mbody_")+channel_names[i]]);
 			else
 				AddSample(category[j],filename,IsShapeUncertain(category[j]),IsGaussConstrained(category[j]),BBeast,&channels[i],start_param[param_names[j]]);
-
 		}
+
 		channels[i]->SetData("h_data",filename);
 		Data ch_data = channels[i]->GetData();
 		ch_data.SetName("h_data_"+channel_names[i]);

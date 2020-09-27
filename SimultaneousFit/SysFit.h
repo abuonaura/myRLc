@@ -57,7 +57,8 @@ using namespace RooFit;
 using namespace RooStats;
 
 
-class SysFit{
+class SysFit
+{
 
 	public:
 		SysFit();
@@ -76,7 +77,7 @@ class SysFit{
 		string GetMCcathegory() {return MCcathegory;}
 		void SelectChannel2fit(vector<string> ch) {channel_names = ch;}
 		vector<string> NameChannels() {return channel_names;} //return Isolated/Kenriched
-		
+
 		void AllowBarlowBeaston() {BBeast = true;} //if this function is called the BarlowBeaston fit is turned on
 		void ActivateFFCorrections(Bool_t value){FFcorr=value;} //if this function is called the file with the Form Factor correction for mu/tau is read
 		Bool_t GetFFcorrectionValue(){return FFcorr;}
@@ -93,16 +94,16 @@ class SysFit{
 
 		vector<string> GetCategory(map<string,vector<Double_t> >); //Retrieves the name of the samples + "pha" (?)
 		vector<string> GetParametersName(map<string,vector<Double_t> >); //Retrieves the name of the parameters + "pha" (?)
-		
+
 		TString GetComponentName(TString); //Function to call when creating the legend
-        	Int_t GetComponentColor(TString); //Assigns to each sample a color
+		Int_t GetComponentColor(TString); //Assigns to each sample a color
 		TString GetFitVarName(TString); 
-		
+
 		Double_t GetHistoNormalisation(string, string); //Takes the normalization factor of each histogram to 1 (1./h->Integral())
 		void CreateSweightCorrectHistos(string, string,string, vector<string>);
 
 		RooStats::ModelConfig* SetChannelConstants(RooStats::ModelConfig*, string);
-		
+
 		void AddSample(string,string, bool ,const bool, bool, RooStats::HistFactory::Channel**,vector<Double_t>,vector<Double_t>); //Adds the samples to the channel
 
 		RooStats::HistFactory::Measurement CreateMeasurement();
@@ -129,37 +130,47 @@ class SysFit{
 		void StoreFitResults(string,RooFitResult *fitResult);	
 		void CheckDiscrepancyWrtLastRLcValue(string fname, string chName);
 
+		void Constrain2body(double ratio){ Twobodyconstraint=true; ratio2body=ratio;}
+		void ConstrainMbody(double ratio){ Mbodyconstraint=true; ratioMbody = ratio;}
+
+
 	private:
 
-        Int_t alpha;
-        Int_t beta ;
-        Int_t gamma;
-        Int_t alpha_s;
-        Int_t beta_s;
-        Int_t gamma_s;
+		Int_t alpha;
+		Int_t beta ;
+		Int_t gamma;
+		Int_t alpha_s;
+		Int_t beta_s;
+		Int_t gamma_s;
 
-	vector<string> channel_names;
-	string MCcathegory; //either MCfull or MCTrackerOnly
-	string FitType; //Single, Simultaneous
+		vector<string> channel_names;
+		string MCcathegory; //either MCfull or MCTrackerOnly
+		string FitType; //Single, Simultaneous
 
-	Bool_t BBeast;
-	Bool_t FFcorr;
-	Bool_t swcorr;
-	
+		Bool_t BBeast;
+		Bool_t FFcorr;
+		Bool_t swcorr;
 
-	map<string,map<string,vector<Double_t>>> start_parameters;
-	map<string,vector<Double_t> > fit_result;
-	map<string, Double_t> weight; //Weight for Gaussian Constraint 
-	map<string, Bool_t> ShapeUnc; //set or not Gaussian Constraint 
-	map<string, Bool_t> GaussConstr; //set or not Gaussian Constraint 
+		Bool_t Twobodyconstraint;
+		Bool_t Mbodyconstraint;
 
-RooStats::HistFactory::Measurement measure;
-	RooWorkspace *wspace;
-	RooStats::ModelConfig* model;
+		Double_t ratio2body;
+		Double_t ratioMbody;
 
-	string swfname;
 
-	void blindResult(RooFitResult*,string name_suffix);
+		map<string,map<string,vector<Double_t>>> start_parameters;
+		map<string,vector<Double_t> > fit_result;
+		map<string, Double_t> weight; //Weight for Gaussian Constraint 
+		map<string, Bool_t> ShapeUnc; //set or not Gaussian Constraint 
+		map<string, Bool_t> GaussConstr; //set or not Gaussian Constraint 
+
+		RooStats::HistFactory::Measurement measure;
+		RooWorkspace *wspace;
+		RooStats::ModelConfig* model;
+
+		string swfname;
+
+		void blindResult(RooFitResult*,string name_suffix);
 
 };
 
