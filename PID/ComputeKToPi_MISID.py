@@ -21,16 +21,11 @@ pathToScript = '~/UraniaDev_v7r0/PIDCalib/PIDPerfScripts/scripts/python/MultiTra
 pathToOutput = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/Datasets/HistoPID/K2Pi/'
 polarities = ['MagUp','MagDown']
 stripping = 'Turbo16'
-#stripping = '20'
-#particleList = ['K','Pi','P','Mu']
 particleList = ['K']
-#cuts = '[DLLmu>-200 && (DLLK<2.0 || DLLK >4.0) && DLLp>0.0 && (MC15TuneV1_ProbNNp - MC15TuneV1_ProbNNK)>0. && IsMuon!=1.0]'
-
 
 cuts = {'K':'IsMuon==0 && DLLK<2.0'}
 
 
-#\"[DLLK > 0.0, DLLK > 4.0 && DLLp < 0.0]\" 
 for polarity in polarities:
     for particle in particleList:
         filename = 'Lb_Data_FakeMu_'+polarity+'_first5files_eff_'+particle+'.root'
