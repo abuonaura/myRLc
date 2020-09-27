@@ -10,5 +10,6 @@
 *.pyc
 *.so
 */.ipynb_checkpoints/
-*/build/*/
+*/multiGauss/build/
 */__pycache__/
+*SysFit_h_ACLi*

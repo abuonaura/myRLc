@@ -71,7 +71,7 @@ def GetProjectionsNormalised(h, value):
 r.gStyle.SetOptStat(0)
 
 
-fname = 'RootFiles/Histos_Isolated_MCfull.root'
+fname = 'RootFiles/Histos_Isolated_MCfull_morebins.root'
 h_Lc2ch_2bd, h_Lc2ch_mbd, h_LcSt2ch_2bd, h_LcSt2ch_mbd, h_Lc2ch_mbd_1pl, h_LcSt2ch_mbd_1pl, h_Lc2ch_mbd_1ml, h_LcSt2ch_mbd_1ml, h_Lc2ch_mbd_1pq, h_LcSt2ch_mbd_1pq, h_Lc2ch_mbd_1mq, h_LcSt2ch_mbd_1mq, h_tau, h_startau = ReadHistos(fname)
 
 h_Lc2ch_2bd_q2, h_Lc2ch_2bd_El, h_Lc2ch_2bd_Mm = GetProjections(h_Lc2ch_2bd)
