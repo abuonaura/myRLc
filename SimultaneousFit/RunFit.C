@@ -73,7 +73,7 @@ void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true
 	}
 
 	//Perform fit
-	a.CorrectSweights(false);
+	a.CorrectSweights(true);
 	RooStats::HistFactory::Measurement m = a.CreateMeasurement();
     RooWorkspace* w = a.CreateWorkspace(m);
 
