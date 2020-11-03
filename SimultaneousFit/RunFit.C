@@ -30,7 +30,7 @@ void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true
 
 	a.ActivateFFCorrections(ffcorr);
 
-	a.Constrain2body(0.3);
+	a.Constrain2body(0.5);
 	a.ConstrainMbody(0.5);
 
 	//Get name of channels for the fit (Isolated/Kenriched)
