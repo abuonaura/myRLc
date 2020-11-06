@@ -78,16 +78,30 @@ void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true
     RooWorkspace* w = a.CreateWorkspace(m);
 
     RooStats::ModelConfig* mc = a.CreateModel(w);
-    RooFitResult *fitResult = a.Fit(mc, m, w, false);
+    RooFitResult *fitResult = a.Fit(mc, m, w, false,false);
 
-	//Produce plot
-	a.CorrectSweights(false);
+	cout<<"--------------------------------"<<endl;
+	cout<<endl;
+	cout<<"      Second fit iteration "<<endl;
+	cout<<endl;
+	cout<<"--------------------------------"<<endl;
+
+	//Refit
     RooStats::HistFactory::Measurement m1 = a.CreateMeasurement();
     RooWorkspace* w1 = a.CreateWorkspace(m1);
 
     RooStats::ModelConfig* mc1 = a.CreateModel(w1);
-    RooFitResult *fitResult1 = a.Fit(mc1, m1, w1, true);
+    RooFitResult *fitResult1 = a.Fit(mc1, m1, w1, false, true);
 
+	/*
+	//Produce plot
+	a.CorrectSweights(false);
+    RooStats::HistFactory::Measurement m2 = a.CreateMeasurement();
+    RooWorkspace* w2 = a.CreateWorkspace(m2);
+
+    RooStats::ModelConfig* mc2 = a.CreateModel(w2);
+    RooFitResult *fitResult2 = a.Fit(mc2, m2, w2, true, false);
+*/
 	for (Int_t i =0; i<names.size();i++)
     {
 		string outfilename;

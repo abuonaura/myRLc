@@ -126,6 +126,22 @@ map<string,vector<Double_t>> SysFit::GetStartParameters(string ch_name)
 	return params;
 }
 
+void SysFit::SetStartParameters(RooFitResult *fitResult, string ch_name)
+{
+	RooArgList ParList = fitResult->floatParsFinal();
+
+	for(Int_t i=0;i<ParList.getSize();i++)
+	{
+		const char* title =  ParList.at(i)->GetTitle();
+		if(string(title)!="RLctau_"+ch_name)
+		{
+		RooRealVar* value = (RooRealVar*)(ParList.find(title));
+		RooErrorVar* error = value->errorVar();
+		//start_parameters[ch_name].insert(pair<string, vector<Double_t>>(string(title),{value->getVal(), value->getVal()-error->getVal(),value->getVal()+error->getVal() }));
+		start_parameters[ch_name][string(title)] = {value->getVal(), value->getVal()-3*error->getVal(),value->getVal()+3*error->getVal() };
+		}
+	}
+}
 
 
 void SysFit::PrintStartParams(string channel, map<string,vector<Double_t>> start_parameters)
@@ -617,7 +633,7 @@ RooStats::ModelConfig* SysFit::CreateModel(RooWorkspace* w)
 	return mc;
 }
 
-RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w, Bool_t plotonly, Bool_t refit)
+RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w, Bool_t plotonly)
 {
 	//Understand if FF corrections are or not activated
 	Bool_t ffcorr = GetFFcorrectionValue();	
@@ -649,9 +665,8 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	  cout<<" Parameter "<<theName<<" starting from "<<value<<endl;
 	}
 	cout << "------------------------------------------------------------------------------------" << endl;
-
 	
-	if(plotonly||refit)
+	if(plotonly)
 	{
 	for(Int_t i=0; i<nchannels;i++)
         {
@@ -755,7 +770,7 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
         }
         */
 
-	if(plotonly==false)
+		if(plotonly==false)
 	{
 
 
@@ -780,9 +795,7 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		cout<<" ------------------------- Starting fitting procedure ------------------------"<<endl;
 		RooStats::HistFactory::HistFactorySimultaneous* model_hf = new RooStats::HistFactory::HistFactorySimultaneous(*model);
 
-		RooAbsReal* nll_hf;
-        if(refit==false) nll_hf	= model_hf->createNLL(*data);
-		if(refit==true) nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
+		RooAbsReal* nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
 
 		RooMinuit* minuit_hf = new RooMinuit(*nll_hf);
 		RooArgSet *temp = new RooArgSet();
@@ -790,11 +803,6 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		minuit_hf->setErrorLevel(0.5);
 		minuit_hf->setStrategy(2);
 		minuit_hf->fit("smh");
-		
-		RooPlot* frame = y_vector[0]->frame();
-		nll_hf->plotOn(frame) ;
-		TCanvas *c =new TCanvas();
-		frame->Draw();
 
 		RooFitResult *fitResult=minuit_hf->save("TempResult","TempResult");
 
