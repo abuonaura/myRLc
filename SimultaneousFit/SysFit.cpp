@@ -511,7 +511,7 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 
 	//Define a channel for each category
 	vector <string> channel_names = NameChannels();	
-	string MCcat = GetMCcathegory();
+	TString MCcat = GetMCcathegory();
 	Int_t nchannels = channel_names.size();
 	vector <Channel*> channels;
 
@@ -528,8 +528,8 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 		map<string,vector<Double_t>> start_param = GetStartParameters(channel_names[i]);
 		vector<string> category = GetCategory(start_param);
 		vector<string> param_names = GetParametersName(start_param);
-		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+MCcat+string(".root");
-		string filename1 = string("RootFiles/DemoHistosLattice_")+channel_names[i]+string("_")+MCcat+string(".root");
+		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+string(MCcat)+string(".root");
+		string filename1 = string("RootFiles/DemoHistosLattice_")+channel_names[i]+string("_")+string(MCcat)+string(".root");
 
 		if(CorrectSweightsValue())
         {
@@ -839,7 +839,7 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 		for(Int_t i=0; i<nchannels;i++)
 		{
-			string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+GetMCcathegory()+string(".root");
+			string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+string(GetMCcathegory())+string(".root");
 
 			TFile* datatemplatefile = new TFile((filename).c_str(),"read");
 
@@ -1369,7 +1369,8 @@ void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar
 	TString TotComponents = "";
 
 	//Plot the data points
-	RooAbsData* channelData = data[idx->getLabel()];
+
+	RooAbsData* channelData = (RooAbsData*)data[idx->getLabel()];
 	channelData->plotOn(frame1, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 	channelData->plotOn(frame2, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 	channelData->plotOn(frame3, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
