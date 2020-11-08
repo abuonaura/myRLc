@@ -72,9 +72,9 @@ class SysFit
 		void FitIsolated();
 		void FitLcpipi();
 		void FitKenriched();
-		string GetFitType(){return FitType;}
+		TString GetFitType(){return FitType;}
 		void SetMCcathegory(string MCcat) {MCcathegory = MCcat;}
-		string GetMCcathegory() {return MCcathegory;}
+		TString GetMCcathegory() {return MCcathegory;}
 		void SelectChannel2fit(vector<string> ch) {channel_names = ch;}
 		vector<string> NameChannels() {return channel_names;} //return Isolated/Kenriched
 
@@ -144,8 +144,8 @@ class SysFit
 		Int_t gamma_s;
 
 		vector<string> channel_names;
-		string MCcathegory; //either MCfull or MCTrackerOnly
-		string FitType; //Single, Simultaneous
+		TString MCcathegory; //either MCfull or MCTrackerOnly
+		TString FitType; //Single, Simultaneous
 
 		Bool_t BBeast;
 		Bool_t FFcorr;
