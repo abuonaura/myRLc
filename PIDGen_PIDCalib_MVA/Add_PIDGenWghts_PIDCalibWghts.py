@@ -9,9 +9,9 @@ trcks    = ['pi', 'K', 'p', 'mu']
 leafs    = ['PT', 'P', 'nTracks']
 
 perfhistname = {}
-perfhistname['K']  = "K_DLLK>4_All"
-perfhistname['Pi'] = "Pi_DLLK<2_All"
-perfhistname['P']  = "P_DLLp>0_All"
+perfhistname['K']  = "K_DLLK>4&&IsMuon==0_All"
+perfhistname['Pi'] = "Pi_DLLK<2&&IsMuon==0_All"
+perfhistname['P']  = "P_DLLp>0&&IsMuon==0_All"
 perfhistname['Mu'] = "Mu_DLLmu>2&&DLLmu-DLLK>2&&DLLmu-DLLp>2&&IsMuon==1&&MC15TuneV1_ProbNNghost<0.2_All"
 trcks_PIDCalib  = ['Pi', 'K', 'P', 'Mu']
 leafs_PIDCalib  = ['Brunel_P', 'Brunel_PT', 'nTracks_Brunel']
@@ -244,8 +244,10 @@ def AddPIDCalibWeights(infname, intreename, outfname, magtype, year = '2016', pe
         binningname = "binning-"+trck_PIDCalib+"-"+yr+"-"+magtype
         suffix      = "_".join(leafs_PIDCalib)
         perfname    = prefix+"_"+binningname+"_"+suffix+".root"
+        print(perfname)
         File        = TFile.Open(perfname, "read")
         Histg       = File.Get(perfhistname[trck_PIDCalib])
+        print(perfhistname[trck_PIDCalib])
         perfHist[trck_PIDCalib]  = Histg.Clone(trck_PIDCalib+"new")
         File.Close()
 

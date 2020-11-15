@@ -25,12 +25,17 @@ folder = {'MC':{'Lb_Lcmunu':{'MagUp':'361','MagDown':'362'},
 	                   'Lb_Lc2593Ds':{'MagUp':'353','MagDown':'354'},
 	                   'Lb_Lc2625munu':{'MagUp':'355','MagDown':'356'},
 	                   'Lb_Lc2625taunu':{'MagUp':'357','MagDown':'358'},
-	                   'Lb_Lc2625Ds':{'MagUp':'359','MagDown':'360'}}
+	                   'Lb_Lc2625Ds':{'MagUp':'359','MagDown':'360'},
+					   'B_Lcpbarmunu':{'MagUp':'390','MagDown':'391'},
+					   'Lb_Lc2765munu':{'MagUp':'392','MagDown':'393'},
+					   'Lb_Lc2880munu':{'MagUp':'394','MagDown':'395'}
+					   }
 	}
 
 
 datatypes = [datatype]
-samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2625taunu','Lb_Lc2625munu','Lb_Lc2593taunu','Lb_Lc2593munu','Lb_Lc2625Ds','Lb_Lc2593Ds']
+#samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2625taunu','Lb_Lc2625munu','Lb_Lc2593taunu','Lb_Lc2593munu','Lb_Lc2625Ds','Lb_Lc2593Ds']
+samples = ['B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
 polarities=['MagUp','MagDown']
 fname={'MC':'tupleoutMC.root','Data':'tupleout.root','MCtrackeronly':'tupleoutMC.root'}
 #fname = {'MC':'LbLcDs_fullsim.root'}

@@ -5,7 +5,7 @@ import ROOT as r
 parser = argparse.ArgumentParser(description="Add files produced by Ganga")
 #Arguments without the '--' are mandatory
 parser.add_argument('jobID',help = 'folder number')
-parser.add_argument('jobname', choices=['Lb_Lcmunu', 'Lb_Lctaunu','Lb_LcDs','Lb_Lc2625taunu','Lb_Lc2625munu', 'Lb_Lc2593taunu', 'Lb_Lc2593munu','Lb_Lc2625Ds','Lb_Lc2593Ds','Lb_Data','Lb_FakeMu','Lb_DataSS','Lb_FakeMuSS'], help = 'name of the sample')
+parser.add_argument('jobname', choices=['Lb_Lcmunu', 'Lb_Lctaunu','Lb_LcDs','Lb_Lc2625taunu','Lb_Lc2625munu', 'Lb_Lc2593taunu', 'Lb_Lc2593munu','Lb_Lc2625Ds','Lb_Lc2593Ds','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu','Lb_Data','Lb_FakeMu','Lb_DataSS','Lb_FakeMuSS'], help = 'name of the sample')
 parser.add_argument('polarity',choices=['MagUp','MagDown'], help = 'sample polarity')
 parser.add_argument('dtype',choices=['Data','MC','MCtrackeronly'], help = 'type: data or MC files')
 parser.add_argument('filename', help = 'name of the tree')

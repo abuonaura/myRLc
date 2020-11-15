@@ -42,7 +42,7 @@ if __name__ == "__main__":
 	parser.add_argument('--MCTrackerOnly',dest='MCTO', help="Process MC TrackerOnly simulation samples", required=False, default=False, action='store_true')
 	parser.add_argument('--PIDGen',dest='PIDGen', help="Creates only the PIDGen file with the probNN vars", required=False, default=False, action='store_true')
 	parser.add_argument('--PIDCalib',dest='PIDCalib', help="Creates only the file with the PIDCalib weights", required=False, default=False, action='store_true')
-	parser.add_argument('datatype',choices=['Lctaunu','Lcmunu','LcDs','Lc2593munu','Lc2593taunu','Lc2625munu','Lc2625taunu','all'], help = 'which mc sample we want to run on', default='all')
+	parser.add_argument('datatype',choices=['Lctaunu','Lcmunu','LcDs','Lc2593munu','Lc2593taunu','Lc2625munu','Lc2625taunu','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu','all'], help = 'which mc sample we want to run on', default='all')
 	parser.add_argument('polarity',choices=['MagUp','MagDown','all'], help = 'which data sample we want to run on', default = 'all')
 	
 	options = parser.parse_args()
@@ -59,7 +59,9 @@ if __name__ == "__main__":
 		filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'
 
 	tname = 'tupleout/DecayTree'
-	datatypes = ['Lcmunu','Lctaunu','LcDs','Lc2593munu','Lc2593taunu','Lc2593Ds','Lc2625munu','Lc2625taunu','Lc2625Ds']
+	datatypes = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds']
+	if MCTO==True:
+		datatypes = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
 	polarities = ['MagUp','MagDown']
 	
 	if datatype!='all':
@@ -72,9 +74,9 @@ if __name__ == "__main__":
 		for dt in datatypes:
 			print('   ', dt)
 			if MCfull==True:
-				inputFile = filedir+'Lb_'+dt+'_'+polarity+'_full.root'
+				inputFile = filedir+dt+'_'+polarity+'_full.root'
 			if MCTO==True:
-				inputFile = filedir+'Lb_'+dt+'_'+polarity+'.root'
+				inputFile = filedir+dt+'_'+polarity+'.root'
 			outFilePIDGen = inputFile[0:-5]+'_PIDGen.root'
 			outFilePIDCalib = inputFile[0:-5]+'_PIDCalib.root'
 			if PIDGen==True:
