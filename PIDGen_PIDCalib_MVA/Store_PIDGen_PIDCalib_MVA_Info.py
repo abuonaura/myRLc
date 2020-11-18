@@ -5,8 +5,8 @@ import os
 #files=glob.glob(Dir+"*_TMatched.root")
 
 #Evaluate MC
-Dir = '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/RLc_MC/'
-files = [Dir+'Lb_Lc2593taunu_MagUp_TMatched_PID.root']
+Dir   = '/disk/lhcb_data/RLcMuonic2016/MC_full/'
+files = [Dir+'Lb_Lc2625Ds_MagUp_full.root']
 
 from Add_PIDGenWghts_PIDCalibWghts import AddPIDGenWeights, AddPIDCalibWeights
 UraniaDir = '/home/hep/amathad/Packages/UraniaDev_v8r0/'
@@ -23,7 +23,7 @@ for fn in files:
     #AddPIDGenWeights(  fn, 'DecayTree', fn_pidgen,   magtype, UraniaDir, nentries_to_read=2000)
     #AddPIDCalibWeights(fn, 'DecayTree', fn_pidcalib, magtype, UraniaDir, nentries_to_read=2000)
     #AddPIDCalibWeights(fn, 'DecayTree', fn_pidcalib, magtype, nentries_to_read=2000)
-    AddPIDCalibWeights(fn, 'DecayTree', 'Test.root', magtype, nentries_to_read=2000)
+    AddPIDCalibWeights(fn, 'tupleout/DecayTree', 'Test.root', magtype, nentries_to_read=2000)
 
 ##Make sure all the python packages are present (see README.md)
 #rom Add_MVA import AddBDTinfo

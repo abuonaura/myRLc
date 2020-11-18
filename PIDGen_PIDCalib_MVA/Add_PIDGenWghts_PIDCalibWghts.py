@@ -4,18 +4,17 @@ import shutil
 from root_pandas import read_root
 
 magtypes = ['MagUp', 'MagDown']
-years    = ['2011' , '2012', '2015', '2016', '2017', '2018']
+years    = ['2011' , '2012', '2016', '2017', '2018']
 trcks    = ['pi', 'K', 'p', 'mu']
 leafs    = ['PT', 'P', 'nTracks']
 
 perfhistname = {}
-perfhistname['K']  = "K_DLLK>4&&IsMuon==0_All"
-perfhistname['Pi'] = "Pi_DLLK<2&&IsMuon==0_All"
-perfhistname['P']  = "P_DLLp>0&&IsMuon==0_All"
+perfhistname['K']  = "K_DLLK>4_All"
+perfhistname['Pi'] = "Pi_DLLK<2_All"
+perfhistname['P']  = "P_DLLp>0_All"
 perfhistname['Mu'] = "Mu_DLLmu>2&&DLLmu-DLLK>2&&DLLmu-DLLp>2&&IsMuon==1&&MC15TuneV1_ProbNNghost<0.2_All"
-trcks_PIDCalib  = ['Pi', 'K', 'P', 'Mu']
-leafs_PIDCalib  = ['Brunel_P', 'Brunel_PT', 'nTracks_Brunel']
-
+trcks_PIDCalib     = ['Pi', 'K', 'P', 'Mu']
+leafs_PIDCalib     = ['Brunel_P', 'Brunel_PT', 'nTracks_Brunel']
 
 def Exceptions(infname, year, magtype, tmpdir, UraniaDir):
     if 'root://eoslhcb.cern.ch/' in infname:
@@ -144,7 +143,7 @@ def AddPIDGenWeights(infname, intreename, outfname, magtype, UraniaDir, year = '
         make_tmpfile(tmpinfile, treename, output_file, ['runNumber', 'eventNumber']+pidvarstokeep, nentries_to_read = 1000000000)
         shutil.rmtree(tmpdir)
 
-#def AddPIDCalibWeights(infname, intreename, outfname, magtype, UraniaDir, year = '2016', tmpdir = '/tmp/', perfhistpath = '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist', nentries_to_read = 1000000000):
+#def AddPIDCalibWeights(infname, intreename, outfname, magtype, UraniaDir, year = '2016', tmpdir = '/tmp/', perfhistpath = '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist/RLc', nentries_to_read = 1000000000):
 #    """
 #    Function:
 #    ---------
@@ -163,7 +162,7 @@ def AddPIDGenWeights(infname, intreename, outfname, magtype, UraniaDir, year = '
 #    year :      2016
 #    tmpdir :    Currently default is set to /tmp/.The program makes a tmp directory inside tmpdir i.e. /tmp/tmp. It also later deltes it.
 #    UraniaDir:  Path to the Urania directory that holds the run bash script
-#    perfhistpath: path where the perfomance histogram are stored (these are created using custom binning scheme). Default is set to '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist'.
+#    perfhistpath: path where the perfomance histogram are stored (these are created using custom binning scheme). Default is set to '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist/RLc'.
 #    nentries_to_read: number of candidates to read. Set to root default i.e. 1000000000
 #
 #    Output:
@@ -185,7 +184,7 @@ def AddPIDGenWeights(infname, intreename, outfname, magtype, UraniaDir, year = '
 #    leafskeep   = [trck+'_'+lf for trck in trcks for lf in leafs[:2]] + ['runNumber', 'eventNumber', leafs[2]]
 #    make_tmpfile(infname, intreename, tmpfinfname, leafskeep, nentries_to_read)
 #
-#    command = r'bash '+UraniaDir+'run python '+pidscript+' '+stripp+' '+magtype+' '+tmpfinfname+' '+intreename+' '+tmpfoutfname+' \[mu,Mu,DLLmu\>2\&\&DLLmu-DLLK\>2\&\&DLLmu-DLLp\>2\&\&IsMuon\=\=1\] \[pi,Pi,DLLK\<2\] \[K,K,DLLK\>4\] \[p,P,DLLp\>0\] -i '+perfhistpath+' -X Brunel_P -Y Brunel_PT -Z nTracks -x P -y PT -z nTracks -s Mu binning-Mu-'+stripp+'-'+magtype+' -s Pi binning-Pi-'+stripp+'-'+magtype+' -s K binning-K-'+stripp+'-'+magtype+' -s P binning-P-'+stripp+'-'+magtype+' -q' 
+#    command = r'bash '+UraniaDir+'run python '+pidscript+' '+stripp+' '+magtype+' '+tmpfinfname+' '+intreename+' '+tmpfoutfname+' \[mu,Mu,DLLmu\>2\&\&DLLmu-DLLK\>2\&\&DLLmu-DLLp\>2\&\&IsMuon\=\=1\] \[pi,Pi,DLLK\<2\] \[K,K,DLLK\>4\] \[p,P,DLLp\>0\] -i '+perfhistpath+' -X Brunel_P -Y Brunel_PT -Z nTracks_Brunel -x P -y PT -z nTracks -s Mu binning-Mu-'+stripp+'-'+magtype+' -s Pi binning-Pi-'+stripp+'-'+magtype+' -s K binning-K-'+stripp+'-'+magtype+' -s P binning-P-'+stripp+'-'+magtype+' -q' 
 #    os.system(command)
 #
 #    make_tmpfile(tmpfoutfname, intreename, outfname, ['runNumber', 'eventNumber', 'Event_PIDCalibEffWeight'], nentries_to_read = 1000000000)
@@ -198,14 +197,14 @@ def storeeff(row, histg, limits):
     eff    = histg.GetBinContent(glbbin)
     if cond: return 0.
 
-    if eff < 0.: 
-        return 0.
-    elif eff > 1.:
-        return 1.
+    #if eff < 0.: 
+    #    return 0.
+    #elif eff > 8.:
+    #    return 1.
 
     return eff
 
-def AddPIDCalibWeights(infname, intreename, outfname, magtype, year = '2016', perfhistpath = '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist', nentries_to_read = 1000000000, chunksize = 10000):
+def AddPIDCalibWeights(infname, intreename, outfname, magtype, year = '2016', perfhistpath = '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist/RLc', nentries_to_read = 1000000000, chunksize = 10000):
     """
     Function:
     ---------
@@ -222,7 +221,7 @@ def AddPIDCalibWeights(infname, intreename, outfname, magtype, year = '2016', pe
     outfname:   full path to the output file including it's name where it will be written
     magtype :   MagDown or MagUp
     year :      2016
-    perfhistpath: path where the perfomance histogram are stored (these are created using custom binning scheme). Default is set to '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist'.
+    perfhistpath: path where the perfomance histogram are stored (these are created using custom binning scheme). Default is set to '/disk/lhcb_data2/amathad/Lb2Lclnu_analysis/perfhist/RLc'.
     nentries_to_read: number of candidates to read. Set to root default i.e. 1000000000
     chunksize: Pandas data frame chunksize to read
 
@@ -244,10 +243,8 @@ def AddPIDCalibWeights(infname, intreename, outfname, magtype, year = '2016', pe
         binningname = "binning-"+trck_PIDCalib+"-"+yr+"-"+magtype
         suffix      = "_".join(leafs_PIDCalib)
         perfname    = prefix+"_"+binningname+"_"+suffix+".root"
-        print(perfname)
         File        = TFile.Open(perfname, "read")
         Histg       = File.Get(perfhistname[trck_PIDCalib])
-        print(perfhistname[trck_PIDCalib])
         perfHist[trck_PIDCalib]  = Histg.Clone(trck_PIDCalib+"new")
         File.Close()
 

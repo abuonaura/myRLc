@@ -19,12 +19,12 @@ pidcut["P"]  = "DLLp>0"
 varminmax = {}
 varminmax["Brunel_P"]       = (0, 200000, 100)
 varminmax["Brunel_PT"]      = (0,  60000, 100)
-varminmax["nTracks"]        = (0,  700  ,  5)
+varminmax["nTracks_Brunel"]        = (0,  700  ,  5)
 
 for data in ["Turbo16"]:
     for magtype in ["MagUp"]:
         for particle in ["Pi", "P", "K", "Mu"]:
-            for varname in ["Brunel_P", "Brunel_PT", "nTracks"]:
+            for varname in ["Brunel_P", "Brunel_PT", "nTracks_Brunel"]:
                 config = {}
                 config["sampleVersion"             ] = data
                 config["magnetPolarity"            ] = magtype
@@ -32,7 +32,7 @@ for data in ["Turbo16"]:
                 config["priorCut"                  ] = cut[particle]
                 config["pidCut"                    ] = pidcut[particle]
                 config["varName"                   ] = varname
-                config["outputFile"                ] = "binoutput/binning-"+data+"-"+magtype+"-"+particle+"-"+varname+".py"
+                config["outputFile"                ] = "binoutput/binning-"+data+".py"
                 config["minimum"                   ] = varminmax[varname][0]
                 config["maximum"                   ] = varminmax[varname][1]
                 config["minimumBinWidth"           ] = varminmax[varname][2]
