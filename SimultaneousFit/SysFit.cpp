@@ -29,6 +29,7 @@ SysFit::SysFit()
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{4.E3,1E2,1.E5}));
     start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{4.E3,1E2,1.E5}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.6E5,3.E4,1.E6}));
+	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcLcpbar_Isolated",{2.6E5,3.E4,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{3.1E4,10,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{4.0E4,1.E1,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,0.,1.}));
@@ -177,6 +178,7 @@ TString SysFit::GetComponentName(TString component)
 	else if(component.Contains("h_starDs-2body")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c}";
 	else if(component.Contains("h_starDs-mbody")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c} X";
 	else if(component.Contains("h_startau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #tau #nu_{#tau}";
+	else if(component.Contains("h_Lcpbar_")) name = "#B #rightarrow #Lambda_{c} #bar{p} #mu_{#mu} #nu_{#tau}";
 	else if(component.Contains("_tau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #tau #nu_{#tau}";
 	else if(component.Contains("h_2charm-2body")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c}";
 	else if(component.Contains("h_2charm-mbody")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c} X";
@@ -192,6 +194,7 @@ Int_t SysFit::GetComponentColor(TString component)
 	if (component.Contains("_mu_")) color = kBlue;
 	else if(component.Contains("h_starmu_")) color = kViolet;
 	else if(component.Contains("h_startau_")) color = kMagenta-9;
+	else if(component.Contains("h_Lcpbar_")) color = kViolet+7;
 	else if(component.Contains("h_starDs-2body")) color = kAzure+2;
 	else if(component.Contains("h_starDs-mbody")) color = kAzure+10;
 	else if(component.Contains("_tau_"))color = kRed;
@@ -469,6 +472,8 @@ RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, st
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNctau_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarmu_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstartau_"+channel).c_str())))->setConstant(kTRUE);
+	if((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcLcpbar_"+channel).c_str())))
+		((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcLcpbar_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-mbody_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-2body_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-mbody_"+channel).c_str())))->setConstant(kTRUE);
@@ -718,7 +723,7 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	//Put together the alphas from the FF corrections
 	RooRealVar *alpha_mu_shape_unc;
 	RooRealVar *alpha_tau_shape_unc;
-	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -100., 100.);
+	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -3., 3.);
     if (ffcorr)
     {
         alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_mu_shape_unc");
@@ -730,8 +735,8 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
     RooRealVar *alphal_starDs;
     RooRealVar *alphaq_2charm;
     RooRealVar *alphaq_starDs;
-    RooRealVar* alpha_linear = new RooRealVar("alpha_linear","alpha_linear", 0, -10., 10.);
-    RooRealVar* alpha_quadratic = new RooRealVar("alpha_quadratic","alpha_quadratic", 0, -10., 10.);
+    RooRealVar* alpha_linear = new RooRealVar("alpha_linear","alpha_linear", 0, -3., 3.);
+    RooRealVar* alpha_quadratic = new RooRealVar("alpha_quadratic","alpha_quadratic", 0, -3., 3.);
     alphal_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation");
     alphal_starDs = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_starDs-mbody_variation");
     alphaq_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation");

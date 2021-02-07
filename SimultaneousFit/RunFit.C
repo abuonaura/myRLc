@@ -80,6 +80,7 @@ void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true
     RooStats::ModelConfig* mc = a.CreateModel(w);
     RooFitResult *fitResult = a.Fit(mc, m, w, false,false);
 
+	/*
 	cout<<"--------------------------------"<<endl;
 	cout<<endl;
 	cout<<"      Second fit iteration "<<endl;
@@ -87,15 +88,15 @@ void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true
 	cout<<"--------------------------------"<<endl;
 
 	//Refit
-    /*
     RooStats::HistFactory::Measurement m1 = a.CreateMeasurement();
     RooWorkspace* w1 = a.CreateWorkspace(m1);
 
     RooStats::ModelConfig* mc1 = a.CreateModel(w1);
     RooFitResult *fitResult1 = a.Fit(mc1, m1, w1, false, true);
-*/
+	*/
+
 	//Produce plot
-	a.CorrectSweights(false);
+	a.CorrectSweights(true);
     RooStats::HistFactory::Measurement m2 = a.CreateMeasurement();
     RooWorkspace* w2 = a.CreateWorkspace(m2);
 

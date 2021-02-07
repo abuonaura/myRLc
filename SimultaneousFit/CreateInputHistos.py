@@ -40,8 +40,9 @@ def GetFileList(category,MCtype):
                         'tau':['MC_TrackerOnly/Lb_Lctaunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lctaunu_MagDown_preselected_iso_LbCorr.root'],
                         '2charm':['MC_TrackerOnly/Lb_LcDs_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_LcDs_MagDown_preselected_iso_LbCorr.root'],
                         'starDs':['MC_TrackerOnly/Lb_Lc2625Ds_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625Ds_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593Ds_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593Ds_MagDown_preselected_iso_LbCorr.root'],
-                        'starmu':['MC_TrackerOnly/Lb_Lc2625munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625munu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagDown_preselected_iso_LbCorr.root'],
-                        'startau':['MC_TrackerOnly/Lb_Lc2625taunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625taunu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagDown_preselected_iso_LbCorr.root']}
+                        'starmu':['MC_TrackerOnly/Lb_Lc2625munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625munu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593munu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2765munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2765munu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2880munu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2880munu_MagDown_preselected_iso_LbCorr.root'],
+                        'startau':['MC_TrackerOnly/Lb_Lc2625taunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2625taunu_MagDown_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/Lb_Lc2593taunu_MagDown_preselected_iso_LbCorr.root'],
+                        'Lcpbar':['MC_TrackerOnly/B_Lcpbarmunu_MagUp_preselected_iso_LbCorr.root','MC_TrackerOnly/B_Lcpbarmunu_MagDown_preselected_iso_LbCorr.root']}
 
     
     if category=='Kenriched':
@@ -183,7 +184,9 @@ def FillHistograms(category, MCtype):
                         if (t.FitVar_q2_mLc/1.E6>-2 and t.FitVar_q2_mLc/1.E6<14) and (t.FitVar_Mmiss2_mLc/1.E6>-2 and t.FitVar_Mmiss2_mLc/1.E6<14) and (t.FitVar_El_mLc>0 and t.FitVar_El_mLc<2600):
                             integral+=weight
                             sigma_Comb = sigma_Comb+ weight*weight
-                    if sample == 'mu' or sample=='tau' or sample=='starmu' or sample=='startau':
+                    if sample == 'mu' or sample=='tau' or sample=='starmu' or sample=='startau': 
+                        weight=t.Event_PIDCalibEffWeight*t.Event_FFcorr*t.w_LbCorr
+                    if sample=='Lcpbar':
                         weight=t.Event_PIDCalibEffWeight*t.w_LbCorr
                     h.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,weight)
             histos.append(h)
