@@ -29,6 +29,7 @@ SysFit::SysFit()
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-2body_Isolated",{4.E3,1E2,1.E5}));
     start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcstarDs-mbody_Isolated",{4.E3,1E2,1.E5}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Ncstarmu_Isolated",{2.6E5,3.E4,1.E6}));
+	//start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcLcpbar_Isolated",{2.6E5,3.E4,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcMISID_Isolated",{3.1E4,10,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("NcCombinatorial_Isolated",{4.0E4,1.E1,1.E6}));
 	start_parameters["Isolated"].insert(pair<string, vector<Double_t>>("Nctau_Isolated",{0.05,0.,1.}));
@@ -126,22 +127,6 @@ map<string,vector<Double_t>> SysFit::GetStartParameters(string ch_name)
 	return params;
 }
 
-void SysFit::SetStartParameters(RooFitResult *fitResult, string ch_name)
-{
-	RooArgList ParList = fitResult->floatParsFinal();
-
-	for(Int_t i=0;i<ParList.getSize();i++)
-	{
-		const char* title =  ParList.at(i)->GetTitle();
-		if(string(title)!="RLctau_"+ch_name)
-		{
-		RooRealVar* value = (RooRealVar*)(ParList.find(title));
-		RooErrorVar* error = value->errorVar();
-		//start_parameters[ch_name].insert(pair<string, vector<Double_t>>(string(title),{value->getVal(), value->getVal()-error->getVal(),value->getVal()+error->getVal() }));
-		start_parameters[ch_name][string(title)] = {value->getVal(), value->getVal()-3*error->getVal(),value->getVal()+3*error->getVal() };
-		}
-	}
-}
 
 
 void SysFit::PrintStartParams(string channel, map<string,vector<Double_t>> start_parameters)
@@ -193,6 +178,7 @@ TString SysFit::GetComponentName(TString component)
 	else if(component.Contains("h_starDs-2body")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c}";
 	else if(component.Contains("h_starDs-mbody")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* X_{c} X";
 	else if(component.Contains("h_startau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c}* #tau #nu_{#tau}";
+	else if(component.Contains("h_Lcpbar_")) name = "#B #rightarrow #Lambda_{c} #bar{p} #mu_{#mu} #nu_{#tau}";
 	else if(component.Contains("_tau_")) name = "#Lambda_{b} #rightarrow #Lambda_{c} #tau #nu_{#tau}";
 	else if(component.Contains("h_2charm-2body")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c}";
 	else if(component.Contains("h_2charm-mbody")) name = "#Lambda_{b} #rightarrow #Lambda_{c} X_{c} X";
@@ -208,6 +194,7 @@ Int_t SysFit::GetComponentColor(TString component)
 	if (component.Contains("_mu_")) color = kBlue;
 	else if(component.Contains("h_starmu_")) color = kViolet;
 	else if(component.Contains("h_startau_")) color = kMagenta-9;
+	else if(component.Contains("h_Lcpbar_")) color = kViolet+7;
 	else if(component.Contains("h_starDs-2body")) color = kAzure+2;
 	else if(component.Contains("h_starDs-mbody")) color = kAzure+10;
 	else if(component.Contains("_tau_"))color = kRed;
@@ -485,6 +472,8 @@ RooStats::ModelConfig* SysFit::SetChannelConstants(RooStats::ModelConfig *mc, st
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNctau_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarmu_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstartau_"+channel).c_str())))->setConstant(kTRUE);
+	if((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcLcpbar_"+channel).c_str())))
+		((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcLcpbar_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-mbody_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNcstarDs-2body_"+channel).c_str())))->setConstant(kTRUE);
 	((RooRealVar*)(mc->GetNuisanceParameters()->find(("mcNc2charm-mbody_"+channel).c_str())))->setConstant(kTRUE);
@@ -527,7 +516,7 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 
 	//Define a channel for each category
 	vector <string> channel_names = NameChannels();	
-	string MCcat = GetMCcathegory();
+	TString MCcat = GetMCcathegory();
 	Int_t nchannels = channel_names.size();
 	vector <Channel*> channels;
 
@@ -544,8 +533,8 @@ RooStats::HistFactory::Measurement SysFit::CreateMeasurement()
 		map<string,vector<Double_t>> start_param = GetStartParameters(channel_names[i]);
 		vector<string> category = GetCategory(start_param);
 		vector<string> param_names = GetParametersName(start_param);
-		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+MCcat+string(".root");
-		string filename1 = string("RootFiles/DemoHistosLattice_")+channel_names[i]+string("_")+MCcat+string(".root");
+		string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+string(MCcat)+string(".root");
+		string filename1 = string("RootFiles/DemoHistosLattice_")+channel_names[i]+string("_")+string(MCcat)+string(".root");
 
 		if(CorrectSweightsValue())
         {
@@ -633,7 +622,7 @@ RooStats::ModelConfig* SysFit::CreateModel(RooWorkspace* w)
 	return mc;
 }
 
-RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w, Bool_t plotonly)
+RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Measurement meas, RooWorkspace *w, Bool_t plotonly, Bool_t refit)
 {
 	//Understand if FF corrections are or not activated
 	Bool_t ffcorr = GetFFcorrectionValue();	
@@ -654,24 +643,25 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 	cout << "------------------------------Setting Alpha Starting Values-------------------------" << endl;
 	SetAlphaStartingPoints(mc);
-	
+
 	cout << "------------------Printig fit nuisance parameters starting values ------------------" << endl;
 	//Print the values of the nuisance parameters befor the fit
 	RooRealVar *tempVar; //dummy pointer
-    TIterator *iterpars = mc->GetNuisanceParameters()->createIterator();
-    while((tempVar = (RooRealVar*) iterpars->Next())) {
-      TString theName = tempVar->GetName();
-	  Double_t value = tempVar->getValV();
-	  cout<<" Parameter "<<theName<<" starting from "<<value<<endl;
+	TIterator *iterpars = mc->GetNuisanceParameters()->createIterator();
+	while((tempVar = (RooRealVar*) iterpars->Next())) {
+		TString theName = tempVar->GetName();
+		Double_t value = tempVar->getValV();
+		cout<<" Parameter "<<theName<<" starting from "<<value<<endl;
 	}
 	cout << "------------------------------------------------------------------------------------" << endl;
-	
-	if(plotonly)
+
+
+	if(plotonly||refit)
 	{
-	for(Int_t i=0; i<nchannels;i++)
-        {
-            string resultfname = "FitResultsUnblinded_"+channel_names[i]+".txt";
-            LoadFitResults(resultfname, mc, channel_names[i]);
+		for(Int_t i=0; i<nchannels;i++)
+		{
+			string resultfname = "FitResultsUnblinded_"+channel_names[i]+".txt";
+			LoadFitResults(resultfname, mc, channel_names[i]);
 			cout << "------------------Printig fit nuisance parameters values (loaded) ------------------" << endl;
 			//Print the values of the nuisance parameters befor the fit
 			RooRealVar *tempVar; //dummy pointer
@@ -733,24 +723,24 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 	//Put together the alphas from the FF corrections
 	RooRealVar *alpha_mu_shape_unc;
 	RooRealVar *alpha_tau_shape_unc;
-	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -100., 100.);
-    if (ffcorr)
-    {
-        alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_mu_shape_unc");
-        alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_tau_shape_unc");
-    }
+	RooRealVar* alpha = new RooRealVar("alpha","alpha", 0, -3., 3.);
+	if (ffcorr)
+	{
+		alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_mu_shape_unc");
+		alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_tau_shape_unc");
+	}
 
 	//Put together the alphas from the mbody shape variations for LcXc and Lc*Xc
 	RooRealVar *alphal_2charm;
-    RooRealVar *alphal_starDs;
-    RooRealVar *alphaq_2charm;
-    RooRealVar *alphaq_starDs;
-    RooRealVar* alpha_linear = new RooRealVar("alpha_linear","alpha_linear", 0, -10., 10.);
-    RooRealVar* alpha_quadratic = new RooRealVar("alpha_quadratic","alpha_quadratic", 0, -10., 10.);
-    alphal_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation");
-    alphal_starDs = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_starDs-mbody_variation");
-    alphaq_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation");
-    alphaq_starDs = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_starDs-mbody_quadratic_variation");
+	RooRealVar *alphal_starDs;
+	RooRealVar *alphaq_2charm;
+	RooRealVar *alphaq_starDs;
+	RooRealVar* alpha_linear = new RooRealVar("alpha_linear","alpha_linear", 0, -3., 3.);
+	RooRealVar* alpha_quadratic = new RooRealVar("alpha_quadratic","alpha_quadratic", 0, -3., 3.);
+	alphal_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_variation");
+	alphal_starDs = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_starDs-mbody_variation");
+	alphaq_2charm = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_2charm-mbody_quadratic_variation");
+	alphaq_starDs = (RooRealVar*) mc->GetNuisanceParameters()->find("alpha_starDs-mbody_quadratic_variation");
 
 	cout<<"-----FF corr: "<<ffcorr<<endl;
 
@@ -761,31 +751,31 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		pdf_=model_->getPdf(idx->getLabel());
 		cust = new RooCustomizer(*pdf_,"cust");
 		/*
-         * ---------- Make FF alpha parameters between tau and mu the same but different for the channels
-        RooRealVar* alpha = new RooRealVar((string("alpha_")+channel_names[i]).c_str(),(string("alpha_")+channel_names[i]).c_str(), 0, -100., 100.);
-        if (ffcorr)
-        {
-            alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_mu_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
-            alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_tau_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
-        }
-        */
+		 * ---------- Make FF alpha parameters between tau and mu the same but different for the channels
+		 RooRealVar* alpha = new RooRealVar((string("alpha_")+channel_names[i]).c_str(),(string("alpha_")+channel_names[i]).c_str(), 0, -100., 100.);
+		 if (ffcorr)
+		 {
+		 alpha_mu_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_mu_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+		 alpha_tau_shape_unc = (RooRealVar*) mc->GetNuisanceParameters()->find((string("alpha_tau_shape_unc_RLc_kinematic_")+channel_names[i]).c_str());
+		 }
+		 */
 
 		if(plotonly==false)
-	{
-
-
-		if(ffcorr)
 		{
-			cust->replaceArg(*alpha_mu_shape_unc,*alpha);
-			cust->replaceArg(*alpha_tau_shape_unc,*alpha);
+
+
+			if(ffcorr)
+			{
+				cust->replaceArg(*alpha_mu_shape_unc,*alpha);
+				cust->replaceArg(*alpha_tau_shape_unc,*alpha);
+			}
+			//Set the linear alphas for the LcXc and LcXcStar templates to be one parameter
+			cust->replaceArg(*alphal_2charm,*alpha_linear);
+			cust->replaceArg(*alphal_starDs,*alpha_linear);
+			//Set the quadratic alphas for the LcXc and LcXcStar templates to be one parameter
+			cust->replaceArg(*alphaq_2charm,*alpha_quadratic);
+			cust->replaceArg(*alphaq_starDs,*alpha_quadratic);
 		}
-		//Set the linear alphas for the LcXc and LcXcStar templates to be one parameter
-        cust->replaceArg(*alphal_2charm,*alpha_linear);
-        cust->replaceArg(*alphal_starDs,*alpha_linear);
-        //Set the quadratic alphas for the LcXc and LcXcStar templates to be one parameter
-        cust->replaceArg(*alphaq_2charm,*alpha_quadratic);
-        cust->replaceArg(*alphaq_starDs,*alpha_quadratic);
-	}
 
 		model->addPdf((RooAbsPdf&)*cust->build(),idx->getLabel());
 	}
@@ -795,7 +785,9 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		cout<<" ------------------------- Starting fitting procedure ------------------------"<<endl;
 		RooStats::HistFactory::HistFactorySimultaneous* model_hf = new RooStats::HistFactory::HistFactorySimultaneous(*model);
 
-		RooAbsReal* nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
+		RooAbsReal* nll_hf;
+		if(refit==false) nll_hf	= model_hf->createNLL(*data);
+		if(refit==true) nll_hf = model_hf->createNLL(*data,RooFit::Offset(kTRUE));//,RooFit::NumCPU(8));
 
 		RooMinuit* minuit_hf = new RooMinuit(*nll_hf);
 		RooArgSet *temp = new RooArgSet();
@@ -803,6 +795,11 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		minuit_hf->setErrorLevel(0.5);
 		minuit_hf->setStrategy(2);
 		minuit_hf->fit("smh");
+
+		RooPlot* frame = y_vector[0]->frame();
+		nll_hf->plotOn(frame) ;
+		TCanvas *c =new TCanvas();
+		frame->Draw();
 
 		RooFitResult *fitResult=minuit_hf->save("TempResult","TempResult");
 
@@ -829,14 +826,14 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 		cout <<"-------------------------- PRINT SUMMARY RESULTS ------------------------------" <<endl;
 		fitResult->Print();
 		cout <<"------------------------------------------------------------------------------" <<endl;
-	
+
 		/*
-		for(Int_t i=0; i<nchannels;i++)
-    {
-        idx->setIndex(i);
-        PlotFitVariablesInFit(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",data,model,idx,channel_names[i]);
-    }
-	*/
+		   for(Int_t i=0; i<nchannels;i++)
+		   {
+		   idx->setIndex(i);
+		   PlotFitVariablesInFit(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",data,model,idx,channel_names[i]);
+		   }
+		   */
 		return fitResult;
 	}
 	else
@@ -847,7 +844,7 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 		for(Int_t i=0; i<nchannels;i++)
 		{
-			string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+GetMCcathegory()+string(".root");
+			string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+string(GetMCcathegory())+string(".root");
 
 			TFile* datatemplatefile = new TFile((filename).c_str(),"read");
 
@@ -875,24 +872,24 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 
 	/*
-	for(Int_t i=0; i<nchannels;i++)
-    { 
-        idx->setIndex(i);
-		PlotFitVariables(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",data,model,idx,channel_names[i]);
-	}
+	   for(Int_t i=0; i<nchannels;i++)
+	   { 
+	   idx->setIndex(i);
+	   PlotFitVariables(x_vector[i],"M_{miss}^{2}",y_vector[i],"E_{l}",z_vector[i],"q^{2}",data,model,idx,channel_names[i]);
+	   }
 
 	// Access list of final fit parameter values
 	if(fitResult->status()==0)
-		cout<<" Fit converged "<<endl;
+	cout<<" Fit converged "<<endl;
 	else
-		cout<<"!!!! ATTENTION !!!!    Fit NON CONVERGING!  "<<endl;
+	cout<<"!!!! ATTENTION !!!!    Fit NON CONVERGING!  "<<endl;
 
 	cout << "final value of floating parameters" << endl ;
 	fitResult->floatParsFinal().Print("s") ;
 	*/
 
 
-	
+
 	//RooRealVar* RLc_fitresult = (RooRealVar*)fitResult->floatParsFinal().find("RLtau");
 	//Double_t fitOut[] = {RLc_fitresult->getVal(),RLc_fitresult->errorVar()->getVal()};
 
@@ -1377,7 +1374,8 @@ void SysFit::PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar
 	TString TotComponents = "";
 
 	//Plot the data points
-	RooAbsData* channelData = data[idx->getLabel()];
+
+	RooAbsData* channelData = (RooAbsData*)data[idx->getLabel()];
 	channelData->plotOn(frame1, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 	channelData->plotOn(frame2, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));
 	channelData->plotOn(frame3, RooFit::DrawOption("ZP"), RooFit::DataError(RooAbsData::Poisson));

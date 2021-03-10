@@ -51,10 +51,11 @@
 #include <vector>
 #include <map>
 
-vector<string> ch2fit = {"Isolated","Kenriched"};
+//vector<string> ch2fit = {"Isolated","Kenriched"};
 using namespace std;
 using namespace RooFit;
 using namespace RooStats;
+using namespace HistFactory;
 
 
 class SysFit
@@ -64,113 +65,127 @@ class SysFit
 		SysFit();
 		~SysFit() {;}
 
-		void CorrectSweights(Bool_t value){swcorr=value;}
-		Bool_t CorrectSweightsValue(){return swcorr;}
-		string GetSweightHistFileName(){return swfname;}
-		void SetSweightHistFileName(string fname){swfname = fname;}
-		void DoSimultaneousFit();
-		void FitIsolated();
-		void FitLcpipi();
-		void FitKenriched();
-		TString GetFitType(){return FitType;}
-		void SetMCcathegory(string MCcat) {MCcathegory = MCcat;}
-		TString GetMCcathegory() {return MCcathegory;}
-		void SelectChannel2fit(vector<string> ch) {channel_names = ch;}
-		vector<string> NameChannels() {return channel_names;} //return Isolated/Kenriched
+		//Set fit configuration
+		void AllowBarlowBeaston(Bool_t v) {BBeast = v; }       //Turn on Barlow-Beaston fit
+		void CorrectFF_GS(Bool_t v)       {FF_GS = v; } 	   //Turn on FF corrections Lc Ground State 
+		void CorrectFF_HES(Bool_t v)      {FF_HES = v; } 	   //Turn on FF corrections Lc Higher Excited State 
+		void CorrectFF_LES(Bool_t v)      {FF_LES = v; } 	   //Turn on FF corrections Lc Higher Excited State 
+		void CorrectSweights(Bool_t v)	  {swcorr = v; }       //Trun on sweight corrections
 
-		void AllowBarlowBeaston() {BBeast = true;} //if this function is called the BarlowBeaston fit is turned on
-		void ActivateFFCorrections(Bool_t value){FFcorr=value;} //if this function is called the file with the Form Factor correction for mu/tau is read
-		Bool_t GetFFcorrectionValue(){return FFcorr;}
-		void ActivateShapeUncertainties(string, Bool_t);
-		Bool_t IsShapeUncertain(string);
-		void ActivateGaussConstraint(string, Bool_t);
-		Bool_t IsGaussConstrained(string);
-		void SetWeightGaussConstraint(string , Double_t );
-		Double_t GetWeightGaussConstraint(string);
+		void SetMCcategory(TString MCcat) {MCcategory = MCcat;} //Set MC category to fit
+		void SetFitType(TString ftype)    {FitType = ftype;} //Set MC type of fit to perform
+		
+		void DoSimultaneousFit();      //Perform a simultaneous fit on the 3 channels
+        void FitIsolated();            //Only perform fit on isolated ch.
+        void FitLcpipi();              //Only perform fit on Lcpipi ch.
+        void FitKenriched();		   //Only perform fit on Kenriched ch.
+		void SelectChannel2fit(vector<string> ch) {channel_names = ch;} //Perform a simultaneous fit of selected channels
 
-		map<string,vector<Double_t>> GetStartParameters (string); //Gets the starting Parameters for the different samples in the 2 channels 
-		void SetStartParameters(RooFitResult *, string); //sets the start fit parameters
-		void PrintStartParams(string, map<string,vector<Double_t>>); //prints the starting fit parameters
+		void SetStartParameter(string, string, Double_t, Double_t, Double_t); //Set mean, min, max start value for a sample in a channel
+		void SetTemplateFileName(string ch, string name);      //Sets name of files from which templates are read
+		void SetSampleNames(TString);						   //Sets names of template samples for the MCcategory
 
-		vector<string> GetCategory(map<string,vector<Double_t> >); //Retrieves the name of the samples + "pha" (?)
-		vector<string> GetParametersName(map<string,vector<Double_t> >); //Retrieves the name of the parameters + "pha" (?)
+		//Get fit configuration
+		Bool_t IsBarlowBeastonOn() {return BBeast;}   //Retrieve BBeast value
+		Bool_t IsGSFFcorrected()   {return FF_GS;}    //Retrieve if Lc GS is FF corrected
+		Bool_t IsHESFFcorrected()  {return FF_HES;}   //Retrieve if Lc HES is FF corrected
+		Bool_t IsLESFFcorrected()  {return FF_LES;}   //Retrieve if Lc LES is FF corrected
+		Bool_t IsSweightCorrOn()   {return swcorr;}   //Retrieve if the sweight correction is applied 
 
-		TString GetComponentName(TString); //Function to call when creating the legend
-		Int_t GetComponentColor(TString); //Assigns to each sample a color
-		TString GetFitVarName(TString); 
+		TString GetMCcategory() {return MCcategory;} //Retrieve which MC category is being fitted
+		TString GetFitType(){return FitType;}		   //Retrieve Type of fit to perfom (single,isolated)
 
-		Double_t GetHistoNormalisation(string, string); //Takes the normalization factor of each histogram to 1 (1./h->Integral())
-		void CreateSweightCorrectHistos(string, string,string, vector<string>);
+		map<string,vector<Double_t>> GetStartParameters (string); //Gets the starting Parameters for all samples in the chosen channel
+		vector<Double_t> GetStartParameter (string, string);      //Gets the starting Parameters for one sample in the chosen channel
 
-		RooStats::ModelConfig* SetChannelConstants(RooStats::ModelConfig*, string);
+		string GetTemplateFileName(string ch);       		     //Gets name of files from which templates are read
+		vector<string> GetSampleNames() {return sample_names;}   //Gets names of template samples considered
+		vector<string> GetChannels2fit() {return channel_names;}    //return Isolated/Kenriched/Lcpipi
+	
 
-		void AddSample(string,string, bool ,const bool, bool, RooStats::HistFactory::Channel**,vector<Double_t>,vector<Double_t>); //Adds the samples to the channel
+		//Functions for sweight correction
+		TString GetSweightHistFileName()          {return swfname;}    			//Get the name of the file with templates sweight corrected
+		void SetSweightHistFileName(TString fname){swfname = fname;}   			//Set the name of the file with templates sweight corrected
+        void CreateSweightCorrectHistos(string, string, vector<string>); //Create the sweight corrected templates 
+		//Functions for performing the fit
+		
+		Double_t GetHistoNormalisation(string, string);        		//Takes the normalization factor of each histogram to 1 (1./h->Integral())
+		void AddSample(string,string, bool, const bool, Channel**); //Adds the samples to the channel
+		ModelConfig* SetChannelConstants(ModelConfig*, string);          //Sets which parameters must be 
+		HistFactory::Measurement CreateMeasurement();
+																		 //constant for each channel
 
-		RooStats::HistFactory::Measurement CreateMeasurement();
-		RooWorkspace *CreateWorkspace(RooStats::HistFactory::Measurement);
-		RooStats::ModelConfig* CreateModel(RooWorkspace* );
-		RooStats::ModelConfig* FixYields(RooStats::ModelConfig*, string, string);
-		RooStats::ModelConfig* SetAlphaStartingPoints(RooStats::ModelConfig*);
+        RooWorkspace *CreateWorkspace(RooStats::HistFactory::Measurement);
+        ModelConfig* CreateModel(RooWorkspace* );
+        ModelConfig* FixYields(RooStats::ModelConfig*, string, string);
+        ModelConfig* SetAlphaStartingPoints(RooStats::ModelConfig*);
 
+		RooFitResult* Fit(ModelConfig*, Measurement, RooWorkspace *, Bool_t, Bool_t); //Perform the fit
+		
+		//Functions for getting fit results
+		
+		ModelConfig* LoadFitResults(string fname, ModelConfig* mc, string channelName);
+        void SaveFitResults(string,RooFitResult *fitResult);
+        //void StoreFitResults(string,RooFitResult *fitResult);
+        //void CheckDiscrepancyWrtLastRLcValue(string fname, string chName);
 
-		RooFitResult* Fit(RooStats::ModelConfig*, RooStats::HistFactory::Measurement, RooWorkspace *, Bool_t, Bool_t); //Perform the fit
-		//void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::HistFactory::HistFactorySimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
+		//Functions for plotting fit results
+		
+		//Gets name of the components for writing name in the legend
+		TString GetComponentName(TString); 
+		//Assigns each component entering the fit a colour
+        Int_t GetComponentColor(TString); 
+		//Returns the name of the fit variable to store the plot
+		TString GetFitVarName(TString);
+		//Plot all the three fit variables in one canvas
+        void PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,std::map<std::string,RooDataHist*> data ,RooSimultaneous* model, RooCategory* idx,string name_suffix);
+		/*
+		//Plot one fit variable
 		void PlotFrame(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
-		void PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::ModelConfig *mc,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
+		*/
+        RooPlot* AdjustVarPlot(RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
+        RooPlot* AdjustPullsPlot(RooPlot* pframe, RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
+		/*
+		//Plot one fit variable in bins of another variable
+        void PlotInBins(RooRealVar* kinemObserv,const char* title,RooAbsData* data,RooStats::ModelConfig *mc,RooSimultaneous* model, RooCategory* idx,Double_t plotStart, Double_t plotEnd, const char* units, string name_suffix, bool legend=kFALSE);
+*/
 
-		RooPlot* AdjustVarPlot(RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
-		RooPlot* AdjustPullsPlot(RooPlot* pframe, RooPlot *frame, double ymin_1, double ymax_1, double ymin_2, double ymax_2);
 
-		void PlotFitVariablesInFit(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,RooAbsData* data,RooSimultaneous* model, RooCategory* idx,string name_suffix);
-		void PlotFitVariables(RooRealVar* fitvar1,const char* title1, RooRealVar* fitvar2, const char* title2, RooRealVar* fitvar3, const char* title3,std::map<std::string,RooDataHist*> data ,RooSimultaneous* model, RooCategory* idx,string name_suffix);
-
-
-		RooStats::ModelConfig* LoadFitResults(string fname, RooStats::ModelConfig* mc, string channelName);
-		void SaveFitResults(string,RooFitResult *fitResult);	
-		void StoreFitResults(string,RooFitResult *fitResult);	
-		void CheckDiscrepancyWrtLastRLcValue(string fname, string chName);
-
-		void Constrain2body(double ratio){ Twobodyconstraint=true; ratio2body=ratio;}
-		void ConstrainMbody(double ratio){ Mbodyconstraint=true; ratioMbody = ratio;}
-
+		//
 
 	private:
+		Bool_t BBeast;  //Turn on/off Barlow Beaston fit
+		Bool_t FF_GS;   //Turn on/off FF corrections Lc Ground State (Lcmunu, Lctaunu)
+		Bool_t FF_HES;  //Turn on/off FF corrections Lc Higher Excited State (Lc2625munu, Lc2625taunu)
+		Bool_t FF_LES;  //Turn on/off FF corrections Lc Lower Excited State (Lc2593munu, Lc2593taunu)
+		Bool_t swcorr;  //Turn on/off sweight corrections
+		
+		TString MCcategory;  //either MCfull or MCTrackerOnly
+        TString FitType;     //Single, Simultaneous
+		TString swfname;	 //Name file to read when applying sweights
 
-		Int_t alpha;
-		Int_t beta ;
-		Int_t gamma;
-		Int_t alpha_s;
-		Int_t beta_s;
-		Int_t gamma_s;
+		vector<string> channel_names; 			 //Isolated, Kenriched, Lcpipi
+		map<string, string> template_fname;	     //Name file to read templates from
+		vector<string> sample_names; 			 //Lb_Lcmunu, ...
 
-		vector<string> channel_names;
-		TString MCcathegory; //either MCfull or MCTrackerOnly
-		TString FitType; //Single, Simultaneous
-
-		Bool_t BBeast;
-		Bool_t FFcorr;
-		Bool_t swcorr;
-
-		Bool_t Twobodyconstraint;
-		Bool_t Mbodyconstraint;
-
-		Double_t ratio2body;
-		Double_t ratioMbody;
-
-
-		map<string,map<string,vector<Double_t>>> start_parameters;
-		map<string,vector<Double_t> > fit_result;
-		map<string, Double_t> weight; //Weight for Gaussian Constraint 
-		map<string, Bool_t> ShapeUnc; //set or not Gaussian Constraint 
-		map<string, Bool_t> GaussConstr; //set or not Gaussian Constraint 
+		map<string,map<string,vector<Double_t>>> start_parameters; //Starting parameters for fit per category,sample,{value,min,max}
 
 		RooStats::HistFactory::Measurement measure;
-		RooWorkspace *wspace;
-		RooStats::ModelConfig* model;
-
-		string swfname;
-
+        RooWorkspace *wspace;
+        RooStats::ModelConfig* model;
+		
+		//Parameters for blinding + blinding function
+		Int_t alpha;
+        Int_t beta ;
+        Int_t gamma;
+        Int_t alpha_s;
+        Int_t beta_s;
+        Int_t gamma_s;
 		void blindResult(RooFitResult*,string name_suffix);
+
+
+
+		
 
 };
 

@@ -9,10 +9,12 @@ import math as m
 import array
 import argparse
 
-samples = ['Lcmunu','Lctaunu','LcDs','Lc2625munu','Lc2625taunu','Lc2625Ds','Lc2593munu','Lc2593taunu','Lc2593Ds']
+#samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2880munu','Lb_Lc2765munu','B_Lcpbarmunu']
+samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2593munu','Lb_Lc2593taunu']
 polarities = ['MagUp','MagDown']
 categories = ['iso','Kenr','Lcpipi']
 #categories = ['Kenr','Lcpipi']
+#categories = ['iso']
 
 def init():
     ap = argparse.ArgumentParser(description='Add Lb production corrections')
@@ -64,11 +66,13 @@ def correct_all_new(MCtype):
         for sample in samples:
             for polarity in polarities:
                 if MCtype=='MCfull':
+                    if sample in ['Lb_Lc2880munu','Lb_Lc2765munu','B_Lcpbarmunu']:
+                        continue
                     filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
-                    fname = filedir+'Lb_'+sample+'_'+polarity+'_full_preselected_'+category+'.root'
+                    fname = filedir+sample+'_'+polarity+'_full_preselected_'+category+'.root'
                 if MCtype=='MCTrackerOnly':
                     filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'
-                    fname = filedir+'Lb_'+sample+'_'+polarity+'_preselected_'+category+'.root'
+                    fname = filedir+sample+'_'+polarity+'_preselected_'+category+'.root'
 
                 print(fname)
                 correctLb(fname,'DecayTree')

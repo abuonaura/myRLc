@@ -2,117 +2,187 @@
 #include "SysFit.cpp"
 #include <TROOT.h>
 #include <vector>
+#include <iterator>
+#include <map>
+#include <iostream>
 
-void RunFit(string MCcat,string FitType,Bool_t ffcorr=false, Bool_t rebuild=true)
+using namespace std;
+
+Bool_t BBeast    =  0;
+Bool_t FFGstate  =  0;
+Bool_t FFEstateL =  0;
+Bool_t FFEstateH =  0; 
+Bool_t SWcorr    =  1; 
+Bool_t MCTO      =  0; //Uses MC TrackerOnly samples
+Bool_t FitIso    =  0; //Fit Isolated cat
+Bool_t FitKenr   =  1; //Fit Kenriched cat
+Bool_t FitLcpi   =  0; //Fit Lcpipi cat
+
+
+void PrintFitConfiguration(string MCcat, vector<string> channels)
 {
-    cout<<rebuild<<endl;
+	cout<<"------------------------------------------------------------------------"<<endl;
+	cout<<" Performing the fit using:                       "<< MCcat<< endl;
+	cout<<" Considered fit categories:                      ";
+	for(int i=0;i<channels.size();i++) cout<< channels.at(i) <<"  ";
+	cout<<endl;
+	cout<<" Is Barlow Beaston fit on:                       "<< BBeast<<endl;
+	cout<<" Lc Ground state FF corrections activated:       "<< FFGstate<<endl;
+	cout<<" Low Excited Lc state FF corrections activated:  "<< FFEstateL<<endl;
+	cout<<" High Excited Lc state FF corrections activated: "<< FFEstateH<<endl;
+	cout<<" Sweight corrections activated:                  "<< SWcorr << endl;
+	cout<<"------------------------------------------------------------------------"<<endl;
+}
 
-     // Check if the class is already loaded
-     if (!TClass::GetDict("SysFit")||rebuild==true)
-     {
-            gROOT->ProcessLine(".L SysFit.h++");
-            //gROOT->ProcessLine(".L SysFit.cpp++");
-     }
+map<string, Bool_t> DefineMapCategories(Bool_t FitIso, Bool_t FitKenr, Bool_t FitLcpi)
+{
+	map<string, Bool_t> FitMap;
+	FitMap.insert(make_pair("Isolated", FitIso));
+	FitMap.insert(make_pair("Kenriched",FitKenr));
+	FitMap.insert(make_pair("Lcpipi",   FitLcpi));
+	return FitMap;
+}
 
-     TClass::GetClass("SysFit")->Print();
-
-	//Set type of fit to be run
-    SysFit a;
-	a.SetMCcathegory(MCcat);
-	if (FitType=="Kenriched")
-		a.FitKenriched();
-	if (FitType=="Lcpipi")
-		a.FitLcpipi();
-	if (FitType=="Isolated")
-		a.FitIsolated();
-	if (FitType=="Simultaneous")
-		a.DoSimultaneousFit();
-
-	a.ActivateFFCorrections(ffcorr);
-
-	a.Constrain2body(0.5);
-	a.ConstrainMbody(0.5);
-
-	//Get name of channels for the fit (Isolated/Kenriched)
-	vector<string> names = a.NameChannels();
-
-	for (Int_t i =0; i<names.size();i++)
-    {	
-		//File with templates
-		string filename = string("RootFiles/Histos_")+names[i]+string("_")+MCcat+string(".root");
-		//Get start parameters for fit values
-		map<string,vector<Double_t>> startparams = a.GetStartParameters(names[i]);
-		
-		vector<string> category = a.GetCategory(startparams);
-		for(Int_t j=0; j<category.size(); j++)
-        {
-            cout<<"category: "<<category[j]<<endl;
-			
-			//Do not use gauss constraints for any category
-            a.ActivateGaussConstraint(category[j],false);
-			
-			//Set to false shape uncertainties (activate only for 2charm)
-			a.ActivateShapeUncertainties(category[j],false);
-			//Activate shape uncertainties for 2charm (groun/excited state)
-			if(category[j]=="2charm-mbody")
-            {
-                a.ActivateShapeUncertainties(category[j],true);
-            }
-            else if(category[j]=="starDs-mbody")
-            {
-                a.ActivateShapeUncertainties(category[j],true);
-			}
-			else if(category[j]=="mu" || category[j]=="tau")
-			{
-				if (ffcorr)
-					a.ActivateShapeUncertainties(category[j],true);
-				else
-					a.ActivateShapeUncertainties(category[j],false);
-			}
-		}
+vector<string> Channels2Fit(map<string,Bool_t> FitMap)
+{
+	vector<string> channels;
+	map<string, Bool_t>::iterator itr;
+	for (itr =  FitMap.begin(); itr !=  FitMap.end(); ++itr)
+	{
+		if(itr->second)
+			channels.push_back(itr->first);
 	}
 
-	//Perform fit
-	a.CorrectSweights(true);
+	return channels;
+}
+
+void SetParametersIsolatedCh(SysFit &a, string ch)
+{	
+	a.SetStartParameter(ch,"Lb_Lcmunu",8.E5,3.E3,2.E6);
+	a.SetStartParameter(ch,"Lb_LcDs-2body",14.E3,1E2,2.E5);
+	a.SetStartParameter(ch,"Lb_LcDs-mbody",6.0E3,1E2,1.E5);
+	a.SetStartParameter(ch,"Lb_Lc2625Ds-2body",2.0E3,1E2,1.E5);
+	a.SetStartParameter(ch,"Lb_Lc2593Ds-2body",2.0E3,1E2,1.E5);
+	a.SetStartParameter(ch,"Lb_Lc2625Ds-mbody",2.0E3,1E2,1.E5);
+	a.SetStartParameter(ch,"Lb_Lc2593Ds-mbody",2.0E3,1E2,1.E5);
+	a.SetStartParameter(ch,"Lb_Lc2625munu",1.8E5,1.E3,1.E6);
+	a.SetStartParameter(ch,"Lb_Lc2593munu",0.8E5,1.E3,1.E6);
+	a.SetStartParameter(ch,"MISID",3.1E4,10,1.E6);
+	a.SetStartParameter(ch,"Combinatorial",4.0E4,10,1.E6);
+	a.SetStartParameter(ch,"Lb_Lctaunu",0.05,0.,1);
+	a.SetStartParameter(ch,"Lb_Lc2625taunu",0.05,0.,1);
+	a.SetStartParameter(ch,"Lb_Lc2593taunu",0.05,0.,1);
+}
+
+void SetParametersKenrichedCh(SysFit &a, string ch)
+{	
+	a.SetStartParameter(ch,"Lb_Lcmunu",2E2,0,1.E3);
+	a.SetStartParameter(ch,"Lb_LcDs-2body",3.E3,0,1.E4);
+	a.SetStartParameter(ch,"Lb_LcDs-mbody",2.E3,500,2.E4);
+	a.SetStartParameter(ch,"Lb_Lc2625Ds-2body",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2593Ds-2body",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2625Ds-mbody",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2593Ds-mbody",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2625munu",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2593munu",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"MISID",1.7E3,100,1.E4);
+	a.SetStartParameter(ch,"Combinatorial",1.7E3,1.E2,5.E3);
+	a.SetStartParameter(ch,"Lb_Lctaunu",0.,0.,1);
+	a.SetStartParameter(ch,"Lb_Lc2625taunu",0.,0.,1);
+	a.SetStartParameter(ch,"Lb_Lc2593taunu",0.,0.,1);
+}
+
+void SetParametersLcpipiCh(SysFit &a, string ch)
+{	
+	a.SetStartParameter(ch,"Lb_Lcmunu",2E2,0,1.E3);
+	a.SetStartParameter(ch,"Lb_LcDs-2body",1.E3,0,1.E4);
+	a.SetStartParameter(ch,"Lb_LcDs-mbody",1.E2,0,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2625Ds-2body",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2593Ds-2body",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2625Ds-mbody",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2593Ds-mbody",5.0E2,10,1.E4);
+	a.SetStartParameter(ch,"Lb_Lc2625munu",5.0E3,10,2.E4);
+	a.SetStartParameter(ch,"Lb_Lc2593munu",5.0E3,10,2.E4);
+	a.SetStartParameter(ch,"MISID",5.E2,0,1.E3);
+	a.SetStartParameter(ch,"Combinatorial",5.E1,0,5.E2);
+	a.SetStartParameter(ch,"Lb_Lctaunu",0.,0.,1);
+	a.SetStartParameter(ch,"Lb_Lc2625taunu",0.05,0.,1);
+	a.SetStartParameter(ch,"Lb_Lc2593taunu",0.05,0.,1);
+}
+
+string GetTemplateFileName(string ch, string MCcat)
+{	
+	string fname = "TemplateFiles/Histos_"+ch+"_"+MCcat+"_LbCorr";
+	vector<string> suffix = {};
+	if(FFGstate)
+		suffix.push_back("_FFGstate");
+	if(FFEstateL)
+		suffix.push_back("_FFEstateL");
+	if(FFEstateH)
+		suffix.push_back("_FFEstateH");
+	if(!FFGstate && !FFEstateL && !FFEstateH)
+		suffix.push_back("_NoFFcorr");
+	for (Int_t i=0; i<suffix.size();i++)
+		fname+=suffix[i];
+	fname += ".root";
+	cout<<fname<<endl;
+	
+	return fname;
+}
+
+void RunFit(bool rebuild=true)
+{
+	// Check if the class is already loaded
+
+	if (!TClass::GetDict("SysFit")||rebuild==true)
+		gROOT->ProcessLine(".L SysFit.h++");
+
+
+	string MCcat = "MCfull";
+	if (MCTO) MCcat = "MCTrackerOnly";
+
+	map<string, Bool_t> FitMap  = DefineMapCategories(FitIso, FitKenr, FitLcpi);
+	vector<string> channels = Channels2Fit(FitMap);
+
+	PrintFitConfiguration(MCcat, channels);
+
+	//Define the fit
+	SysFit a;
+
+	//Set the fit configuration
+	a.AllowBarlowBeaston(BBeast);
+	a.CorrectFF_GS(FFGstate);
+	a.CorrectFF_LES(FFEstateL);
+	a.CorrectFF_HES(FFEstateH);
+	a.CorrectSweights(SWcorr);
+	a.SetMCcategory(MCcat);
+	a.SelectChannel2fit(channels);
+
+	//Set the start parameters of the fit
+	for (int i=0;i<channels.size();i++)
+	{
+		string fname = GetTemplateFileName(channels[i], MCcat);
+		a.SetTemplateFileName(channels[i],fname);
+		if(channels[i]=="Isolated")
+			SetParametersIsolatedCh(a, channels[i]);
+		if(channels[i]=="Kenriched")
+			SetParametersKenrichedCh(a, channels[i]);
+		if(channels[i]=="Lcpipi")
+			SetParametersLcpipiCh(a, channels[i]);
+	}
+
+	//Run the fit only
 	RooStats::HistFactory::Measurement m = a.CreateMeasurement();
-    RooWorkspace* w = a.CreateWorkspace(m);
-
+	RooWorkspace* w = a.CreateWorkspace(m);
     RooStats::ModelConfig* mc = a.CreateModel(w);
-    RooFitResult *fitResult = a.Fit(mc, m, w, false,false);
-
-	/*
-	cout<<"--------------------------------"<<endl;
-	cout<<endl;
-	cout<<"      Second fit iteration "<<endl;
-	cout<<endl;
-	cout<<"--------------------------------"<<endl;
-
-	//Refit
-    RooStats::HistFactory::Measurement m1 = a.CreateMeasurement();
-    RooWorkspace* w1 = a.CreateWorkspace(m1);
-
-    RooStats::ModelConfig* mc1 = a.CreateModel(w1);
-    RooFitResult *fitResult1 = a.Fit(mc1, m1, w1, false, true);
-	*/
+	RooFitResult *fitResult = a.Fit(mc, m, w, false,false);
 
 	//Produce plot
-	a.CorrectSweights(true);
     RooStats::HistFactory::Measurement m2 = a.CreateMeasurement();
     RooWorkspace* w2 = a.CreateWorkspace(m2);
-
     RooStats::ModelConfig* mc2 = a.CreateModel(w2);
     RooFitResult *fitResult2 = a.Fit(mc2, m2, w2, true, false);
-	
-	for (Int_t i =0; i<names.size();i++)
-    {
-		string outfilename;
-		if(FitType=="Simultaneous")
-			outfilename = string("StoredTxtFitResults/StoredFitResults_")+names[i]+string("_")+MCcat+string("_Simultaneous.txt");
-		else
-			outfilename = string("StoredTxtFitResults/StoredFitResults_")+names[i]+string("_")+MCcat+string(".txt");
-        a.StoreFitResults(outfilename,fitResult);
-        a.CheckDiscrepancyWrtLastRLcValue(outfilename, FitType);
-	}
+
 
 }
 
