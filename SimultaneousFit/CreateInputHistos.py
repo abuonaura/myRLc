@@ -1,15 +1,15 @@
 import ROOT as r
 import os, sys
 import argparse
-from LbCorr import correctLb
 from array import array
 
 #Variables to change to include/exclude some corrections
 suffixl = []
 weighComb = False 
 FFGstate  = True
-FFEstateL = True
+FFEstateL = False
 FFEstateH = True
+
 if FFGstate:
     suffixl.append('_FFGstate')
 if FFEstateL:
@@ -24,7 +24,6 @@ def init():
     ap.add_argument('-c','--category', type=str, dest='category', default=None)
     ap.add_argument('--MCfull',dest='MCfull', help="Process MC full simulation samples", required=False, default=False, action='store_true')
     ap.add_argument('--MCTrackerOnly',dest='MCTO', help="Process MC TrackerOnly simulation samples", required=False, default=False, action='store_true')
-    ap.add_argument('--LbCorr',dest='LbCorrection', help="Recreates the file with the Lb production correction weight", required=False, default=False, action='store_true')
     args = ap.parse_args()
     return args
 
@@ -106,23 +105,18 @@ def GetFileName(category,datatype,MCtype,sample,polarity):
             fname = folder+'CombinatorialBkg_'+polarity+'_'+suffix[category]+'.root'
     if datatype=='MC':
         if MCtype=='MCfull':
-            fname = folder+sample+'_'+polarity+'_full_preselected_'+suffix[category]+'.root'
+            fname = folder+sample+'_'+polarity+'_full_preselected_'+suffix[category]+'_LbCorr.root'
             print(fname)
         if MCtype=='MCTrackerOnly':
-            fname = folder+sample+'_'+polarity+'_preselected_'+suffix[category]+'.root'
+            fname = folder+sample+'_'+polarity+'_preselected_'+suffix[category]+'_LbCorr.root'
     return fname
 
-def GetFileListPerSample(category,datatype,MCtype,sample,LbCorrection):
+def GetFileListPerSample(category,datatype,MCtype,sample):
     polarities = ['MagUp','MagDown']
     flist = [] 
     for polarity in polarities:
         fname = GetFileName(category,datatype,MCtype,sample,polarity)
         print (fname)
-        if datatype=='MC': 
-            fname = fname[:-5]+'_LbCorr.root'
-            print(fname)
-            if LbCorrection ==True: #recreate file with Lb Correction
-                ApplyLbCorrection(fname)
         if sample!='MISID':
             flist.append(fname)
         else:
@@ -130,9 +124,6 @@ def GetFileListPerSample(category,datatype,MCtype,sample,LbCorrection):
     print(flist)
     return flist
 
-
-def ApplyLbCorrection(fname):
-    correctLb(fname,'DecayTree')
 
 def GetWeight(sample,tree,MCtype):
     FF_Lbmunu      = FFGstate 
@@ -164,7 +155,7 @@ def GetWeight(sample,tree,MCtype):
     return weight
 
 
-def FillHistograms(category,MCtype, LbCorrection):
+def FillHistograms(category,MCtype):
     histos = []
     sigma_MISID = array('d',[0])
     sigma_Comb = array('d',[0])
@@ -172,7 +163,7 @@ def FillHistograms(category,MCtype, LbCorrection):
     datasamples = GetDataSampleNames()
     for datasample in datasamples:
         print(datasample)
-        filelist = GetFileListPerSample(category,'DATA','',datasample, LbCorrection)
+        filelist = GetFileListPerSample(category,'DATA','',datasample)
         print(filelist)
         h = r.TH3F('h_'+datasample,"qem_"+datasample,4,-2,14,10,0,2600,10,-2,14)
         h.SetDirectory(0)
@@ -197,7 +188,7 @@ def FillHistograms(category,MCtype, LbCorrection):
     print(mcsamples)
     for mcsample in mcsamples:
         print(mcsample)
-        filelist = GetFileListPerSample(category,'MC',MCtype,mcsample,LbCorrection)
+        filelist = GetFileListPerSample(category,'MC',MCtype,mcsample)
         print(filelist)
         if mcsample not in ['Lb_LcDs','Lb_Lc2625Ds','Lb_Lc2593Ds']:
             h = r.TH3F('h_'+mcsample,"qem_"+mcsample,4,-2,14,10,0,2600,10,-2,14)
@@ -270,10 +261,6 @@ if __name__== "__main__":
         MCtype = 'MCfull'
     if args.MCTO==True:
         MCtype = 'MCTrackerOnly'
-    if args.LbCorrection==True:
-        LbCorrection = True
-    else:
-        LbCorrection = False
 
     print('Category: ', category)
     print('MCtype: ', MCtype)
@@ -305,7 +292,7 @@ if __name__== "__main__":
     tree.Branch('integral_Comb',integral_Comb,'integral_Comb/D')
     tree.Branch('sigma_Comb',sigma_Comb,'sigma_Comb/D')
 
-    histos, sigma_MISID[0], sigma_Comb[0] = FillHistograms(category, MCtype, LbCorrection)
+    histos, sigma_MISID[0], sigma_Comb[0] = FillHistograms(category, MCtype)
     for h in histos:
         if h.GetName()=='h_MISID':
             integral_MISID[0] = h.Integral()

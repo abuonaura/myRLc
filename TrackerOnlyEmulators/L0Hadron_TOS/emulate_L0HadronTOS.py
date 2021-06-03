@@ -99,8 +99,9 @@ double calcET(double smear1,double smear2,double smear3,int shared12,int shared1
 
 double calcLcET(double KET,double pET, double piET){
   if ((KET >= piET) && (KET >= pET)) return KET;
-  if ((pET >= KET) && (pET >= piET)) return pET;
-  if ((piET >= pET) && (piET >= KET)) return piET;
+  else if ((pET >= KET) && (pET >= piET)) return pET;
+  else if ((piET >= pET) && (piET >= KET)) return piET;
+  else return -99;
 }
 
 int calcTOS(double KET, double pET, double piET){ 

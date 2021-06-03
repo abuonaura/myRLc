@@ -1,0 +1,22 @@
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+/disk/users/abuonaura/miniconda3/envs/lhcb_ana/lib/python3.7/site-packages/sklearn/base.py:315: UserWarning: Trying to unpickle estimator LabelEncoder from version 0.22 when using version 0.24.2. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+MagDown
+    Lb_Lc2593taunu
+
+>>>   Creating file with BDT variable
+
+Writing isolation variables
+Computing Lb Corrections
+161011
+  Event:  50000
+  Event:  100000
+  Event:  150000
+161011 161011
+ok
+Writing the preselection tree ...
+Tree written.

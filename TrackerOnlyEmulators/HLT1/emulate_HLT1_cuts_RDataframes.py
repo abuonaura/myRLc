@@ -1,5 +1,4 @@
-import ROOT as r
-import math as m 
+
 from array import array
 import sys
 
@@ -64,6 +63,7 @@ bool TrackReconstructedDecision()
     TRandom3 *s = new TRandom3(0);
     double num = s->Uniform(0.,1.);
     bool isReco =  Inefficiency_Decision(num,Correction);
+    delete s;
     if(isReco==0) {return false;}
     return true;
 }
@@ -107,7 +107,6 @@ def main(inputFile):
 
     r.gInterpreter.Declare(func_code)
     df1 = df0.Define("isGECPassed" ,  "GECDecision(nVeloClusters, nITClusters,nOTClusters)")
-
     df2 = df1.Define('isTrackPassed_K',
                      'TrackInputDecision(Lb_PT_DAU_1, Lb_P_DAU_1, Lb_TRACK_CHI2_DAU_1, Lb_TRACK_GHOSTPROB_DAU_1,Lb_TRACK_NDOF_DAU_1)')
     df2 = df2.Define('isTrackPassed_p',

@@ -17,19 +17,21 @@ How to run:
     - to select only 1 polarity (e.g. MagUp):
     python -i CreateTreePreselectionMC.py --MCTrackerOnly --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 all MagUp --presel
 
-    - to select only 1 sample (e.g. Lcmunu):
-    python -i CreateTreePreselectionMC.py --MCTrackerOnly --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 Lcmunu all --presel
+    - to select only 1 sample (e.g. Lb_Lcmunu):
+    python -i CreateTreePreselectionMC.py --MCTrackerOnly --L0GTIS --L0HTOS --HLT1_1 --HLT1_2 Lb_Lcmunu all --presel
 '''
-
-import uproot
+#import uproot
 import sys, os
 import pandas as pd
 import numpy as np
-from root_pandas import to_root
+import ROOT as r
+#from root_pandas import to_root
 sys.path.append('../PIDGen_PIDCalib_MVA/')
 from Add_MVA import AddBDTinfo
 from AddSweights import *
 from argparse import ArgumentParser
+from LbCorr import correctLb
+
 
 
 def EmulateTrigger(inputFile,restartL0HTOS,restartL0GTIS,restartHLT1_1,restartHLT1_2):
@@ -75,8 +77,12 @@ bool TruthMatchCharm(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, doubl
         if(abs(Lb_TRUEID)==5122&&abs(Lc_TRUEID)==4122 &&abs(mu_TRUEID)==13)
         {
             if(abs(mu_MC_MOTHER_ID)==431 || abs(mu_MC_MOTHER_ID)==421 || abs(mu_MC_MOTHER_ID)==411)
-            return true;
+                return true;
+            else
+                return false;
         }
+        else
+            return false;
     }
     return false;
 }
@@ -89,7 +95,11 @@ bool TruthMatchTau(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double 
         {
             if(abs(mu_MC_MOTHER_ID)==15)
                 return true;
+            else
+                return false;
         }
+        else
+            return false;
     }
     return false;
 }
@@ -102,7 +112,28 @@ bool TruthMatchLb(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double L
         {
             if(abs(mu_MC_MOTHER_ID)==5122)
                 return true;
+            else
+                return false;
         }
+        else
+            return false;
+    }
+    return false;
+}
+
+bool TruthMatchBLcpbar(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double Lc_TRUEID, double mu_TRUEID, double mu_MC_MOTHER_ID)
+{
+    if(Lc_BKGCAT<30 && Lb_BKGCAT<50)
+    {
+        if(abs(Lb_TRUEID)==521&&abs(Lc_TRUEID)==4122 &&abs(mu_TRUEID)==13)
+        {
+            if(abs(mu_MC_MOTHER_ID)==521)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
     }
     return false;
 }
@@ -111,14 +142,18 @@ bool PassHLT2Selections(double Lc_PT, double K_PIDK, double pi_PIDK, double p_PI
 {
     if(Lc_PT>2000&&Lb_FDCHI2_OWNPV>50.&&p_P>5000&&K_P>5000&&pi_P>5000)
         return true;
-    else
-        return false;
+    return false;
 }
 
-bool L0Trigger(bool L0TOS, bool L0TIS)
+bool L0Trigger(bool L0TOS, bool L0TIS, int nSPDHits)
 {
-    if(L0TOS || L0TIS)
-        return true;
+    if (nSPDHits<450)
+    {
+        if(L0TOS || L0TIS)
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
@@ -207,9 +242,9 @@ double GetMass(double Lb_ISOLATION_PIDK, double Lb_ISOLATION_CHARGE, double muCh
     double m = m_pi;
     if (Lb_ISOLATION_PIDK>4.)
     {
-        if (Lb_ISOLATION_CHARGE==-muCharge || (Lb_ISOLATION_CHARGE==muCharge&& PIDdiff<0))
+        if (Lb_ISOLATION_CHARGE==-muCharge || (Lb_ISOLATION_CHARGE==muCharge&& PIDdiff<=0.))
             m=m_K;
-        else if (Lb_ISOLATION_CHARGE==muCharge&& PIDdiff>=0)
+        else if (Lb_ISOLATION_CHARGE==muCharge&& PIDdiff>0)
             m=m_p;
     }
     return m;
@@ -314,9 +349,9 @@ def CheckIsolation(df,inputFile,dt,ISOBDTcut, ISOBDT2cut):
     df1 = df1.Define("pLc12_y","Lc_PY+Lb_ISOLATION_PY+Lb_ISOLATION_PY2")
     df1 = df1.Define("pLc12_z","Lc_PZ+Lb_ISOLATION_PZ+Lb_ISOLATION_PZ2")
     df1 = df1.Define("mLc12","TMath::Sqrt(TMath::Power(ELc+E1pi+E2pi,2)-(TMath::Power(pLc12_x,2)+TMath::Power(pLc12_y,2)+TMath::Power(pLc12_z,2)))")
-    h = df1.Histo1D(('h_mLc12','',100,2000,5000),'mLc12')
-    h.Draw()
-    h.SaveAs('plots/mLc12_'+dt+'.png')
+    #h = df1.Histo1D(('h_mLc12','',100,2000,5000),'mLc12')
+    #h.Draw()
+    #h.SaveAs('plots/mLc12_'+dt+'.png')
     df1 = df1.Define("muCharge","GetMuCharge(mu_ID)")
     df1 = df1.Define("PIDdiff","Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK")
     df1 = df1.Define("PIDdiff2","Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2")
@@ -333,15 +368,22 @@ def CheckIsolation(df,inputFile,dt,ISOBDTcut, ISOBDT2cut):
     #Lcpipi tot energy (both anti-iso particle are pions)
     df1 = df1.Define("Etot1","ELc+E1pi+E2pi+Emu")
     df1 = df1.Define("mTOT1","TMath::Sqrt(TMath::Power(Etot1,2)-pTOT_x*pTOT_x - pTOT_y*pTOT_y - pTOT_z*pTOT_z)")
-    df1 = df1.Define("isKenriched","isKenriched(Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT,"+str(ISOBDT2cut)+", mLc12, mTOT, m1,  m2, Lb_ISOLATION_Type, Lb_ISOLATION_Type2, Lb_ISOLATION_NNghost, Lb_ISOLATION_NNghost2)")
-    df1 = df1.Define("isLcpipi","isLcpipi(isKenriched,Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT,"+str(ISOBDT2cut)+", mLc12, mTOT1, Lb_ISOLATION_Type, Lb_ISOLATION_Type2, Lb_ISOLATION_NNghost, Lb_ISOLATION_NNghost2, Lb_ISOLATION_CHARGE, Lb_ISOLATION_CHARGE2)")
+    df1 = df1.Define("isKenriched","isKenriched(Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT2,"+str(ISOBDT2cut)+", mLc12, mTOT, m1,  m2, Lb_ISOLATION_Type, Lb_ISOLATION_Type2, Lb_ISOLATION_NNghost, Lb_ISOLATION_NNghost2)")
+    df1 = df1.Define("isLcpipi","isLcpipi(isKenriched,Lb_ISOLATION_BDT,"+str(ISOBDTcut)+", Lb_ISOLATION_BDT2,"+str(ISOBDT2cut)+", mLc12, mTOT1, Lb_ISOLATION_Type, Lb_ISOLATION_Type2, Lb_ISOLATION_NNghost, Lb_ISOLATION_NNghost2, Lb_ISOLATION_CHARGE, Lb_ISOLATION_CHARGE2)")
     df1 = df1.Define("isIsolated","Lb_ISOLATION_BDT<"+str(ISOBDTcut))
     column_name_vector = r.std.vector('string')()
     column_name_vector.push_back("isKenriched")
     column_name_vector.push_back("isIsolated")
     column_name_vector.push_back("isLcpipi")
     df1.Snapshot("DecayTree",inputFile[0:-5]+'_Isolation.root',column_name_vector)
-    return 
+    return
+
+def ApplyLbCorrection(df,inputFile,dt):
+    df1 = df.Define("w_LbCorr","GetLbCorrWeight(Lb_TRUEP_X, Lb_TRUEP_Y, Lb_TRUEP_Z, Lb_TRUEPT)")
+    column_name_vector = r.std.vector('string')()
+    column_name_vector.push_back("w_LbCorr")
+    df1.Snapshot("DecayTree",inputFile[0:-5]+'_LbCorrection.root',column_name_vector)
+    return
 
 def PlotFitTemplate(df,dtype,polarity):
     h_El = df.Histo1D(("h_El", "E*_{#mu}", 10, 0., 2600.)
@@ -385,7 +427,7 @@ if __name__ == "__main__":
     parser.add_argument('--L0GTIS',dest='restartL0GTIS', help="Forces to reproduce L0Global TIS file", required=False, default=False, action='store_true')
     parser.add_argument('--HLT1_1',dest='restartHLT1_1', help="Forces to reproduce HLT1 one track file", required=False, default=False, action='store_true')
     parser.add_argument('--HLT1_2',dest='restartHLT1_2', help="Forces to reproduce HLT1 two track file", required=False, default=False, action='store_true')
-    parser.add_argument('datatype',choices=['Lctaunu','Lcmunu','LcDs','Lc2593munu','Lc2593taunu','Lc2625munu','Lc2625taunu','all'], help = 'which mc sample we want to run on', default = 'all')
+    parser.add_argument('datatype', help = 'which mc sample we want to run on', default = 'all')
     parser.add_argument('polarity',choices=['MagUp','MagDown','all'], help = 'which data sample we want to run on', default = 'all')
     parser.add_argument('--presel',dest='preselect',help='If this option is inserted the preselection file + the iso/Kenriched sample files are produced', default=False, action='store_true')
     parser.add_argument('--eff',dest='efficiency',help='If this option is inserted, only the efficiency are printed out', default=False, action='store_true')
@@ -403,8 +445,8 @@ if __name__ == "__main__":
     efficiencies = options.efficiency
     
     if MCfull==True:
-        #filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full/'
-        filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
+        filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/'
+        #filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
     if MCTO==True:
         filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'
 
@@ -415,7 +457,10 @@ if __name__ == "__main__":
     r.gInterpreter.Declare(func_isolation)
     r.gInterpreter.Declare(func_doublecharm)
     
-    datatypes = ['Lcmunu','Lctaunu','LcDs','Lc2593munu','Lc2593taunu','Lc2593Ds','Lc2625munu','Lc2625taunu','Lc2625Ds']
+    if(MCfull):
+        datatypes = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds']
+    if(MCTO):
+        datatypes = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
     polarities=['MagUp','MagDown']
 
     if datatype!='all':
@@ -429,17 +474,19 @@ if __name__ == "__main__":
         for dt in datatypes:
             print('   ', dt)
             if MCfull==True:
-                inputFile = filedir+'Lb_'+dt+'_'+polarity+'_full.root'
+                inputFile = filedir+dt+'_'+polarity+'_full.root'
             if MCTO==True:
-                inputFile = filedir+'Lb_'+dt+'_'+polarity+'.root'
+                inputFile = filedir+dt+'_'+polarity+'.root'
             pidgenFile = inputFile[0:-5]+'_PIDGen.root'
             pidcalibFile = inputFile[0:-5]+'_PIDCalib.root'
             EmulateTrigger(inputFile,restartL0HTOS,restartL0GTIS,restartHLT1_1,restartHLT1_2)
+
             L0TOSFile = inputFile[0:-5]+'_wL0TOSEmulation.root'
             L0TISFile = inputFile[0:-5]+'_wL0TISEmulation.root'
+            #HLT1_File = inputFile[0:-5]+'_wHLT1Emulation.root'
             HLT1_1Trk_File = inputFile[0:-5]+'_wHLT1OneTrackEmulation_Df.root'
             HLT1_2Trk_File = inputFile[0:-5]+'_wHLT1TwoTracksEmulation.root'
-
+            FFcorr_File = inputFile[0:-5]+'_FFcorrections.root'
 
             f=r.TFile(inputFile)
             tname = 'tupleout/DecayTree'
@@ -457,6 +504,9 @@ if __name__ == "__main__":
 
             fL0TIS = r.TFile(L0TISFile)
             tL0TIS = fL0TIS.Get(tname2)
+            
+            #fHLT1 = r.TFile(HLT1_File)
+            #tHLT1 = fHLT1.Get(tname2)
 
             fHLT1_1 = r.TFile(HLT1_1Trk_File)
             tHLT1_1 = fHLT1_1.Get(tname2)
@@ -464,11 +514,18 @@ if __name__ == "__main__":
             fHLT1_2 = r.TFile(HLT1_2Trk_File)
             tHLT1_2 = fHLT1_2.Get(tname2)
             
+            #add FFcorrection file only for mu/tau samples
+            if dt in ['Lb_Lcmunu','Lb_Lctaunu','Lb_Lc2593munu','Lb_Lc2625munu','Lb_Lc2593taunu','Lb_Lc2625taunu']:
+                fFFcorr = r.TFile(FFcorr_File)
+                tFFcorr = fFFcorr.Get(tname2)
+                t.AddFriend(tFFcorr)
+
             
             t.AddFriend(tcalib)
             t.AddFriend(tgen)
             t.AddFriend(tL0TOS)
             t.AddFriend(tL0TIS)
+            #t.AddFriend(tHLT1)
             t.AddFriend(tHLT1_1)
             t.AddFriend(tHLT1_2)
             
@@ -479,34 +536,46 @@ if __name__ == "__main__":
 
             df0 = r.RDataFrame(t)
             
+
+            print('Writing isolation variables')
             CheckIsolation(df0,inputFile,dt,ISOBDTcut, ISOBDT2cut)
             fIso = r.TFile(inputFile[0:-5]+'_Isolation.root')
             tIso = fIso.Get(tname2)
             t.AddFriend(tIso)
 
+            #ApplyLbCorrection(df0,inputFile,dt)
+            print('Computing Lb Corrections')
+            correctLb(inputFile,tname)
+            fLbCorr = r.TFile(inputFile[0:-5]+'_LbCorrection.root')
+            tLbCorr = fLbCorr.Get(tname2)
+            t.AddFriend(tLbCorr)
+
             df0 = r.RDataFrame(t)
 
-            if dt in ['LcDs','Lc2593Ds','Lc2625Ds']:
+            if dt in ['Lb_LcDs','Lb_Lc2593Ds','Lb_Lc2625Ds']:
                 df1 = df0.Define("TruthMatch","TruthMatchCharm(Lc_BKGCAT, Lb_BKGCAT, Lb_TRUEID, Lc_TRUEID, mu_TRUEID, mu_MC_MOTHER_ID)") 
-            if dt in ['Lctaunu','Lc2593taunu','Lc2625taunu']:
+            if dt in ['Lb_Lctaunu','Lb_Lc2593taunu','Lb_Lc2625taunu']:
                 df1 = df0.Define("TruthMatch","TruthMatchTau(Lc_BKGCAT, Lb_BKGCAT, Lb_TRUEID, Lc_TRUEID, mu_TRUEID, mu_MC_MOTHER_ID)")
-            if dt in ['Lcmunu','Lc2593munu','Lc2625munu']:
+            if dt in ['Lb_Lcmunu','Lb_Lc2593munu','Lb_Lc2625munu','Lb_Lc2880munu','Lb_Lc2765munu']:
                 df1 = df0.Define("TruthMatch","TruthMatchLb(Lc_BKGCAT, Lb_BKGCAT, Lb_TRUEID, Lc_TRUEID, mu_TRUEID, mu_MC_MOTHER_ID)")
+            if dt=='B_Lcpbarmunu':
+                df1 = df0.Define("TruthMatch","TruthMatchBLcpbar(Lc_BKGCAT, Lb_BKGCAT, Lb_TRUEID, Lc_TRUEID, mu_TRUEID, mu_MC_MOTHER_ID)")
+
             df1 = df1.Define("MoreHLT2Sel","PassHLT2Selections(Lc_PT, K_PIDK, pi_PIDK, p_PIDp, Lb_FDCHI2_OWNPV, p_P, pi_P, K_P)")
-            df1 = df1.Define("L0","L0Trigger(Lc_L0Hadron_TOS_emulated,Lb_L0Global_TIS_emulated)")
-            df1 = df1.Define("HLT1","HLT1Trigger(Lc_HLT1TrackMVA_Emu_EffCorrected_TOS, Lc_HLT1TwoTrackMVA_Emu_TOS)")
+            df1 = df1.Define("L0","L0Trigger(Lc_L0Hadron_TOS_emulated,Lb_L0Global_TIS_emulated, nSPDHits)")
+            df1 = df1.Define("HLT1","HLT1Trigger(Lc_HLT1TrackMVA_Emu_EffCorrected_TOS, Lc_HLT1TwoTrackMVA_Emu_EffCorr_TOS)")
             df1 = df1.Define("Trigger","PassTrigger(L0, HLT1)")
             df2 = df1.Define("LcMass","LcMassCut(Lc_M)")
             df2 = df2.Define("PIDCalib", "ApplyPIDCalibCuts(nTracks, K_P, K_PT, p_P, p_PT,pi_P, pi_PT, mu_P, mu_PT)")
             df2 = df2.Define("Preselection","GetFinalPreselection(TruthMatch,MoreHLT2Sel,Trigger,PIDCalib, LcMass)")
             df3 = df2.Define("PassBDT","PassBDT(bdt)")
             df3 = df3.Define("FinalSel","FinalSelection(Preselection, PassBDT)")
-            if dt in ['LcDs','Lc2625Ds','Lc2593Ds']:
-                if dt=='LcDs':
+            if dt in ['Lb_LcDs','Lb_Lc2625Ds','Lb_Lc2593Ds']:
+                if dt=='Lb_LcDs':
                     df3 = df3.Define("D0pdg", "4122")
-                if dt=='Lc2593Ds':
+                if dt=='Lb_Lc2593Ds':
                     df3 = df3.Define("D0pdg", "14122")
-                if dt=='Lc2625Ds':
+                if dt=='Lb_Lc2625Ds':
                     df3 = df3.Define("D0pdg", "104124")
                 df3 = df3.Define("twobody","Select2Body(Lb_TrueHadron_D0_ID, Lb_TrueHadron_D1_ID, Lb_TrueHadron_D2_ID, D0pdg)")
                 df3 = df3.Define("mbody","SelectMBody(Lb_TrueHadron_D0_ID, Lb_TrueHadron_D1_ID, Lb_TrueHadron_D2_ID, D0pdg)")
@@ -526,20 +595,27 @@ if __name__ == "__main__":
             column_name_vector.push_back("isKenriched")
             column_name_vector.push_back("isIsolated")
             column_name_vector.push_back("isLcpipi")
-            if dt in ['LcDs','Lc2625Ds','Lc2593Ds']:
+            column_name_vector.push_back("w_LbCorr")
+            column_name_vector.push_back("Event_PIDCalibEffWeight")
+            if dt in ['Lb_LcDs','Lb_Lc2625Ds','Lb_Lc2593Ds']:
                 column_name_vector.push_back("twobody")
                 column_name_vector.push_back("mbody")
                 column_name_vector.push_back("w_mbody")
+            if dt in ['Lb_Lcmunu','Lb_Lctaunu','Lb_Lc2593munu','Lb_Lc2625munu','Lb_Lc2593taunu','Lb_Lc2625taunu']:
+                column_name_vector.push_back("Event_FFcorr")
 
             if preselect==True:
+                print('ok') 
                 print("Writing the preselection tree ...")
                 df3.Snapshot("DecayTree",inputFile[0:-5]+'_preselectionVars.root',column_name_vector)
                 print("Tree written.")
                 
+                '''
                 df5 = df3.Filter("FinalSel==true&&isIsolated==true")
                 print("Writing the Isolated tree ...")
                 df5.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_iso.root')
                 print("Tree written.")
+
                 
                 df6 = df3.Filter("FinalSel==true&&isKenriched==true")
                 print("Writing the Kenriched tree ...")
@@ -550,6 +626,8 @@ if __name__ == "__main__":
                 print("Writing the Lcpipi tree ...")
                 df7.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_Lcpipi.root')
                 print("Tree written.")
+                '''
+
 
             if efficiencies==True:
                 PrintCutsEfficiencies(df3)

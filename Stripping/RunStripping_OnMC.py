@@ -22,7 +22,7 @@ DaVinci().Lumi =  not DaVinci().Simulation
 DaVinci().ProductionType = "Stripping"
 DaVinci().InputType = "DST"
 #DaVinci().TupleFile = "LbLcmunu_fullsim.root"
-#DaVinci().TupleFile = "LbLcmunu_trackeronly.root"
+#DaVinci().TupleFile = "/disk/lhcb_data2/buonaura/LbLcmunu_MagUp_trackeronly_5000.root"
 #DaVinci().TupleFile = "LbLcDs_fullsim.root"
 
 DaVinci().TupleFile = "tupleoutMC.root"
@@ -39,10 +39,10 @@ if DaVinci().EvtMax !=-1:
 	#DaVinci().Input=['PFN:/home/hep/buonaura/Analysis/RLc/Datasets/MC/00067107_00000006_1.lctaunu.safestrip.dst']
 #------ Lb_Lcmunu full sim
 #	DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_Lcmunu/FullSim/00066927_00000004_1.lctaunu.safestrip.dst']
-#------ Lb_Lcmunu trackeronly
-#	DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_Lcmunu/TrackerOnly/00089847_00000022_1.lctaunu.safestrip.dst']
+#------ Lb_Lcmunu MagUp trackeronly
+	DaVinci().Input=['PFN:/disk/lhcb_data2/buonaura/00089844_00000124_1.lctaunu.safestrip.dst']
 #------ Lb_LcDs full sim
-   DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_LcDs/FullSim/00067063_00000002_1.lctaunu.safestrip.dst']
+   #DaVinci().Input=['PFN:/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/DSTfiles/Lb_LcDs/FullSim/00067063_00000002_1.lctaunu.safestrip.dst']
 
 
 

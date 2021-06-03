@@ -9,13 +9,13 @@
 using namespace std;
 
 Bool_t BBeast    =  0;
-Bool_t FFGstate  =  0;
+Bool_t FFGstate  =  1;
 Bool_t FFEstateL =  0;
-Bool_t FFEstateH =  0; 
+Bool_t FFEstateH =  1; 
 Bool_t SWcorr    =  1; 
 Bool_t MCTO      =  0; //Uses MC TrackerOnly samples
-Bool_t FitIso    =  0; //Fit Isolated cat
-Bool_t FitKenr   =  1; //Fit Kenriched cat
+Bool_t FitIso    =  1; //Fit Isolated cat
+Bool_t FitKenr   =  0; //Fit Kenriched cat
 Bool_t FitLcpi   =  0; //Fit Lcpipi cat
 
 

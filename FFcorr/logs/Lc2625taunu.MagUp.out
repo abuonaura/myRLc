@@ -1,0 +1,110 @@
+/home/hep/buonaura/.local/lib/python3.6/site-packages/uproot3/__init__.py:138: FutureWarning: Consider switching from 'uproot3' to 'uproot', since the new interface became the default in 2020.
+
+    pip install -U uproot
+
+In Python:
+
+    >>> import uproot
+    >>> with uproot.open(...) as file:
+    ...
+
+  FutureWarning
+/home/hep/buonaura/.local/lib/python3.6/site-packages/awkward0/__init__.py:23: FutureWarning: Consider switching from 'awkward0' to 'awkward', since the new interface became the default in 2020.
+
+    pip install -U awkward
+
+In Python:
+
+    >>> import awkward as ak
+    >>> new_style_array = ak.from_awkward0(old_style_array)
+    >>> old_style_array = ak.to_awkward0(new_style_array)
+
+  FutureWarning
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:20: RuntimeWarning: invalid value encountered in true_divide
+  boost = -SpatialComponents(boostvector)/Scalar(TimeComponent(boostvector))
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:24: RuntimeWarning: invalid value encountered in true_divide
+  return vec/Scalar(Norm(vec))
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:10: RuntimeWarning: divide by zero encountered in true_divide
+  gamma = 1./np.sqrt(1.-b2)
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:15: RuntimeWarning: invalid value encountered in add
+  vp2   = vp + Scalar(gamma2*bp + gamma*ve)*boost
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:15: RuntimeWarning: invalid value encountered in multiply
+  vp2   = vp + Scalar(gamma2*bp + gamma*ve)*boost
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:16: RuntimeWarning: invalid value encountered in multiply
+  ve2   = gamma*(ve + bp)
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:10: RuntimeWarning: invalid value encountered in sqrt
+  gamma = 1./np.sqrt(1.-b2)
+/home/hep/buonaura/Analysis/RLc/scripts/FFcorr/store_q2costhmu.py:33: RuntimeWarning: invalid value encountered in sqrt
+  return np.sqrt(np.sum(vector*vector*MetricTensor(), 1))
+Running over TrackerOnly MC samples
+Analysing sample:  Lc2625taunu
+Running over polarity:  MagUp
+/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/Lb_Lc2625taunu_MagUp.root tupleout/DecayTree /disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/Lb_Lc2625taunu_MagUp_FFcorrections.root DecayTree {'Lcmunu': 'mu', 'Lctaunu': 'tau', 'Lc2593munu': 'mu', 'Lc2593taunu': 'tau', 'Lc2625munu': 'mu', 'Lc2625taunu': 'tau'} Lb_True_Q2_mu Lb_True_Costhetal_mu
+Using the histname Lc2625tau_ratio
+(0.012, 8.947999954223633, -1.0, 1.0) 39.640580194778835
+Events read 10000
+Events read 20000
+Events read 30000
+Events read 40000
+Events read 50000
+Events read 60000
+Events read 70000
+Events read 80000
+Events read 90000
+Events read 100000
+Events read 110000
+Events read 120000
+Events read 130000
+Events read 140000
+Events read 150000
+Events read 160000
+Events read 170000
+Events read 180000
+Events read 190000
+Events read 200000
+Events read 210000
+Events read 220000
+Events read 230000
+Events read 240000
+Events read 250000
+Events read 260000
+Events read 270000
+Events read 280000
+Events read 290000
+Events read 300000
+Events read 310000
+Events read 320000
+Events read 330000
+Events read 340000
+Events read 350000
+Events read 360000
+Events read 370000
+Events read 380000
+Events read 390000
+Events read 400000
+Events read 410000
+Events read 420000
+Events read 430000
+Events read 440000
+Events read 450000
+Events read 460000
+Events read 470000
+Events read 480000
+Events read 490000
+Events read 500000
+Events read 510000
+Events read 520000
+Events read 530000
+Events read 540000
+Events read 550000
+Events read 560000
+Events read 570000
+Events read 580000
+Events read 590000
+Events read 600000
+Events read 610000
+Events read 620000
+Events read 630000
+Events read 640000
+Events read 650000
+Events read 652001

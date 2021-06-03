@@ -670,11 +670,13 @@ RooFitResult* SysFit::Fit(RooStats::ModelConfig* mc, RooStats::HistFactory::Meas
 
 		for(Int_t i=0; i<nchannels;i++)
 		{
-			string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+string(GetMCcategory())+string(".root");
+			//string filename = string("RootFiles/Histos_")+channel_names[i]+string("_")+string(GetMCcategory())+string(".root");
+			//string filename = GetSweightHistFileName();
+			string filename = GetTemplateFileName(channel_names[i]);
 
 			TFile* datatemplatefile = new TFile((filename).c_str(),"read");
 
-			plotting_TH3D_vector.push_back(*((TH3D*) (datatemplatefile->Get("h_data"))->Clone(("TH1"+channel_names[i]).c_str())));
+			plotting_TH3D_vector.push_back(*((TH3D*) (datatemplatefile->Get("h_Data"))->Clone(("TH1"+channel_names[i]).c_str())));
 			datatemplatefile->Close();
 			plotting_datahist_vector.push_back(RooDataHist(("plotting_datahist_channel"+channel_names[i]).c_str(),("plotting_datahist_channel"+channel_names[i]).c_str(),RooArgList(*z_vector[i],*y_vector[i],*x_vector[i]),&plotting_TH3D_vector[i]));
 		}

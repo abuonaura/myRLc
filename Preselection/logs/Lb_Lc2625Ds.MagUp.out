@@ -1,0 +1,127 @@
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+/disk/users/abuonaura/miniconda3/envs/lhcb_ana/lib/python3.7/site-packages/sklearn/base.py:315: UserWarning: Trying to unpickle estimator LabelEncoder from version 0.22 when using version 0.24.2. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+MagUp
+    Lb_Lc2625Ds
+
+>>>   Creating file with BDT variable
+
+Writing isolation variables
+Computing Lb Corrections
+5421451
+  Event:  50000
+  Event:  100000
+  Event:  150000
+  Event:  200000
+  Event:  250000
+  Event:  300000
+  Event:  350000
+  Event:  400000
+  Event:  450000
+  Event:  500000
+  Event:  550000
+  Event:  600000
+  Event:  650000
+  Event:  700000
+  Event:  750000
+  Event:  800000
+  Event:  850000
+  Event:  900000
+  Event:  950000
+  Event:  1000000
+  Event:  1050000
+  Event:  1100000
+  Event:  1150000
+  Event:  1200000
+  Event:  1250000
+  Event:  1300000
+  Event:  1350000
+  Event:  1400000
+  Event:  1450000
+  Event:  1500000
+  Event:  1550000
+  Event:  1600000
+  Event:  1650000
+  Event:  1700000
+  Event:  1750000
+  Event:  1800000
+  Event:  1850000
+  Event:  1900000
+  Event:  1950000
+  Event:  2000000
+  Event:  2050000
+  Event:  2100000
+  Event:  2150000
+  Event:  2200000
+  Event:  2250000
+  Event:  2300000
+  Event:  2350000
+  Event:  2400000
+  Event:  2450000
+  Event:  2500000
+  Event:  2550000
+  Event:  2600000
+  Event:  2650000
+  Event:  2700000
+  Event:  2750000
+  Event:  2800000
+  Event:  2850000
+  Event:  2900000
+  Event:  2950000
+  Event:  3000000
+  Event:  3050000
+  Event:  3100000
+  Event:  3150000
+  Event:  3200000
+  Event:  3250000
+  Event:  3300000
+  Event:  3350000
+  Event:  3400000
+  Event:  3450000
+  Event:  3500000
+  Event:  3550000
+  Event:  3600000
+  Event:  3650000
+  Event:  3700000
+  Event:  3750000
+  Event:  3800000
+  Event:  3850000
+  Event:  3900000
+  Event:  3950000
+  Event:  4000000
+  Event:  4050000
+  Event:  4100000
+  Event:  4150000
+  Event:  4200000
+  Event:  4250000
+  Event:  4300000
+  Event:  4350000
+  Event:  4400000
+  Event:  4450000
+  Event:  4500000
+  Event:  4550000
+  Event:  4600000
+  Event:  4650000
+  Event:  4700000
+  Event:  4750000
+  Event:  4800000
+  Event:  4850000
+  Event:  4900000
+  Event:  4950000
+  Event:  5000000
+  Event:  5050000
+  Event:  5100000
+  Event:  5150000
+  Event:  5200000
+  Event:  5250000
+  Event:  5300000
+  Event:  5350000
+  Event:  5400000
+5421451 5421451
+ok
+Writing the preselection tree ...
+Tree written.

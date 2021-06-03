@@ -25,7 +25,7 @@ def init():
 
 
 def getDistr():
-    coefFile = r.TFile.Open("PTETAweights_2016_Aug18_250b_L0M.root")
+    coefFile = r.TFile.Open("../SimultaneousFit/PTETAweights_2016_Aug18_250b_L0M.root")
     hCoefficients = coefFile.Get("hFold0")
     return hCoefficients
 

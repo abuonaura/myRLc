@@ -44,10 +44,11 @@ def ScaleHisto(h,value):
     h.Scale(scale)
     return h
 
-
+samples     = ['Lcmunu']
 #samples    = ['Lcmunu','Lctaunu','Lc2593munu','Lc2625munu','Lc2593taunu','Lc2625taunu']
-samples    = ['Lctaunu','Lc2593munu','Lc2625munu','Lc2593taunu','Lc2625taunu']
+#samples    = ['Lctaunu','Lc2593munu','Lc2625munu','Lc2593taunu','Lc2625taunu']
 polarities = ['MagUp','MagDown']
+categories = ['Isolated','Kenriched','Lcpipi']
 
 h_q2_tmatched = r.TH1F('h_q2_tmatched','q^{2} for TMatched sample',30,-2E6,14E6)
 h_q2_fsel     = r.TH1F('h_q2_fsel','q^{2} for sample passing full preselection',30,-2E6,14E6)
@@ -118,26 +119,21 @@ for sample in samples:
         #for i in range(t.GetEntries()):
         for i in range(int(t.GetEntries()/2)):
             t.GetEntry(i)
-            if t.TruthMatch!=1:
+            if t.FinalSel != 1:
                 continue
             else:
-                #h_q2_tmatched.Fill(t.Lb_True_Q2_mu,w)
-                #h_cthl_tmatched.Fill(t.Lb_True_Costhetal_mu,w)
-                if t.FinalSel != 1:
-                    continue
-                else:
-                    w = t.Event_PIDCalibEffWeight
-                    w_ff = t.Event_FFcorr
-                    h_q2_fsel.Fill(t.Lb_True_Q2_mu,w)
-                    h_cthl_fsel.Fill(t.Lb_True_Costhetal_mu,w)
-                    if t.isIsolated==1:
-                        h_q2_iso.Fill(t.Lb_True_Q2_mu,w)
-                        h_cthl_iso.Fill(t.Lb_True_Costhetal_mu,w)
-                        h_q2_cthl_iso.Fill(t.Lb_True_Q2_mu,t.Lb_True_Costhetal_mu,w)
-                        h_q2_ff_iso.Fill(t.Lb_True_Q2_mu,w_ff,w)
-                        h_ff_cthl_iso.Fill(t.Lb_True_Costhetal_mu,w_ff,w)
-                        h_templ_iso.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,w)
-                        h_templ_ffcorr.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,w*w_ff)
+                w = t.Event_PIDCalibEffWeight
+                w_ff = t.Event_FFcorr
+                h_q2_fsel.Fill(t.Lb_True_Q2_mu,w)
+                h_cthl_fsel.Fill(t.Lb_True_Costhetal_mu,w)
+                if t.isIsolated==1:
+                    h_q2_iso.Fill(t.Lb_True_Q2_mu,w)
+                    h_cthl_iso.Fill(t.Lb_True_Costhetal_mu,w)
+                    h_q2_cthl_iso.Fill(t.Lb_True_Q2_mu,t.Lb_True_Costhetal_mu,w)
+                    h_q2_ff_iso.Fill(t.Lb_True_Q2_mu,w_ff,w)
+                    h_ff_cthl_iso.Fill(t.Lb_True_Costhetal_mu,w_ff,w)
+                    h_templ_iso.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,w)
+                    h_templ_ffcorr.Fill(t.FitVar_q2_mLc/1.E6,t.FitVar_El_mLc,t.FitVar_Mmiss2_mLc/1.E6,w*w_ff)
 
 
 

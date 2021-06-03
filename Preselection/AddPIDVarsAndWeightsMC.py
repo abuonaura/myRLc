@@ -54,15 +54,19 @@ if __name__ == "__main__":
 	polarity=options.polarity
     
 	if MCfull==True:
-		filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
+		#filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
+		filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/'
 	if MCTO==True:
 		filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'
 
 	tname = 'tupleout/DecayTree'
 	datatypes = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds']
 	if MCTO==True:
-		datatypes = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
-	polarities = ['MagUp','MagDown']
+		#datatypes = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
+		datatypes = ['Lb_LcDs']
+		#datatypes = ['B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
+	#polarities = ['MagUp','MagDown']
+	polarities = ['MagDown']
 	
 	if datatype!='all':
 		datatypes=[datatype]

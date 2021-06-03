@@ -154,12 +154,12 @@ def CheckIfIsKenriched(df):
     df1['m2']= m_pi
     df1.loc[(df1.Lb_ISOLATION_PIDK>4.)&((df1.Lb_ISOLATION_CHARGE==-df1.muCharge)|
                                         ((df1.Lb_ISOLATION_CHARGE==df1.muCharge) 
-                                         & (df1.PIDdiff<0))),'m1']= m_K
+                                         & (df1.PIDdiff<=0))),'m1']= m_K
     df1.loc[(df1.Lb_ISOLATION_PIDK>4.)&((df1.Lb_ISOLATION_CHARGE==df1.muCharge) 
                                          & (df1.PIDdiff>0)),'m1']= m_p
     df1.loc[(df1.Lb_ISOLATION_PIDK2>4.)&((df1.Lb_ISOLATION_CHARGE2==-df1.muCharge)|
                                         ((df1.Lb_ISOLATION_CHARGE2==df1.muCharge) 
-                                         & (df1.PIDdiff2<0))),'m2']= m_K
+                                         & (df1.PIDdiff2<=0))),'m2']= m_K
     df1.loc[(df1.Lb_ISOLATION_PIDK2>4.)&((df1.Lb_ISOLATION_CHARGE2==df1.muCharge) 
                                          & (df1.PIDdiff2>0)),'m2']= m_p
     df1['E1'] = np.sqrt(df1["Lb_ISOLATION_PX"]**2 + df1['Lb_ISOLATION_PY']**2 + df1['Lb_ISOLATION_PZ']**2 +df1['m1']**2)
@@ -298,6 +298,7 @@ def CreatePreselectionTree(dtype,polarity):
     finalDf_Iso.to_root(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_iso.root','DecayTree')
     ofname = ComputeSweights(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_iso.root',dtype,polarity,'iso')
     print('Created: '+ofname)
+    '''
 
     #Create Kenr root file
     print('Creating Kenriched preselected file: ')
@@ -305,7 +306,7 @@ def CreatePreselectionTree(dtype,polarity):
     finalDf_Kenr.to_root(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_Kenr.root','DecayTree')
     ofname = ComputeSweights(filedir+'Data/Lb_'+dtype+'_'+polarity+'_preselected_Kenr.root',dtype,polarity,'Kenriched')
     print('Created: '+ofname)
-    '''
+
     #Create Lcpipi root file
     print('Creating Lcpipi preselected file: ')
     finalDf_Lcpipi = pd.concat(dflist_final_Lcpipi)
