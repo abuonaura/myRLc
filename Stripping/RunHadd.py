@@ -7,15 +7,15 @@ args = parser.parse_args()
 
 datatype = args.datatype
 
-folder = {'MC':{'Lb_Lcmunu':{'MagUp':'435','MagDown':'436'},
-                'Lb_Lctaunu':{'MagUp':'437','MagDown':'438'},
-                'Lb_LcDs':{'MagUp':'439','MagDown':'440'},
-                'Lb_Lc2593munu':{'MagUp':'441','MagDown':'442'},
-                'Lb_Lc2593taunu':{'MagUp':'443','MagDown':'444'},
-                'Lb_Lc2593Ds':{'MagUp':'445','MagDown':'446'},
-                'Lb_Lc2625munu':{'MagUp':'447','MagDown':'448'},
-                'Lb_Lc2625taunu':{'MagUp':'449','MagDown':'450'},
-                'Lb_Lc2625Ds':{'MagUp':'451','MagDown':'452'}
+folder = {'MC':{'Lb_Lcmunu':     {'MagUp':'0', 'MagDown':'1'},
+                'Lb_Lctaunu':    {'MagUp':'2', 'MagDown':'3'},
+                'Lb_LcDs':       {'MagUp':'4', 'MagDown':'5'},
+                'Lb_Lc2593munu': {'MagUp':'6', 'MagDown':'7'},
+                'Lb_Lc2593taunu':{'MagUp':'8', 'MagDown':'9'},
+                'Lb_Lc2593Ds':   {'MagUp':'10','MagDown':'11'},
+                'Lb_Lc2625munu': {'MagUp':'12','MagDown':'13'},
+                'Lb_Lc2625taunu':{'MagUp':'14','MagDown':'15'},
+                'Lb_Lc2625Ds':   {'MagUp':'16','MagDown':'17'}
                 },
 	   'MCtrackeronly':{'Lb_Lcmunu':    {'MagUp':'0','MagDown':'1'},
 	                   'Lb_Lctaunu':    {'MagUp':'2','MagDown':'3'},

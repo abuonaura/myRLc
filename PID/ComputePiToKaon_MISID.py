@@ -30,7 +30,6 @@ cuts = {'Pi':Kid}
 #\"[DLLK > 0.0, DLLK > 4.0 && DLLp < 0.0]\" 
 for polarity in polarities:
     for particle in particleList:
-        filename = 'Lb_Data_FakeMu_'+polarity+'_first5files_eff_'+particle+'.root'
         command = 'python '+pathToScript+' \"'+ stripping+'\" \"'+ polarity +'\"  \"'+ particle+ '\" \"[ ' + cuts[particle] + ']\" \"P\" \"ETA\" \"nTracks_Brunel\" -o '+pathToOutput
         print command
         subprocess.call(command,shell=True)

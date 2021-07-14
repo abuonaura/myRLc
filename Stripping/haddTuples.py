@@ -22,7 +22,8 @@ fname = args.filename
 print('%s %s %s %s %s'%(jobID, jobname, polarity, dtype, fname))
 
 #gangadir = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/'
-gangadir = '/disk/lhcb_data2/buonaura/gangadir/workspace/buonaura/LocalXML/'
+#gangadir = '/disk/lhcb_data2/buonaura/gangadir/workspace/buonaura/LocalXML/'
+gangadir = '/disk/gangadir/buonaura/gangadir/workspace/buonaura/LocalXML/workspace/buonaura/LocalXML/'
 
 files2Hadd=['']
 
@@ -52,7 +53,7 @@ print('.... Hadding files ...')
 #Create name output file
 if dtype=='MC':
 	#outfile = '/disk/lhcb_data2/RLcMuonic2016/'+dtype+'_full_new/'+jobname+'_'+polarity+'.root'
-	outfile = '/disk/lhcb_data2/RLcMuonic2016/'+dtype+'_full_trueTrigger/'+jobname+'_'+polarity+'.root'
+	outfile = '/disk/lhcb_data2/RLcMuonic2016/'+dtype+'_full_TrueIsoInfo/'+jobname+'_'+polarity+'_full.root'
 if dtype=='MCtrackeronly':
 	outfile = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'+jobname+'_'+polarity+'.root'
 print(outfile)

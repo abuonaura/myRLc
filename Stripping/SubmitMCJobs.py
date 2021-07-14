@@ -36,7 +36,7 @@ event = {'Lb_Lcmunu':'15874003',
          'Lb_Lc2880munu':'15876031'
 	 }
 samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds']
-samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
+#samples = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds','B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
 #samples = ['Lb_Lc2880munu']
 polarities = ['MagUp','MagDown']
 
@@ -46,7 +46,7 @@ def createjob(sample,polarity,bkPath,fullsim):
 
 	j = Job()
 	j.name = sample+'_'+polarity
-	j.comment = 'Wrong HLT1 MVA + true iso grandmaID information'
+	j.comment = 'True iso grandmaID information'
 	myApp = GaudiExec()
 	myApp.directory = "/home/hep/buonaura/DaVinciDev/DaVinciDev_v42r6p1/"
 	j.application = myApp

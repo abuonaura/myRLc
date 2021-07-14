@@ -55,7 +55,8 @@ if __name__ == "__main__":
     
 	if MCfull==True:
 		#filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
-		filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/'
+		#filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/'
+		filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'
 	if MCTO==True:
 		filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'
 
@@ -66,7 +67,7 @@ if __name__ == "__main__":
 		datatypes = ['Lb_LcDs']
 		#datatypes = ['B_Lcpbarmunu','Lb_Lc2765munu','Lb_Lc2880munu']
 	#polarities = ['MagUp','MagDown']
-	polarities = ['MagDown']
+	polarities = ['MagUp']
 	
 	if datatype!='all':
 		datatypes=[datatype]
