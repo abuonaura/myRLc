@@ -445,7 +445,8 @@ if __name__ == "__main__":
     efficiencies = options.efficiency
     
     if MCfull==True:
-        filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/'
+        filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'
+        #filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/'
         #filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_full_new/'
     if MCTO==True:
         filedir = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/'

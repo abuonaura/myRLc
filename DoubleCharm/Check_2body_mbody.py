@@ -1,48 +1,57 @@
 import ROOT as r
 
-files = {'MagUp':'$FILEDIR/MC/Lb_LcDs_MagUp_PID_reduced_preselected.root','MagDown':'$FILEDIR/MC/Lb_LcDs_MagUp_PID_reduced_preselected.root'}
-csamples = {'MagUp':'$FILEDIR/ControlSamples/MC_Kenr/Lb_LcDs_MagUp.root','MagDown':'$FILEDIR/ControlSamples/MC_Kenr/Lb_LcDs_MagDown.root'}
+folder = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'
+files = {'MagUp':folder + 'Lb_LcDs_MagUp_full.root','MagDown':folder + 'Lb_LcDs_MagDown_full.root'}
+preselfiles = {'MagUp': folder + 'Lb_LcDs_MagUp_full_preselectionVars.root', 'MagDown': folder + 'Lb_LcDs_MagDown_full_preselectionVars.root'}
 polarities=['MagUp','MagDown']
+
+
 
 def GetTotalNumberMCevts():
     ntotMC=0 #total number  of MC events
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
-        t = f.Get('DecayTree')
-        ntotMC += t.GetEntries()
-    print('Total number of MC events before applying ANY selection: ', ntotMC)
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        ntotMC += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lc_M>0)','goff')
+    print('Total number of MC events before applying ANY selection (weighted): ', ntotMC)
     return ntotMC
 
 def GetTotalNumber2body():
     ntot_2body = 0
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
-        t = f.Get('DecayTree')
-        ntot_2body += t.Draw('Lc_M','Lb_TrueHadron_D2_ID==0','goff')
-        '''
-        for i in range(t.GetEntries()):
-            t.GetEntry(i)
-            if  t.Lb_TrueHadron_D2_ID==0:
-                ntot_2body+=1
-        '''
-    print('Total number of 2body MC events before applying ANY selection: ', ntot_2body)
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        ntot_2body += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID==0)','goff')
+    print('Total number of 2body MC events before applying ANY selection (weighted): ', ntot_2body)
     return ntot_2body
 
 def GetTotalNumberMbody():
     ntot_mbody = 0
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
-        t = f.Get('DecayTree')
-        ntot_mbody += t.Draw('Lc_M','Lb_TrueHadron_D2_ID!=0','goff')
-    print('Total number of mbody MC events before applying ANY selection: ', ntot_mbody)
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        ntot_mbody += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID!=0)','goff')
+    print('Total number of mbody MC events before applying ANY selection (weighted): ', ntot_mbody)
     return ntot_mbody
 
-def GetTotalNumberMCevts_TMatch():
+def GetTotalNumberMCevts_TMatch()i:
     ntotMC=0 #total number  of MC events
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
-        t = f.Get('DecayTree')
-        ntotMC += t.Draw('Lc_M','Lc_BKGCAT<30 && Lb_BKGCAT<50','goff')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        ntotMC += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lc_M)','goff')
     print('Total number of MC events after applying Truth Matching: ', ntotMC)
     return ntotMC
 
@@ -262,6 +271,7 @@ GetTotalNumberMCevts()
 GetTotalNumber2body()
 GetTotalNumberMbody()
 print()
+'''
 GetTotalNumberMCevts_TMatch()
 GetTotalNumber2body_TMatch()
 GetTotalNumberMbody_TMatch()
@@ -275,3 +285,4 @@ GetTotalNumber2body_TMatch_Kenriched()
 GetTotalNumberMbody_TMatch_Kenriched()
 print()
 Check_mbody()
+'''

@@ -5,7 +5,7 @@ import sys
 
 
 func_code = '''
-bool GECDecision(double nVeloClusters, double nITClusters, double nOTClusters, int nSPDHits)
+bool GECDecision2(double nVeloClusters, double nITClusters, double nOTClusters, int nSPDHits)
 {
     if (nVeloClusters>=6000 || nVeloClusters<=50 || nITClusters>=3000 || nITClusters<=50 || nOTClusters>=15000 || nOTClusters<=50 || nSPDHits >450) 
     {
@@ -15,7 +15,7 @@ bool GECDecision(double nVeloClusters, double nITClusters, double nOTClusters, i
 }
 
 
-bool TrackReconstructedDecision()
+bool TrackReconstructedDecision2()
 {
     //---Get the Track Reconstruction Efficiency correction factor
     double Correction = 1./1.035; //This is a number I get from LHCb-PUB-2015-024
@@ -26,7 +26,7 @@ bool TrackReconstructedDecision()
     return true;
 }
 
-bool TrackInputDecision(double PT, double P, double TRCHI2, double NDOF, double IP, double GHOSTPROB, double nTTHits)
+bool TrackInputDecision2(double PT, double P, double TRCHI2, double NDOF, double IP, double GHOSTPROB, double nTTHits)
 {
     if (PT<=600 || P<=5000 || TRCHI2/NDOF >= 2.5 || GHOSTPROB>=0.2 || IP<=4. || nTTHits<3.)
     {
@@ -103,17 +103,17 @@ def main(MC_fileName = "Lb_Lcmunu_MagUp.root"):
     df0 = r.RDataFrame(T)
 
     r.gInterpreter.Declare(func_code)
-    df1 = df0.Define("isGECPassed","GECDecision(nVeloClusters, nITClusters,nOTClusters, nSPDHits)")
+    df1 = df0.Define("isGECPassed","GECDecision2(nVeloClusters, nITClusters,nOTClusters, nSPDHits)")
     df1 = df1.Define('isTrackPassed_p',
-                     'TrackInputDecision(Lb_PT_DAU_1, Lb_P_DAU_1, Lb_TRACK_CHI2_DAU_1,Lb_TRACK_NDOF_DAU_1, Lb_IPCHI2_OWNPV_DAU_1, Lb_TRACK_GHOSTPROB_DAU_1, p_TRACK_nTTHits)') #cut in Lb_IPCHI2_OWNPV not in Iaros?
+                     'TrackInputDecision2(Lb_PT_DAU_1, Lb_P_DAU_1, Lb_TRACK_CHI2_DAU_1,Lb_TRACK_NDOF_DAU_1, Lb_IPCHI2_OWNPV_DAU_1, Lb_TRACK_GHOSTPROB_DAU_1, p_TRACK_nTTHits)') #cut in Lb_IPCHI2_OWNPV not in Iaros?
     df1 = df1.Define('isTrackPassed_K',
-                     'TrackInputDecision(Lb_PT_DAU_2, Lb_P_DAU_2, Lb_TRACK_CHI2_DAU_2, Lb_TRACK_NDOF_DAU_2, Lb_IPCHI2_OWNPV_DAU_2, Lb_TRACK_GHOSTPROB_DAU_2, K_TRACK_nTTHits)')
+                     'TrackInputDecision2(Lb_PT_DAU_2, Lb_P_DAU_2, Lb_TRACK_CHI2_DAU_2, Lb_TRACK_NDOF_DAU_2, Lb_IPCHI2_OWNPV_DAU_2, Lb_TRACK_GHOSTPROB_DAU_2, K_TRACK_nTTHits)')
     df1 = df1.Define('isTrackPassed_pi',
-                     'TrackInputDecision(Lb_PT_DAU_3, Lb_P_DAU_3, Lb_TRACK_CHI2_DAU_3,Lb_TRACK_NDOF_DAU_3, Lb_IPCHI2_OWNPV_DAU_3, Lb_TRACK_GHOSTPROB_DAU_3, pi_TRACK_nTTHits)')
+                     'TrackInputDecision2(Lb_PT_DAU_3, Lb_P_DAU_3, Lb_TRACK_CHI2_DAU_3,Lb_TRACK_NDOF_DAU_3, Lb_IPCHI2_OWNPV_DAU_3, Lb_TRACK_GHOSTPROB_DAU_3, pi_TRACK_nTTHits)')
 
-    df1 = df1.Define('isTrackReco_p','TrackReconstructedDecision()')
-    df1 = df1.Define('isTrackReco_K','TrackReconstructedDecision()')
-    df1 = df1.Define('isTrackReco_pi','TrackReconstructedDecision()')
+    df1 = df1.Define('isTrackReco_p','TrackReconstructedDecision2()')
+    df1 = df1.Define('isTrackReco_K','TrackReconstructedDecision2()')
+    df1 = df1.Define('isTrackReco_pi','TrackReconstructedDecision2()')
 
     df1 = df1.Define('SUMPT_1_2',"TMath::Sqrt( (p_PX + K_PX)*(p_PX + K_PX) + (p_PY + K_PY)*(p_PY + K_PY) )")
     df1 = df1.Define('SUMPT_1_3',"TMath::Sqrt( (p_PX + pi_PX)*(p_PX + pi_PX) + (p_PY + pi_PY)*(p_PY + pi_PY) )")

@@ -1,7 +1,7 @@
 import ROOT as r
 import os
 
-directory = {'old':'/disk/lhcb_data2/RLcMuonic2016/MC_full_new/','new':'/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/'}
+directory = {'old':'/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/','new':'/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'}
 mcsamples  = ['Lb_Lcmunu','Lb_Lctaunu','Lb_LcDs','Lb_Lc2593munu','Lb_Lc2593taunu','Lb_Lc2593Ds','Lb_Lc2625munu','Lb_Lc2625taunu','Lb_Lc2625Ds']
 polarities = ['MagUp','MagDown']
 
@@ -47,6 +47,7 @@ def PlotSuperimposed(hold, hnew):
 
 def CompareAllVariables():
     parentdir = os.getcwd()
+    mcsamples = ['Lb_LcDs']
     for mcsample in mcsamples:
         for polarity in polarities:
             plotdir = 'ComparisonPlots/'+mcsample+'/'+polarity
@@ -59,7 +60,7 @@ def CompareAllVariables():
                 print("Successfully created the directory %s" % path)
             fold = r.TFile(directory['old']+mcsample+'_'+polarity+'_full.root','READ')
             told = fold.Get('tupleout/DecayTree')
-            fnew = r.TFile(directory['new']+mcsample+'_'+polarity+'.root','READ')
+            fnew = r.TFile(directory['new']+mcsample+'_'+polarity+'_full.root','READ')
             tnew = fnew.Get('tupleout/DecayTree')
 
             branches = told.GetListOfBranches()

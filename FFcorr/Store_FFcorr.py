@@ -32,7 +32,7 @@ if __name__== "__main__":
     if args.MCfull==True:
         print('Running over full MC samples')
         MCtype    = 'MCfull'
-        directory = '/disk/lhcb_data2/RLcMuonic2016/MC_full_trueTrigger/' 
+        directory = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/' 
     if args.MCTO==True:
         MCtype = 'MCTrackerOnly'
         directory = '/disk/lhcb_data2/RLcMuonic2016/MC_TrackerOnly/' 
