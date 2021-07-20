@@ -1,6 +1,7 @@
 import ROOT as r
 
-folder = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'
+#folder = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'
+folder = '/Users/annarita/cernbox/LHCbDatasets/MC_full_TrueIsoInfo/'
 files = {'MagUp':folder + 'Lb_LcDs_MagUp_full.root','MagDown':folder + 'Lb_LcDs_MagDown_full.root'}
 preselfiles = {'MagUp': folder + 'Lb_LcDs_MagUp_full_preselectionVars.root', 'MagDown': folder + 'Lb_LcDs_MagDown_full_preselectionVars.root'}
 polarities=['MagUp','MagDown']
@@ -43,35 +44,60 @@ def GetTotalNumberMbody():
     print('Total number of mbody MC events before applying ANY selection (weighted): ', ntot_mbody)
     return ntot_mbody
 
-def GetTotalNumberMCevts_TMatch()i:
+def GetTotalNumberMCevts_TMatch():
     ntotMC=0 #total number  of MC events
+    ntot_2body = 0
+    ntot_mbody = 0
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
         t = f.Get('tupleout/DecayTree')
         fpresel = r.TFile(preselfiles[polarity],'READ')
         tpresel = fpresel.Get('DecayTree')
         t.AddFriend(tpresel)
-        ntotMC += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lc_M)','goff')
-    print('Total number of MC events after applying Truth Matching: ', ntotMC)
-    return ntotMC
+        ntotMC += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(TruthMatch==1)','goff')
+        ntot_2body+=t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID==0&&TruthMatch==1)','goff')
+        ntot_mbody += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID!=0&&TruthMatch==1)','goff')
+    print('Total number of MC events after Truth Matching: ', ntotMC)
+    print('Total number of 2body MC evts after Truth Matching: ', ntot_2body)
+    print('Total number of mbody MC evts after Truth Matching: ', ntot_mbody)
+    return
 
-def GetTotalNumber2body_TMatch():
+def GetTotalNumberMCevts_Trigger():
+    ntotMC=0 #total number  of MC events
     ntot_2body = 0
-    for polarity in polarities:
-        f = r.TFile(files[polarity],'READ')
-        t = f.Get('DecayTree')
-        ntot_2body += t.Draw('Lc_M','Lc_BKGCAT<30 && Lb_BKGCAT<50&&Lb_TrueHadron_D2_ID==0','goff')
-    print('Total number of 2body MC events after applying Truth Matching: ', ntot_2body)
-    return ntot_2body
-
-def GetTotalNumberMbody_TMatch():
     ntot_mbody = 0
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
-        t = f.Get('DecayTree')
-        ntot_mbody += t.Draw('Lc_M','Lc_BKGCAT<30 && Lb_BKGCAT<50&&Lb_TrueHadron_D2_ID!=0','goff')
-    print('Total number of mbody MC events after applying Truth Matching: ', ntot_mbody)
-    return ntot_mbody
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        ntotMC += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(TruthMatch==1&&Trigger==1)','goff')
+        ntot_2body+=t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID==0&&TruthMatch==1&&Trigger==1)','goff')
+        ntot_mbody += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID!=0&&TruthMatch==1&&Trigger==1)','goff')
+    print('Total number of MC events after Truth Matching + Trigger: ', ntotMC)
+    print('Total number of 2body MC evts after Truth Matching + Trigger: ', ntot_2body)
+    print('Total number of mbody MC evts after Truth Matching + Trigger: ', ntot_mbody)
+    return
+
+def GetTotalNumberMCevts_FullPreselection():
+    ntotMC=0 #total number  of MC events
+    ntot_2body = 0
+    ntot_mbody = 0
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        ntotMC += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(FinalSel==1)','goff')
+        ntot_2body+=t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID==0&&FinalSel==1)','goff')
+        ntot_mbody += t.Draw('Lc_M','Event_PIDCalibEffWeight*w_LbCorr*(Lb_TrueHadron_D0_ID==4122&&Lb_TrueHadron_D1_ID!=0&&Lb_TrueHadron_D2_ID!=0&&FinalSel==1)','goff')
+    print('Total number of MC events after full preselection: ', ntotMC)
+    print('Total number of 2body MC evts after full preselection: ', ntot_2body)
+    print('Total number of mbody MC evts after full preselection: ', ntot_mbody)
+    return
+
 
 def GetTotalNumberMCevts_TMatch_Iso():
     ntotMC=0 #total number  of MC events
@@ -161,7 +187,363 @@ def FillHistoD2(h,pdg):
     h.SetDirectory(0)
     return h
 
+def PutTogetherPolarityHistos(h):
+    h_new = h['MagUp']
+    h_new.Add(h['MagDown'])
+    h_new.SetDirectory(0)
+    return h_new
 
+def DisplayLbTrueHadronD0ID(cut=''):
+    hD0ID = {polarity: r.TH1F('h_trueD0ID_'+polarity,'',100,0,5000) for polarity in polarities}
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        name = polarity
+        if cut!='':
+            t.Draw('Lb_TrueHadron_D0_ID>>D0ID_'+name+'(100,0,5000)','Event_PIDCalibEffWeight*w_LbCorr*('+cut+')')
+        else:
+            t.Draw('Lb_TrueHadron_D0_ID>>D0ID_'+name+'(100,0,5000)','Event_PIDCalibEffWeight*w_LbCorr*(Lc_M>0)')
+
+        hD0ID[polarity] = r.gPad.GetPrimitive('D0ID_'+name)
+        hD0ID[polarity].SetDirectory(0)
+
+    hD0ID_1 = PutTogetherPolarityHistos(hD0ID)
+    return hD0ID_1
+        
+def DisplayLbTrueHadronD1ID(cut=''):
+    hD1ID = {polarity: r.TH1F('h_trueD1ID_'+polarity,'',500,0,500) for polarity in polarities}
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        name = polarity
+        if cut!='':
+            t.Draw('Lb_TrueHadron_D1_ID>>D1ID_'+name+'(500,0,500)','Event_PIDCalibEffWeight*w_LbCorr*('+cut+')')
+        else:
+            t.Draw('Lb_TrueHadron_D1_ID>>D1ID_'+name+'(500,0,500)','Event_PIDCalibEffWeight*w_LbCorr*(Lc_M>0)')
+
+        hD1ID[polarity] = r.gPad.GetPrimitive('D1ID_'+name)
+        hD1ID[polarity].SetDirectory(0)
+
+    hD1ID_1 = PutTogetherPolarityHistos(hD1ID)
+    return hD1ID_1
+
+def DisplayLbTrueHadronD2ID(cut=''):
+    hD2ID = {polarity: r.TH1F('h_trueD2ID_'+polarity,'',500,0,500) for polarity in polarities}
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        name = polarity
+        if cut!='':
+            t.Draw('Lb_TrueHadron_D2_ID>>D2ID_'+name+'(500,0,500)','Event_PIDCalibEffWeight*w_LbCorr*('+cut+')')
+        else:
+            t.Draw('Lb_TrueHadron_D2_ID>>D2ID_'+name+'(500,0,500)','Event_PIDCalibEffWeight*w_LbCorr*(Lc_M>0)')
+
+        hD2ID[polarity] = r.gPad.GetPrimitive('D2ID_'+name)
+        hD2ID[polarity].SetDirectory(0)
+
+    hD2ID_1 = PutTogetherPolarityHistos(hD2ID)
+    return hD2ID_1
+
+
+'''
+
+c = r.TCanvas('c','',1500,500)
+c.Divide(3,1)
+c.cd(1)
+h0 =  DisplayLbTrueHadronD0ID('')
+h0.Draw('hist')
+c.cd(2)
+h0a =  DisplayLbTrueHadronD0ID('TruthMatch==1&&Trigger==1')
+h0a.Draw('hist')
+c.cd(3)
+h0b =  DisplayLbTrueHadronD0ID('FinalSel==1')
+h0b.Draw('hist')
+
+c1 = r.TCanvas('c1','',1500,500)
+c1.Divide(3,1)
+c1.cd(1)
+h1 =  DisplayLbTrueHadronD1ID('')
+h1.Draw('hist')
+c1.cd(2)
+h1a =  DisplayLbTrueHadronD1ID('TruthMatch==1&&Trigger==1')
+h1a.Draw('hist')
+c1.cd(3)
+h1b =  DisplayLbTrueHadronD1ID('FinalSel==1')
+h1b.Draw('hist')
+
+
+c2 = r.TCanvas('c2','',1500,500)
+c2.Divide(3,1)
+c2.cd(1)
+h2 =  DisplayLbTrueHadronD2ID('')
+h2.Draw('hist')
+c2.cd(2)
+h2a =  DisplayLbTrueHadronD2ID('TruthMatch==1&&Trigger==1')
+h2a.Draw('hist')
+c2.cd(3)
+h2b =  DisplayLbTrueHadronD2ID('FinalSel==1')
+h2b.Draw('hist')
+'''
+
+def PrintDecays(nentries):
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        if nentries==-1:
+            nentries = t.GetEntries()
+        for i in range(nentries):
+            t.GetEntry(i)
+            if t.FinalSel!=1:
+                continue
+            else:
+                print('-----------------------------------------------')
+                print('Evt: '+ str(i))
+                print('LbID: '+str(t.Lb_TRUEID)+' D0: '+str(t.Lb_TrueHadron_D0_ID)+' D1: '+str(t.Lb_TrueHadron_D1_ID)+ ' D2: '+str(t.Lb_TrueHadron_D2_ID))
+                print('- '+str(t.Lb_TrueHadron_D0_ID)+' -> '+str(t.Lb_TrueHadron_D0_GD0_ID)+' '+str(t.Lb_TrueHadron_D0_GD1_ID)+ ' '+str(t.Lb_TrueHadron_D0_GD2_ID))
+                print('- '+str(t.Lb_TrueHadron_D1_ID)+' -> '+str(t.Lb_TrueHadron_D1_GD0_ID)+' '+str(t.Lb_TrueHadron_D1_GD1_ID)+ ' '+str(t.Lb_TrueHadron_D1_GD2_ID))
+                if(t.Lb_TrueHadron_D2_ID!=0):
+                    print('- '+str(t.Lb_TrueHadron_D2_ID)+' -> '+str(t.Lb_TrueHadron_D2_GD0_ID)+' '+str(t.Lb_TrueHadron_D2_GD1_ID)+ ' '+str(t.Lb_TrueHadron_D2_GD2_ID))
+                PrintLbIsoParticles(t, i)
+    return
+
+def PrintLbIsoParticles(t, i):
+    t.GetEntry(i)
+    print(' 1. BDT:' +str(t.Lb_ISOLATION_BDT)+' TruePID: '+str(t.Lb_ISOLATION_TruePID)+ ' _Mother: '+str(t.Lb_ISOLATION_TrueMotherPID)+' _Grandma: '+str(t.Lb_ISOLATION_TrueGrandmotherPID))
+    print(' 2. BDT:' +str(t.Lb_ISOLATION_BDT2)+' TruePID: '+str(t.Lb_ISOLATION_TruePID2)+ ' _Mother: '+str(t.Lb_ISOLATION_TrueMotherPID2)+' _Grandma: '+str(t.Lb_ISOLATION_TrueGrandmotherPID2))
+    print(' 3. BDT:' +str(t.Lb_ISOLATION_BDT3)+' TruePID: '+str(t.Lb_ISOLATION_TruePID3)+ ' _Mother: '+str(t.Lb_ISOLATION_TrueMotherPID3)+' _Grandma: '+str(t.Lb_ISOLATION_TrueGrandmotherPID3))
+    return
+
+KIDs = [321,311,313,310,323]
+
+def CountTrueKaonsInDecays(nentries):
+    nK1ryDecay,nK1stDaughterDecay,nK2ndDaughterDecay = 0,0,0
+    for polarity in polarities:
+        print(polarity)
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        if nentries==-1:
+            nentries = t.GetEntries()
+            print(nentries)
+        for i in range(nentries):
+            t.GetEntry(i)
+            if i%100000==0:
+                print(i)
+            if t.FinalSel==1:
+                if (abs(t.Lb_TrueHadron_D1_ID) in KIDs) or (abs(t.Lb_TrueHadron_D2_ID) in KIDs):
+                    nK1ryDecay+=1
+                if (abs(t.Lb_TrueHadron_D1_GD0_ID) in KIDs) or (abs(t.Lb_TrueHadron_D1_GD1_ID) in KIDs) or (abs(t.Lb_TrueHadron_D1_GD2_ID) in KIDs):
+                    nK1stDaughterDecay+=1
+                if (abs(t.Lb_TrueHadron_D2_GD0_ID) in KIDs) or (abs(t.Lb_TrueHadron_D2_GD1_ID) in KIDs) or (abs(t.Lb_TrueHadron_D2_GD2_ID) in KIDs):
+                    nK2ndDaughterDecay+=1
+    
+    print('Number of evts with true K from Lb decay: ', nK1ryDecay)
+    print('Number of evts with true K from decay of the 1st Lb daughter: ',nK1stDaughterDecay)
+    print('Number of evts with true K from decay of the 2nd Lb daughter: ',nK2ndDaughterDecay)
+    return
+
+#PrintDecays(100)
+CountTrueKaonsInDecays(-1)
+#PrintLbIsoDecays(1000)
+
+def PrintDecays(t,entry):
+    t.GetEntry(entry)
+    print('LbID: '+str(t.Lb_TRUEID)+' D0: '+str(t.Lb_TrueHadron_D0_ID)+' D1: '+str(t.Lb_TrueHadron_D1_ID)+ ' D2: '+str(t.Lb_TrueHadron_D2_ID))
+    print(' 1. BDT:' +str(t.Lb_ISOLATION_BDT)+' TruePID: '+str(t.Lb_ISOLATION_TruePID)+ ' _Mother: '+str(t.Lb_ISOLATION_TrueMotherPID)+' _Grandma: '+str(t.Lb_ISOLATION_TrueGrandmotherPID)) 
+    print(' 2. BDT:' +str(t.Lb_ISOLATION_BDT2)+' TruePID: '+str(t.Lb_ISOLATION_TruePID2)+ ' _Mother: '+str(t.Lb_ISOLATION_TrueMotherPID2)+' _Grandma: '+str(t.Lb_ISOLATION_TrueGrandmotherPID2)) 
+    print(' 3. BDT:' +str(t.Lb_ISOLATION_BDT3)+' TruePID: '+str(t.Lb_ISOLATION_TruePID3)+ ' _Mother: '+str(t.Lb_ISOLATION_TrueMotherPID3)+' _Grandma: '+str(t.Lb_ISOLATION_TrueGrandmotherPID3)) 
+    return
+
+
+def AnalysisIsoParticles(nentries):
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        if nentries==-1:
+            nentries = t.GetEntries()
+        for i in range(nentries):
+            t.GetEntry(i)
+            if t.FinalSel!=1:
+                continue
+            else:
+                #Lambda_b daughters
+                LbDaughters = [t.Lb_TrueHadron_D0_ID, t.Lb_TrueHadron_D1_ID, t.Lb_TrueHadron_D2_ID]
+                #particles from isolation algorithm
+                isoparticles = [t.Lb_ISOLATION_TruePID, t.Lb_ISOLATION_TruePID2, t.Lb_ISOLATION_TruePID3]
+                #mothers of particles from isolation algorithm
+                misoparticles = [t.Lb_ISOLATION_TrueMotherPID, t.Lb_ISOLATION_TrueMotherPID2, t.Lb_ISOLATION_TrueMotherPID3]
+                #grandmothers of particles from isolation algorithm
+                gmisoparticles = [t.Lb_ISOLATION_TrueGrandmotherPID, t.Lb_ISOLATION_TrueGrandmotherPID2, t.Lb_ISOLATION_TrueGrandmotherPID3]
+                evtfound_m, evtfound_gm = 0,0
+                print('---------------------------------------')
+                for j,isop in enumerate(isoparticles):
+                    if isop!=0:
+                        if misoparticles[j] in LbDaughters and misoparticles[j]!=0:
+                            print(isop, misoparticles[j])
+                            if evtfound_m==0:
+                                PrintDecays(t,i)
+                            evtfound_m=1
+                        if evtfound_m==0:
+                            if gmisoparticles[j] in LbDaughters and gmisoparticles[j]!=0:
+                                print(isop, misoparticles[j], gmisoparticles[j])
+                                if evtfound_gm==0:
+                                    PrintDecays(t,i)
+                                evtfound_gm=1
+                print('---------------------------------------')
+    return
+
+#AnalysisIsoParticles(1000)
+
+def CountIsoParicleisLbDaughter(nentries,ndaughter):
+    count, count_1, count_2, count_3 = 0, 0, 0, 0
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        if nentries==-1:
+             nentries = t.GetEntries()
+        for i in range(nentries):
+            t.GetEntry(i)
+            if t.FinalSel!=1:
+                continue
+            else:
+                #Lambda_b daughters
+                LbDaughters = [t.Lb_TrueHadron_D0_ID, t.Lb_TrueHadron_D1_ID, t.Lb_TrueHadron_D2_ID]
+                #particles from isolation algorithm
+                isoparticles = [t.Lb_ISOLATION_TruePID, t.Lb_ISOLATION_TruePID2, t.Lb_ISOLATION_TruePID3]
+                #mothers of particles from isolation algorithm
+                misoparticles = [t.Lb_ISOLATION_TrueMotherPID, t.Lb_ISOLATION_TrueMotherPID2, t.Lb_ISOLATION_TrueMotherPID3]
+                for j,isop in enumerate(isoparticles):
+                    if isop!=0:
+                        if isop==LbDaughters[ndaughter] and misoparticles[j]==t.Lb_TRUEID:
+                            count+=1
+                            if j==0:
+                                count_1+=1
+                            if j==1:
+                                count_2+=1
+                            if j==2:
+                                count_3+=1
+        print('Polarity :',polarity)
+        print('Number of evts where one isolated particle is Lb daughter '+str(ndaughter)+' '+str(count))
+        print('Number of evts where 1st isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_1))
+        print('Number of evts where 2nd isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_2))
+        print('Number of evts where 3rd isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_3))
+    return
+
+
+def CountIsoParicleisLbGdaughter(nentries,ndaughter):
+    count, count_1, count_2, count_3 = 0, 0, 0, 0
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        if nentries==-1:
+             nentries = t.GetEntries()
+        for i in range(nentries):
+            t.GetEntry(i)
+            if t.FinalSel!=1:
+                continue
+            else:
+                #Lambda_b daughters
+                LbDaughters = [t.Lb_TrueHadron_D0_ID, t.Lb_TrueHadron_D1_ID, t.Lb_TrueHadron_D2_ID]
+                #particles from isolation algorithm
+                isoparticles = [t.Lb_ISOLATION_TruePID, t.Lb_ISOLATION_TruePID2, t.Lb_ISOLATION_TruePID3]
+                #mothers of particles from isolation algorithm
+                misoparticles = [t.Lb_ISOLATION_TrueMotherPID, t.Lb_ISOLATION_TrueMotherPID2, t.Lb_ISOLATION_TrueMotherPID3]
+                #grandmothers of particles from isolation algorithm
+                gmisoparticles = [t.Lb_ISOLATION_TrueGrandmotherPID, t.Lb_ISOLATION_TrueGrandmotherPID2, t.Lb_ISOLATION_TrueGrandmotherPID3]
+                for j,isop in enumerate(isoparticles):
+                    if isop!=0:
+                        if misoparticles[j]==LbDaughters[ndaughter] and gmisoparticles[j]==t.Lb_TRUEID:
+                            count+=1
+                            if j==0:
+                                count_1+=1
+                            if j==1:
+                                count_2+=1
+                            if j==2:
+                                count_3+=1
+        print('Polarity :',polarity)
+        print('Number of evts where one isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count))
+        print('Number of evts where 1st isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_1))
+        print('Number of evts where 2nd isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_2))
+        print('Number of evts where 3rd isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_3))
+    return
+
+def CountIsoParicleisLbGGdaughter(nentries,ndaughter):
+    count, count_1, count_2, count_3 = 0, 0, 0, 0
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        if nentries==-1:
+             nentries = t.GetEntries()
+        for i in range(nentries):
+            t.GetEntry(i)
+            if t.FinalSel!=1:
+                continue
+            else:
+                #Lambda_b daughters
+                LbDaughters = [t.Lb_TrueHadron_D0_ID, t.Lb_TrueHadron_D1_ID, t.Lb_TrueHadron_D2_ID]
+                #particles from isolation algorithm
+                isoparticles = [t.Lb_ISOLATION_TruePID, t.Lb_ISOLATION_TruePID2, t.Lb_ISOLATION_TruePID3]
+                #mothers of particles from isolation algorithm
+                misoparticles = [t.Lb_ISOLATION_TrueMotherPID, t.Lb_ISOLATION_TrueMotherPID2, t.Lb_ISOLATION_TrueMotherPID3]
+                #grandmothers of particles from isolation algorithm
+                gmisoparticles = [t.Lb_ISOLATION_TrueGrandmotherPID, t.Lb_ISOLATION_TrueGrandmotherPID2, t.Lb_ISOLATION_TrueGrandmotherPID3]
+                for j,isop in enumerate(isoparticles):
+                    if isop!=0:
+                        if misoparticles[j]!=0 and gmisoparticles[j]==LbDaughters[ndaughter]:
+                            count+=1
+                            if j==0:
+                                count_1+=1
+                            if j==1:
+                                count_2+=1
+                            if j==2:
+                                count_3+=1
+        print('Polarity :',polarity)
+        print('Number of evts where one isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count))
+        print('Number of evts where 1st isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_1))
+        print('Number of evts where 2nd isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_2))
+        print('Number of evts where 3rd isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_3))
+    return
+
+'''
+CountIsoParicleisLbDaughter(10000,0)
+CountIsoParicleisLbGdaughter(10000,0)
+CountIsoParicleisLbGGdaughter(10000,0)
+print()
+
+CountIsoParicleisLbDaughter(10000,1)
+CountIsoParicleisLbGdaughter(10000,1)
+CountIsoParicleisLbGGdaughter(10000,1)
+print()
+CountIsoParicleisLbDaughter(10000,2)
+CountIsoParicleisLbGdaughter(10000,2)
+CountIsoParicleisLbGGdaughter(10000,2)
+'''
 
 def Check_mbody():
     h_BDT = r.TH1F('h_BDT','Lb_ISOLATION_BDT',50,-2,1)
@@ -267,15 +649,17 @@ def Check_mbody():
     return 
 
 
+'''
 GetTotalNumberMCevts()
 GetTotalNumber2body()
 GetTotalNumberMbody()
 print()
-'''
 GetTotalNumberMCevts_TMatch()
-GetTotalNumber2body_TMatch()
-GetTotalNumberMbody_TMatch()
 print()
+GetTotalNumberMCevts_Trigger()
+print()
+GetTotalNumberMCevts_FullPreselection()
+
 GetTotalNumberMCevts_TMatch_Iso()
 GetTotalNumber2body_TMatch_Iso()
 GetTotalNumberMbody_TMatch_Iso()
