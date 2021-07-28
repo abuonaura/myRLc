@@ -105,10 +105,10 @@ def GetFileName(category,datatype,MCtype,sample,polarity):
             fname = folder+'CombinatorialBkg_'+polarity+'_'+suffix[category]+'.root'
     if datatype=='MC':
         if MCtype=='MCfull':
-            fname = folder+sample+'_'+polarity+'_full_preselected_'+suffix[category]+'_LbCorr.root'
+            fname = folder+sample+'_'+polarity+'_full_preselected_'+suffix[category]+'.root'
             print(fname)
         if MCtype=='MCTrackerOnly':
-            fname = folder+sample+'_'+polarity+'_preselected_'+suffix[category]+'_LbCorr.root'
+            fname = folder+sample+'_'+polarity+'_preselected_'+suffix[category]+'.root'
     return fname
 
 def GetFileListPerSample(category,datatype,MCtype,sample):
