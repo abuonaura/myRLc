@@ -23,8 +23,8 @@ import os,sys,getopt,time
 #Modified anti-isolated region k enriched definition: (Lb_ISOLATION_BDT>"+str(ISOBDTcut)+"&& Lb_ISOLATION_BDT2>" +str(ISOBDT2cut)+")&&((Lb_ISOLATION_PIDK>4.&&(Lb_ISOLATION_CHARGE==mu_ID/13 ||(Lb_ISOLATION_CHARGE==-mu_ID/13 && Lb_ISOLATION_PIDp - Lb_ISOLATION_PIDK<0.))) || (Lb_ISOLATION_PIDK2>4.&&(Lb_ISOLATION_CHARGE2==mu_ID/13 ||(Lb_ISOLATION_CHARGE2==-mu_ID/13 && Lb_ISOLATION_PIDp2 - Lb_ISOLATION_PIDK2<0.))))
 
 
-sample_suffix = {'iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root','Lcpipi':'_Lcpipi_sw.root'}
-suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
+sample_suffix = {'full':'_full_sw.root','iso':'_iso_sw.root','Kenriched':'_Kenr_sw.root','Lcpipi':'_Lcpipi_sw.root'}
+suffix = {'full':'_full.root','iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
 
 datadir = '/disk/lhcb_data2/RLcMuonic2016/'
 
@@ -144,9 +144,11 @@ def AddMISIDweightsWCF(ifile,ofile, polarity, particle,sample):
 
 if __name__ == '__main__':
     restart=False
-    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","Lcpipi","restart"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","Lcpipi","restart"])
     print (opts,args)
     for o, a in opts:
+        if o in ("--full",):
+            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):

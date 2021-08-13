@@ -14,13 +14,15 @@ polarities = ['MagUp','MagDown']
 
 #Lb_DataSS_MagDown_sw_noMISID.root
 
-suffix = {'iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
+suffix = {'full':'_full.root','iso':'_iso.root','Kenriched':'_Kenr.root','Lcpipi':'_Lcpipi.root'}
 
 if __name__ == '__main__':
     reweight=0
-    opts, args = getopt.getopt(sys.argv[1:], "",["iso","Kenriched","Lcpipi","reweight"])
+    opts, args = getopt.getopt(sys.argv[1:], "",["full","iso","Kenriched","Lcpipi","reweight"])
     print (opts,args)
     for o, a in opts:
+        if o in ("--full",):
+            sample = 'full'
         if o in ("--iso",):
             sample = 'iso'
         if o in ("--Kenriched",):
