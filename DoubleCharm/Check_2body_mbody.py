@@ -1,7 +1,7 @@
 import ROOT as r
 
-#folder = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'
-folder = '/Users/annarita/cernbox/LHCbDatasets/MC_full_TrueIsoInfo/'
+folder = '/disk/lhcb_data2/RLcMuonic2016/MC_full_TrueIsoInfo/'
+#folder = '/Users/annarita/cernbox/LHCbDatasets/MC_full_TrueIsoInfo/'
 files = {'MagUp':folder + 'Lb_LcDs_MagUp_full.root','MagDown':folder + 'Lb_LcDs_MagDown_full.root'}
 preselfiles = {'MagUp': folder + 'Lb_LcDs_MagUp_full_preselectionVars.root', 'MagDown': folder + 'Lb_LcDs_MagDown_full_preselectionVars.root'}
 polarities=['MagUp','MagDown']
@@ -294,15 +294,17 @@ h2b =  DisplayLbTrueHadronD2ID('FinalSel==1')
 h2b.Draw('hist')
 '''
 
-def PrintDecays(nentries):
+def PrintDecays(nevents):
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
         t = f.Get('tupleout/DecayTree')
         fpresel = r.TFile(preselfiles[polarity],'READ')
         tpresel = fpresel.Get('DecayTree')
         t.AddFriend(tpresel)
-        if nentries==-1:
+        if nevents==-1:
             nentries = t.GetEntries()
+        else:
+            nentries = nevents
         for i in range(nentries):
             t.GetEntry(i)
             if t.FinalSel!=1:
@@ -327,8 +329,10 @@ def PrintLbIsoParticles(t, i):
 
 KIDs = [321,311,313,310,323]
 
-def CountTrueKaonsInDecays(nentries):
+def CountTrueKaonsInDecays(nevents):
     nK1ryDecay,nK1stDaughterDecay,nK2ndDaughterDecay = 0,0,0
+    nK1ryDecay_ch,nK1stDaughterDecay_ch,nK2ndDaughterDecay_ch = 0,0,0
+    nevtsTOT = 0
     for polarity in polarities:
         print(polarity)
         f = r.TFile(files[polarity],'READ')
@@ -336,28 +340,47 @@ def CountTrueKaonsInDecays(nentries):
         fpresel = r.TFile(preselfiles[polarity],'READ')
         tpresel = fpresel.Get('DecayTree')
         t.AddFriend(tpresel)
-        if nentries==-1:
+        if nevents==-1:
             nentries = t.GetEntries()
-            print(nentries)
+        else:
+            nentries = nevents
+        print(nentries)
         for i in range(nentries):
             t.GetEntry(i)
             if i%100000==0:
                 print(i)
             if t.FinalSel==1:
+                nevtsTOT+=t.w_LbCorr*t.Event_PIDCalibEffWeight
                 if (abs(t.Lb_TrueHadron_D1_ID) in KIDs) or (abs(t.Lb_TrueHadron_D2_ID) in KIDs):
                     nK1ryDecay+=1
+                    if abs(t.Lb_TrueHadron_D1_ID)==321 or abs(t.Lb_TrueHadron_D1_ID)==323:
+                        nK1ryDecay_ch+=1
+                    if abs(t.Lb_TrueHadron_D2_ID)==321 or abs(t.Lb_TrueHadron_D2_ID)==323:
+                        nK1ryDecay_ch+=1
                 if (abs(t.Lb_TrueHadron_D1_GD0_ID) in KIDs) or (abs(t.Lb_TrueHadron_D1_GD1_ID) in KIDs) or (abs(t.Lb_TrueHadron_D1_GD2_ID) in KIDs):
                     nK1stDaughterDecay+=1
+                    if abs(t.Lb_TrueHadron_D1_GD0_ID)==321 or abs(t.Lb_TrueHadron_D1_GD0_ID)==323:
+                        nK1stDaughterDecay_ch+=1
+                    if abs(t.Lb_TrueHadron_D1_GD1_ID)==321 or abs(t.Lb_TrueHadron_D1_GD1_ID)==323:
+                        nK1stDaughterDecay_ch+=1
+                    if abs(t.Lb_TrueHadron_D1_GD2_ID)==321 or abs(t.Lb_TrueHadron_D1_GD2_ID)==323:
+                        nK1stDaughterDecay_ch+=1
                 if (abs(t.Lb_TrueHadron_D2_GD0_ID) in KIDs) or (abs(t.Lb_TrueHadron_D2_GD1_ID) in KIDs) or (abs(t.Lb_TrueHadron_D2_GD2_ID) in KIDs):
                     nK2ndDaughterDecay+=1
+                    if abs(t.Lb_TrueHadron_D2_GD0_ID)==321 or abs(t.Lb_TrueHadron_D1_GD0_ID)==323:
+                        nK2ndDaughterDecay_ch+=1
+                    if abs(t.Lb_TrueHadron_D2_GD1_ID)==321 or abs(t.Lb_TrueHadron_D2_GD1_ID)==323:
+                        nK2ndDaughterDecay_ch+=1
+                    if abs(t.Lb_TrueHadron_D2_GD2_ID)==321 or abs(t.Lb_TrueHadron_D2_GD2_ID)==323:
+                        nK2ndDaughterDecay_ch+=1
     
-    print('Number of evts with true K from Lb decay: ', nK1ryDecay)
-    print('Number of evts with true K from decay of the 1st Lb daughter: ',nK1stDaughterDecay)
-    print('Number of evts with true K from decay of the 2nd Lb daughter: ',nK2ndDaughterDecay)
+    print('% of evts with true K from Lb decay: '+str(nK1ryDecay*100/nevtsTOT)+' of which charged K: '+str(nK1ryDecay_ch*100/nevtsTOT))
+    print('Number of evts with true K from decay of the 1st Lb daughter: '+str(nK1stDaughterDecay*100/nevtsTOT)+' of which charged K: '+str(nK1stDaughterDecay_ch*100/nevtsTOT))
+    print('Number of evts with true K from decay of the 2nd Lb daughter: '+str(nK2ndDaughterDecay*100/nevtsTOT)+' of which charged K: '+str(nK2ndDaughterDecay_ch*100/nevtsTOT))
     return
 
 #PrintDecays(100)
-CountTrueKaonsInDecays(-1)
+#CountTrueKaonsInDecays(100000)
 #PrintLbIsoDecays(1000)
 
 def PrintDecays(t,entry):
@@ -412,7 +435,8 @@ def AnalysisIsoParticles(nentries):
 #AnalysisIsoParticles(1000)
 
 def CountIsoParicleisLbDaughter(nentries,ndaughter):
-    count, count_1, count_2, count_3 = 0, 0, 0, 0
+    count, count_1, count_2, count_3, nevts = 0, 0, 0, 0, 0
+    count_a, count_1a, count_2a, count_3a = 0, 0, 0, 0
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
         t = f.Get('tupleout/DecayTree')
@@ -426,6 +450,7 @@ def CountIsoParicleisLbDaughter(nentries,ndaughter):
             if t.FinalSel!=1:
                 continue
             else:
+                nevts+=t.w_LbCorr*t.Event_PIDCalibEffWeight
                 #Lambda_b daughters
                 LbDaughters = [t.Lb_TrueHadron_D0_ID, t.Lb_TrueHadron_D1_ID, t.Lb_TrueHadron_D2_ID]
                 #particles from isolation algorithm
@@ -436,22 +461,30 @@ def CountIsoParicleisLbDaughter(nentries,ndaughter):
                     if isop!=0:
                         if isop==LbDaughters[ndaughter] and misoparticles[j]==t.Lb_TRUEID:
                             count+=1
+                            if isop in KIDs:
+                                count_a+=1
                             if j==0:
                                 count_1+=1
+                                if isop in KIDs:
+                                    count_1a+=1
                             if j==1:
                                 count_2+=1
+                                if isop in KIDs:
+                                    count_2a+=1
                             if j==2:
                                 count_3+=1
-        print('Polarity :',polarity)
-        print('Number of evts where one isolated particle is Lb daughter '+str(ndaughter)+' '+str(count))
-        print('Number of evts where 1st isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_1))
-        print('Number of evts where 2nd isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_2))
-        print('Number of evts where 3rd isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_3))
+                                if isop in KIDs:
+                                    count_3a+=1
+    print('% of evts where one isolated particle is Lb daughter '+str(ndaughter)+' '+str(count*100/nevts)+' and is a K: '+str(count_a*100/nevts))
+    print('% of evts where 1st isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_1*100/nevts)+' and is a K: '+str(count_1a*100/nevts))
+    print('% of evts where 2nd isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_2*100/nevts)+' and is a K: '+str(count_2a*100/nevts))
+    print('% of evts where 3rd isolated particle is Lb daughter '+str(ndaughter)+' '+str(count_3*100/nevts)+' and is a K: '+str(count_3a*100/nevts))
     return
 
 
 def CountIsoParicleisLbGdaughter(nentries,ndaughter):
-    count, count_1, count_2, count_3 = 0, 0, 0, 0
+    count, count_1, count_2, count_3, nevts = 0, 0, 0, 0, 0
+    count_a, count_1a, count_2a, count_3a = 0, 0, 0, 0
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
         t = f.Get('tupleout/DecayTree')
@@ -465,6 +498,7 @@ def CountIsoParicleisLbGdaughter(nentries,ndaughter):
             if t.FinalSel!=1:
                 continue
             else:
+                nevts+=t.w_LbCorr*t.Event_PIDCalibEffWeight
                 #Lambda_b daughters
                 LbDaughters = [t.Lb_TrueHadron_D0_ID, t.Lb_TrueHadron_D1_ID, t.Lb_TrueHadron_D2_ID]
                 #particles from isolation algorithm
@@ -477,21 +511,79 @@ def CountIsoParicleisLbGdaughter(nentries,ndaughter):
                     if isop!=0:
                         if misoparticles[j]==LbDaughters[ndaughter] and gmisoparticles[j]==t.Lb_TRUEID:
                             count+=1
+                            if isop in KIDs:
+                                count_a+=1
                             if j==0:
                                 count_1+=1
+                                if isop in KIDs:
+                                    count_1a+=1
                             if j==1:
                                 count_2+=1
+                                if isop in KIDs:
+                                    count_2a+=1
                             if j==2:
                                 count_3+=1
-        print('Polarity :',polarity)
-        print('Number of evts where one isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count))
-        print('Number of evts where 1st isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_1))
-        print('Number of evts where 2nd isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_2))
-        print('Number of evts where 3rd isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_3))
+                                if isop in KIDs:
+                                    count_3a+=1
+    print('% of evts where one isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count*100/(nevts))+' and is a K: '+str(count_a*100/nevts))
+    print('% of evts where 1st isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_1*100/nevts)+' and is a K: '+str(count_1a*100/nevts))
+    print('% of evts where 2nd isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_2*100/nevts)+' and is a K: '+str(count_2a*100/nevts))
+    print('% of evts where 3rd isolated particle is daughter of Lb Daughter '+str(ndaughter)+' '+str(count_3*100/nevts)+' and is a K: '+str(count_3a*100/nevts))
     return
 
 def CountIsoParicleisLbGGdaughter(nentries,ndaughter):
-    count, count_1, count_2, count_3 = 0, 0, 0, 0
+    count, count_1, count_2, count_3,nevts = 0, 0, 0, 0, 0
+    count_a, count_1a, count_2a, count_3a = 0, 0, 0, 0
+    for polarity in polarities:
+        f = r.TFile(files[polarity],'READ')
+        t = f.Get('tupleout/DecayTree')
+        fpresel = r.TFile(preselfiles[polarity],'READ')
+        tpresel = fpresel.Get('DecayTree')
+        t.AddFriend(tpresel)
+        if nentries==-1:
+             nentries = t.GetEntries()
+        for i in range(nentries):
+            t.GetEntry(i)
+            if t.FinalSel!=1:
+                continue
+            else:
+                nevts+=t.w_LbCorr*t.Event_PIDCalibEffWeight
+                #Lambda_b daughters
+                LbDaughters = [t.Lb_TrueHadron_D0_ID, t.Lb_TrueHadron_D1_ID, t.Lb_TrueHadron_D2_ID]
+                #particles from isolation algorithm
+                isoparticles = [t.Lb_ISOLATION_TruePID, t.Lb_ISOLATION_TruePID2, t.Lb_ISOLATION_TruePID3]
+                #mothers of particles from isolation algorithm
+                misoparticles = [t.Lb_ISOLATION_TrueMotherPID, t.Lb_ISOLATION_TrueMotherPID2, t.Lb_ISOLATION_TrueMotherPID3]
+                #grandmothers of particles from isolation algorithm
+                gmisoparticles = [t.Lb_ISOLATION_TrueGrandmotherPID, t.Lb_ISOLATION_TrueGrandmotherPID2, t.Lb_ISOLATION_TrueGrandmotherPID3]
+                for j,isop in enumerate(isoparticles):
+                    if isop!=0:
+                        if misoparticles[j]!=0 and gmisoparticles[j]==LbDaughters[ndaughter]:
+                            count+=1
+                            if isop in KIDs:
+                                count_a+=1
+                            if j==0:
+                                count_1+=1
+                                if isop in KIDs:
+                                    count_1a+=1
+                            if j==1:
+                                count_2+=1
+                                if isop in KIDs:
+                                   count_2a+=1
+                            if j==2:
+                                count_3+=1
+                                if isop in KIDs:
+                                    count_3a+=1
+    print('% of evts where one isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count*100/(nevts))+' and is a K: '+str(count_a*100/nevts))
+    print('% of evts where 1st isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_1*100/(nevts))+' and is a K: '+str(count_1a*100/nevts))
+    print('% of evts where 2nd isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_2*100/(nevts))+' and is a K: '+str(count_2a*100/nevts))
+    print('% of evts where 3rd isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_3*100/(nevts))+' and is a K: '+str(count_3a*100/nevts))
+    return
+
+def StudyIsoKFromLbDecays(nentries):
+    h = r.TH1F('h','ISOBDT K from Lb Decay',50,-1,1)
+    h1 = r.TH1F('h1','ISOBDT 2 K from Lb Decay', 50,-1,1)
+    h2 = r.TH1F('h2','ISOBDT 3 K from Lb Decay',50,-1,1)
     for polarity in polarities:
         f = r.TFile(files[polarity],'READ')
         t = f.Get('tupleout/DecayTree')
@@ -515,34 +607,42 @@ def CountIsoParicleisLbGGdaughter(nentries,ndaughter):
                 gmisoparticles = [t.Lb_ISOLATION_TrueGrandmotherPID, t.Lb_ISOLATION_TrueGrandmotherPID2, t.Lb_ISOLATION_TrueGrandmotherPID3]
                 for j,isop in enumerate(isoparticles):
                     if isop!=0:
-                        if misoparticles[j]!=0 and gmisoparticles[j]==LbDaughters[ndaughter]:
-                            count+=1
-                            if j==0:
-                                count_1+=1
-                            if j==1:
-                                count_2+=1
-                            if j==2:
-                                count_3+=1
-        print('Polarity :',polarity)
-        print('Number of evts where one isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count))
-        print('Number of evts where 1st isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_1))
-        print('Number of evts where 2nd isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_2))
-        print('Number of evts where 3rd isolated particle is (maybe) granddaughter of Lb Daughter '+str(ndaughter)+' '+str(count_3))
-    return
+                        for ndaughter in range(0,2):
+                            if (isop==LbDaughters[ndaughter] and misoparticles[j]==t.Lb_TRUEID) or (misoparticles[j]==LbDaughters[ndaughter] and gmisoparticles[j]==t.Lb_TRUEID) or (misoparticles[j]!=0 and gmisoparticles[j]==LbDaughters[ndaughter]):
+                                if j==0:
+                                    h.Fill(t.Lb_ISOLATION_BDT, t.w_LbCorr*t.Event_PIDCalibEffWeight)
+                                if j==1:
+                                    h1.Fill(t.Lb_ISOLATION_BDT2, t.w_LbCorr*t.Event_PIDCalibEffWeight)
+                                if j==2:
+                                    h2.Fill(t.Lb_ISOLATION_BDT3, t.w_LbCorr*t.Event_PIDCalibEffWeight)
+    h.SetDirectory(0)
+    h1.SetDirectory(0)
+    h2.SetDirectory(0)
+    return h, h1, h2
 
 '''
-CountIsoParicleisLbDaughter(10000,0)
-CountIsoParicleisLbGdaughter(10000,0)
-CountIsoParicleisLbGGdaughter(10000,0)
+h, h1, h2 = StudyIsoKFromLbDecays(100000)
+c = r.TCanvas('','',1500,500)
+c.Divide(3,1)
+c.cd(1)
+h.Draw('hist')
+c.cd(2)
+h1.Draw('hist')
+c.cd(3)
+h2.Draw('hist')
+
+CountIsoParicleisLbDaughter(100000,0)
+CountIsoParicleisLbGdaughter(100000,0)
+CountIsoParicleisLbGGdaughter(100000,0)
 print()
 
-CountIsoParicleisLbDaughter(10000,1)
-CountIsoParicleisLbGdaughter(10000,1)
-CountIsoParicleisLbGGdaughter(10000,1)
+CountIsoParicleisLbDaughter(100000,1)
+CountIsoParicleisLbGdaughter(100000,1)
+CountIsoParicleisLbGGdaughter(100000,1)
 print()
-CountIsoParicleisLbDaughter(10000,2)
-CountIsoParicleisLbGdaughter(10000,2)
-CountIsoParicleisLbGGdaughter(10000,2)
+CountIsoParicleisLbDaughter(100000,2)
+CountIsoParicleisLbGdaughter(100000,2)
+CountIsoParicleisLbGGdaughter(100000,2)
 '''
 
 def Check_mbody():
@@ -649,7 +749,6 @@ def Check_mbody():
     return 
 
 
-'''
 GetTotalNumberMCevts()
 GetTotalNumber2body()
 GetTotalNumberMbody()
@@ -660,6 +759,7 @@ GetTotalNumberMCevts_Trigger()
 print()
 GetTotalNumberMCevts_FullPreselection()
 
+'''
 GetTotalNumberMCevts_TMatch_Iso()
 GetTotalNumber2body_TMatch_Iso()
 GetTotalNumberMbody_TMatch_Iso()
