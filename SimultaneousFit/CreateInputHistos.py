@@ -88,7 +88,7 @@ def GetFolder(datatype,MCtype,sample):
                 'Combinatorial':ddir+'CombinatorialBkg/'}
         return folder[sample]
     elif datatype=='MC':
-        folder = {'MCfull':ddir+'MC_full_new/','MCTrackerOnly':ddir+'MC_TrackerOnly'}
+        folder = {'MCfull':ddir+'MC_full_new/','MCTrackerOnly':ddir+'MC_TrackerOnly/'}
         return folder[MCtype]
 
 def GetFileName(category,datatype,MCtype,sample,polarity):
