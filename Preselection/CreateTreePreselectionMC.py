@@ -611,13 +611,13 @@ if __name__ == "__main__":
                 df3.Snapshot("DecayTree",inputFile[0:-5]+'_preselectionVars.root',column_name_vector)
                 print("Tree written.")
                 
-                '''
                 df5 = df3.Filter("FinalSel==true&&isIsolated==true")
                 print("Writing the Isolated tree ...")
                 df5.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_iso.root')
                 print("Tree written.")
 
                 
+                '''
                 df6 = df3.Filter("FinalSel==true&&isKenriched==true")
                 print("Writing the Kenriched tree ...")
                 df6.Snapshot("DecayTree",inputFile[0:-5]+'_preselected_Kenr.root')
