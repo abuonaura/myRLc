@@ -72,7 +72,7 @@ def GetBDTfile(ifname):
 func_code = '''
 bool TruthMatchCharm(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double Lc_TRUEID, double mu_TRUEID, double mu_MC_MOTHER_ID)
 {
-    if(Lc_BKGCAT<30 && Lb_BKGCAT<50)
+    if(Lc_BKGCAT<30 && Lb_BKGCAT<=50)
     {
         if(abs(Lb_TRUEID)==5122&&abs(Lc_TRUEID)==4122 &&abs(mu_TRUEID)==13)
         {
@@ -89,7 +89,7 @@ bool TruthMatchCharm(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, doubl
 
 bool TruthMatchTau(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double Lc_TRUEID, double mu_TRUEID, double mu_MC_MOTHER_ID)
 {
-    if(Lc_BKGCAT<30 && Lb_BKGCAT<50)
+    if(Lc_BKGCAT<30 && Lb_BKGCAT<=50)
     {
         if(abs(Lb_TRUEID)==5122&&abs(Lc_TRUEID)==4122 &&abs(mu_TRUEID)==13)
         {
@@ -106,7 +106,7 @@ bool TruthMatchTau(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double 
 
 bool TruthMatchLb(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double Lc_TRUEID, double mu_TRUEID, double mu_MC_MOTHER_ID)
 {
-    if(Lc_BKGCAT<30 && Lb_BKGCAT<50)
+    if(Lc_BKGCAT<30 && Lb_BKGCAT<=50)
     {
         if(abs(Lb_TRUEID)==5122&&abs(Lc_TRUEID)==4122 &&abs(mu_TRUEID)==13)
         {
@@ -123,7 +123,7 @@ bool TruthMatchLb(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double L
 
 bool TruthMatchBLcpbar(double Lc_BKGCAT, double Lb_BKGCAT, double Lb_TRUEID, double Lc_TRUEID, double mu_TRUEID, double mu_MC_MOTHER_ID)
 {
-    if(Lc_BKGCAT<30 && Lb_BKGCAT<50)
+    if(Lc_BKGCAT<30 && Lb_BKGCAT<=50)
     {
         if(abs(Lb_TRUEID)==521&&abs(Lc_TRUEID)==4122 &&abs(mu_TRUEID)==13)
         {
