@@ -144,8 +144,13 @@ double GetMass(double Lb_ISOLATION_PIDK, double Lb_ISOLATION_CHARGE, double muCh
     return m;
 }
 
-bool CheckIfK(double Lb_ISOLATION_BDT, double Lb_ISOLATION_probK0, double Lb_ISOLATION_probK1, double Lb_ISOLATION_probK2, double NNghost, double Lb_ISOLATION_CHARGE, double Type, double muCharge, double BDTcut)
+bool CheckIfK(double Lb_ISOLATION_BDT, double Lb_ISOLATION_P, double Lb_ISOLATION_eta, double NNghost, double Lb_ISOLATION_CHARGE, double Type, double muCharge, double BDTcut, double nTracks, int polarity)
 {
+    string pol;
+    if (polarity==1)
+        pol="MagUp";
+    if (polarity==-1)
+        pol = "MagDown";
     //TO have always same seed
     TRandom3 *s = new TRandom3();
     double rndm = s->Uniform(0,1);
@@ -154,16 +159,28 @@ bool CheckIfK(double Lb_ISOLATION_BDT, double Lb_ISOLATION_probK0, double Lb_ISO
     {
         if(Type==3 && NNghost<0.2)
         {
+            TFile *fh = new TFile(("/disk/lhcb_data2/RLcMuonic2016/HistoPID/KenrichedSelection/PerfHists_K_Turbo16_"+pol+"_Brunel_P_Brunel_ETA_nTracks_Brunel.root").c_str());
             if(Lb_ISOLATION_CHARGE==-muCharge)
             {
-                if(Lb_ISOLATION_probK0>rndm)
+                TH3D* h = (TH3D*)fh->Get("K_IsMuon==0 && DLLK>4.0_All");
+                int nbin = h->FindFixBin(Lb_ISOLATION_P, Lb_ISOLATION_eta, nTracks);
+                double prob=0;
+                if(nbin)
+                    prob = h->GetBinContent(nbin);
+                if(prob>rndm)
                     isK=1;
             }
             else if (Lb_ISOLATION_CHARGE==muCharge)
             {
-                if(Lb_ISOLATION_probK1>rndm)
+                TH3D* h = (TH3D*)fh->Get("K_IsMuon==0 && DLLK>4.0 && DLLp-DLLK<0_All");
+                int nbin = h->FindFixBin(Lb_ISOLATION_P, Lb_ISOLATION_eta, nTracks);
+                double prob=0;
+                if(nbin)
+                    prob = h->GetBinContent(nbin);
+                if(prob>rndm)
                     isK=1;
             }
+            fh->Close();
         }
     }
     delete s;
@@ -202,6 +219,8 @@ for polarity in polarities:
     df0 = df0.Define('Lb_ISOLATION_eta',"0.5*TMath::Log((Lb_ISOLATION_P+Lb_ISOLATION_PZ)/(Lb_ISOLATION_P-Lb_ISOLATION_PZ))")
     df0 = df0.Define('Lb_ISOLATION_eta2',"0.5*TMath::Log((Lb_ISOLATION_P2+Lb_ISOLATION_PZ2)/(Lb_ISOLATION_P2-Lb_ISOLATION_PZ2))")
     df0 = df0.Define('Lb_ISOLATION_eta3',"0.5*TMath::Log((Lb_ISOLATION_P3+Lb_ISOLATION_PZ3)/(Lb_ISOLATION_P3-Lb_ISOLATION_PZ3))")
+
+    '''
     df0 = df0.Define('Lb_ISOLATION_probK0',"GetProbabilityK_0(nTracks,Lb_ISOLATION_P,Lb_ISOLATION_eta,SamplePolarity)")
     df0 = df0.Define('Lb_ISOLATION_probK0_2',"GetProbabilityK_0(nTracks,Lb_ISOLATION_P2,Lb_ISOLATION_eta2,SamplePolarity)")
     df0 = df0.Define('Lb_ISOLATION_probK0_3',"GetProbabilityK_0(nTracks,Lb_ISOLATION_P3,Lb_ISOLATION_eta3,SamplePolarity)")
@@ -220,20 +239,23 @@ for polarity in polarities:
     df0 = df0.Define('Lb_ISOLATION_probPi2',"GetProbabilityPi_2(nTracks,Lb_ISOLATION_P,Lb_ISOLATION_eta,SamplePolarity)")
     df0 = df0.Define('Lb_ISOLATION_probPi2_2',"GetProbabilityPi_2(nTracks,Lb_ISOLATION_P2,Lb_ISOLATION_eta2,SamplePolarity)")
     df0 = df0.Define('Lb_ISOLATION_probPi2_3',"GetProbabilityPi_2(nTracks,Lb_ISOLATION_P3,Lb_ISOLATION_eta3,SamplePolarity)")
-
+    '''
     df0 = df0.Define("BDTcut",str(BDTcut))
     df0 = df0.Define("BDTcut2",str(BDTcut2))
     df0 = df0.Define("BDTcut3",str(BDTcut3))
     df1 = df0.Filter('FinalSel==1&&(Lb_ISOLATION_BDT>'+str(BDTcut)+'||Lb_ISOLATION_BDT2>'+str(BDTcut2)+'||Lb_ISOLATION_BDT3>'+str(BDTcut3)+')')
 
-    #h = df1.Histo1D(('h_ISOLATION_BDT','',50,-1,1),'Lb_ISOLATION_BDT')
+    h = df1.Histo1D(('h_ISOLATION_P','',50,0,1E6),'Lb_ISOLATION_P')
     #h = df1.Histo1D(('h_ISOLATION_BDT2','',50,-1,1),'Lb_ISOLATION_BDT2')
     #h = df1.Histo1D(('h_ISOLATION_BDT3','',50,-1,1),'Lb_ISOLATION_BDT3')
-    #h.Draw()
-    df1 = df1.Define('isK','CheckIfK(Lb_ISOLATION_BDT, Lb_ISOLATION_probK0, Lb_ISOLATION_probK1, Lb_ISOLATION_probK2, Lb_ISOLATION_NNghost, Lb_ISOLATION_CHARGE, Lb_ISOLATION_Type, muCharge, BDTcut)')
-    df1 = df1.Define('isK2','CheckIfK(Lb_ISOLATION_BDT2, Lb_ISOLATION_probK0_2, Lb_ISOLATION_probK1_2, Lb_ISOLATION_probK2_2, Lb_ISOLATION_NNghost2, Lb_ISOLATION_CHARGE2, Lb_ISOLATION_Type2, muCharge, BDTcut2)')
-    df1 = df1.Define('isK3','CheckIfK(Lb_ISOLATION_BDT3, Lb_ISOLATION_probK0_3, Lb_ISOLATION_probK1_3, Lb_ISOLATION_probK2_3, Lb_ISOLATION_NNghost3, Lb_ISOLATION_CHARGE3, Lb_ISOLATION_Type3, muCharge, BDTcut3)')
+    h.Draw()
+    '''
+    df1 = df1.Define('isK','CheckIfK(Lb_ISOLATION_BDT, Lb_ISOLATION_P, Lb_ISOLATION_eta, Lb_ISOLATION_NNghost, Lb_ISOLATION_CHARGE, Lb_ISOLATION_Type, muCharge, BDTcut, nTracks, SamplePolarity)')
+    df1 = df1.Define('isK2','CheckIfK(Lb_ISOLATION_BDT2, Lb_ISOLATION_P2, Lb_ISOLATION_eta2, Lb_ISOLATION_NNghost2, Lb_ISOLATION_CHARGE2, Lb_ISOLATION_Type2, muCharge, BDTcut2, nTracks, SamplePolarity)')
+    df1 = df1.Define('isK3','CheckIfK(Lb_ISOLATION_BDT3, Lb_ISOLATION_P3, Lb_ISOLATION_eta3, Lb_ISOLATION_NNghost3, Lb_ISOLATION_CHARGE3, Lb_ISOLATION_Type3, muCharge, BDTcut3, nTracks, SamplePolarity)')
+'''
 
+    '''
     print("Writing the new tree ...")
     new_tree = r.std.vector('string')()
     new_tree.push_back('isK')
@@ -241,3 +263,4 @@ for polarity in polarities:
     new_tree.push_back('isK3')
     df1.Snapshot("DecayTree","prova.root",new_tree)
     print("Tree written.")
+    '''
