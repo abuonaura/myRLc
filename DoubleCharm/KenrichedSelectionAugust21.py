@@ -17,7 +17,7 @@ double GetMuCharge(double muID)
     return -muID/13;
 }
 
-int GetProbabilityK_0( double nTracks, double Lb_ISOLATION_P, double Lb_ISOLATION_eta, int polarity)
+double GetProbabilityK_0( double nTracks, double Lb_ISOLATION_P, double Lb_ISOLATION_eta, int polarity)
 {
     string pol;
     if (polarity==1)
@@ -152,7 +152,7 @@ bool CheckIfK(double Lb_ISOLATION_BDT, double Lb_ISOLATION_P, double Lb_ISOLATIO
     if (polarity==-1)
         pol = "MagDown";
     //TO have always same seed
-    TRandom3 *s = new TRandom3();
+    TRandom3 *s = new TRandom3(0);
     double rndm = s->Uniform(0,1);
     bool isK=0;
     if(Lb_ISOLATION_BDT>BDTcut)
@@ -191,6 +191,8 @@ bool CheckIfK(double Lb_ISOLATION_BDT, double Lb_ISOLATION_P, double Lb_ISOLATIO
 
 r.gInterpreter.Declare(func_isolation)
 
+
+polarities=['MagDown']
 for polarity in polarities:
     fname = fdir+'Lb_LcDs_'+polarity+'_full.root'
     f = r.TFile(fname)
@@ -245,22 +247,46 @@ for polarity in polarities:
     df0 = df0.Define("BDTcut3",str(BDTcut3))
     df1 = df0.Filter('FinalSel==1&&(Lb_ISOLATION_BDT>'+str(BDTcut)+'||Lb_ISOLATION_BDT2>'+str(BDTcut2)+'||Lb_ISOLATION_BDT3>'+str(BDTcut3)+')')
 
-    h = df1.Histo1D(('h_ISOLATION_P','',50,0,1E6),'Lb_ISOLATION_P')
-    #h = df1.Histo1D(('h_ISOLATION_BDT2','',50,-1,1),'Lb_ISOLATION_BDT2')
-    #h = df1.Histo1D(('h_ISOLATION_BDT3','',50,-1,1),'Lb_ISOLATION_BDT3')
+    '''
+    h = df1.Histo1D(('h_ISOLATION_P','',50,0,1E5),'Lb_ISOLATION_P')
+    h1 = df1.Histo1D(('h_ISOLATION_P2','',50,0,1E5),'Lb_ISOLATION_P2')
+    h2 = df1.Histo1D(('h_ISOLATION_P3','',50,0,1E5),'Lb_ISOLATION_P3')
+    c = r.TCanvas('c','',1500,500)
+    c.Divide(3,1)
+    c.cd(1)
     h.Draw()
+    c.cd(2)
+    h1.Draw()
+    c.cd(3)
+    h2.Draw()
+    
+    h3 = df1.Histo1D(('h_ISOLATION_eta','',50,0,7),'Lb_ISOLATION_eta')
+    h4 = df1.Histo1D(('h_ISOLATION_eta2','',50,0,7),'Lb_ISOLATION_eta2')
+    h5 = df1.Histo1D(('h_ISOLATION_eta3','',50,0,7),'Lb_ISOLATION_eta3')
+    c1 = r.TCanvas('c1','',1500,500)
+    c1.Divide(3,1)
+    c1.cd(1)
+    h3.Draw()
+    c1.cd(2)
+    h4.Draw()
+    c1.cd(3)
+    h5.Draw()
+
+    df2 = df1.Filter('Lb_ISOLATION_BDT3>0.35&&Lb_ISOLATION_NNghost3<0.2&&Lb_ISOLATION_Type3==3')
+    df2 = df2.Define('Lb_ISOLATION_probK0',"GetProbabilityK_0(nTracks,Lb_ISOLATION_P3,Lb_ISOLATION_eta3,SamplePolarity)")
+    h6 = df2.Histo1D(('h_probK0','',50,0,1),'Lb_ISOLATION_probK0')
+    c2 = r.TCanvas('c2','',500,500)
+    h6.Draw()
+
     '''
     df1 = df1.Define('isK','CheckIfK(Lb_ISOLATION_BDT, Lb_ISOLATION_P, Lb_ISOLATION_eta, Lb_ISOLATION_NNghost, Lb_ISOLATION_CHARGE, Lb_ISOLATION_Type, muCharge, BDTcut, nTracks, SamplePolarity)')
     df1 = df1.Define('isK2','CheckIfK(Lb_ISOLATION_BDT2, Lb_ISOLATION_P2, Lb_ISOLATION_eta2, Lb_ISOLATION_NNghost2, Lb_ISOLATION_CHARGE2, Lb_ISOLATION_Type2, muCharge, BDTcut2, nTracks, SamplePolarity)')
     df1 = df1.Define('isK3','CheckIfK(Lb_ISOLATION_BDT3, Lb_ISOLATION_P3, Lb_ISOLATION_eta3, Lb_ISOLATION_NNghost3, Lb_ISOLATION_CHARGE3, Lb_ISOLATION_Type3, muCharge, BDTcut3, nTracks, SamplePolarity)')
-'''
 
-    '''
     print("Writing the new tree ...")
     new_tree = r.std.vector('string')()
     new_tree.push_back('isK')
     new_tree.push_back('isK2')
     new_tree.push_back('isK3')
-    df1.Snapshot("DecayTree","prova.root",new_tree)
+    df1.Snapshot("DecayTree","prova_"+polarity+".root",new_tree)
     print("Tree written.")
-    '''
