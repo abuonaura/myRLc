@@ -77,44 +77,211 @@ def GetFolder(datatype,MCtype,sample):
         return folder[MCtype]
 
 
+func_weight = '''
+double GetWeightData(double sw_sig)
+{
+    return sw_sig;
+}
+
+double GetWeightMISID(double w_recomu_CF,double sw_sig)
+{
+    double weight = w_recomu_CF*10*sw_sig;
+    return weight;
+}
+
+double GetWeightCombinatorial(double w_MISID, double sw_sig, double w_comb, bool HighMassCorrection)
+{
+    double weight = w_MISID*sw_sig;
+    if(HighMassCorrection)
+        weight =  w_MISID*sw_sig*w_comb;
+    return weight;
+}
+
+double GetMCweightWithFF(double Event_PIDCalibEffWeight, double w_LbCorr, double Event_FFcorr, bool FFcorr)
+{
+    double weight = Event_PIDCalibEffWeight*w_LbCorr;
+    if(FFcorr)
+        weight = weight*Event_FFcorr;
+    return weight;
+}
+double GetMCweightNoFF(double Event_PIDCalibEffWeight, double w_LbCorr)
+{
+    double weight = Event_PIDCalibEffWeight*w_LbCorr;
+    return weight;
+}
+
+double Weight_MultibodyCharm_linear(double w_mbody,double alpha1)
+{
+    double weight = 1+2*alpha1*w_mbody;
+    return weight;
+}
+
+double Weight_MultibodyCharm_quadratic(double w_mbody,double alpha2)
+{
+    double weight = (1-alpha2)+8*alpha2*w_mbody*w_mbody;
+    return weight;
+}
+
+double GetSigmas(double w)
 
 '''
-def GetFileName(category,datatype,MCtype,sample,polarity):
-    folder = GetFolder(datatype,MCtype,sample)
-    suffix = {'Isolated':'iso','Kenriched':'Kenr','Lcpipi':'Lcpipi'}
-    if datatype=='DATA':
-        if sample=='Data':
-            fname = folder+'Lb_'+sample+'_'+polarity+'_preselected_'+suffix[category]+'_sw.root'
-        if sample=='MISID':
-            fname = []
-            fname.append(folder+'K_sample_'+polarity+'_'+suffix[category]+'_sw_withCF.root')
-            fname.append(folder+'Pi_sample_'+polarity+'_'+suffix[category]+'_sw_withCF.root')
-        if sample=='Combinatorial':
-            fname = folder+'CombinatorialBkg_'+polarity+'_'+suffix[category]+'.root'
-    if datatype=='MC':
-        if MCtype=='MCfull':
-            fname = folder+sample+'_'+polarity+'_full_preselected_'+suffix[category]+'.root'
-            print(fname)
-        if MCtype=='MCTrackerOnly':
-            fname = folder+sample+'_'+polarity+'_preselected_'+suffix[category]+'.root'
-    return fname
 
-def GetFileListPerSample(category,datatype,MCtype,sample):
-    polarities = ['MagUp','MagDown']
-    flist = [] 
+r.gInterpreter.Declare(func_weight)
+
+def PutTogetherPolarityHistos(h,mcsample):
+    h_new = h['MagUp']
+    h_new.Add(h['MagDown'])
+    h_new.SetTitle(mcsample)
+    h_new.SetDirectory(0)
+    return h_new
+
+def GetTemplateData(category, cut):
+    h = {}
+    folder = GetFolder('DATA','','Data')
     for polarity in polarities:
-        fname = GetFileName(category,datatype,MCtype,sample,polarity)
-        print (fname)
-        if sample!='MISID':
-            flist.append(fname)
-        else:
-            flist.extend(fname)
-    print(flist)
-    return flist
-'''
+        fname = folder+'Lb_Data_'+polarity+'_preselected_'+suffix[category]+'_sw.root'
+        f = r.TFile(fname,'READ')
+        t = f.Get('DecayTree')
+        df0 = r.RDataFrame(t)
+        df0 = df0.Define("weight","GetWeightData(sw_sig)")
+        h[polarity] = df0.Histo3D(("h_Data_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight")
+        h[polarity].SetDirectory(0)
+    return h
+
+def GetTemplateMISID(category):
+    h = {}
+    folder = GetFolder('DATA','','MISID')
+    for polarity in polarities:
+        fname1 = folder+'K_sample_'+polarity+'_'+suffix[category]+'_sw_withCF.root'
+        fname2 = folder+'Pi_sample_'+polarity+'_'+suffix[category]+'_sw_withCF.root'
+        fname = folder+'MISID_sample_'+polarity+'_'+suffix[category]+'_sw_withCF.root'
+        os.system('hadd -f %s %s %s' %(fname, fname1, fname2))
+        f = r.TFile(fname,'READ')
+        t = f.Get('DecayTree')
+        df0 = r.RDataFrame(t)
+        df0 = df0.Define("weight","GetWeightMISID(w_recomu_CF,sw_sig)")
+        h[polarity] = df0.Histo3D(("h_MISID_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight")
+        h[polarity].SetDirectory(0)
+        column_name_vector = r.std.vector('string')()
+        column_name_vector.push_back("weight")
+        print("Writing the MISID tree with weights ...")
+        df0.Snapshot("DecayTree",'MISID_weights_'+polariy+'_'+category+'.root',column_name_vector)
+        print("Tree written.")
+        os.system('rm %s' %fname)
+    return h
+        
+def GetTemplateCombinatorial(category,weighComb):
+    h = {}
+    folder = GetFolder('DATA','','Combinatorial')
+    for polarity in polarities:
+        fname = folder+'CombinatorialBkg_'+polarity+'_'+suffix[category]+'.root'
+        f = r.TFile(fname,'READ')
+        t = f.Get('DecayTree')
+        df0 = r.RDataFrame(t)
+        df0 = df0.Define("HighMassCorrection",str(weighComb))
+        df0 = df0.Define("weight","GetWeightCombinatorial(w_MISID,sw_sig,w_comb,HighMassCorrection)")
+        h[polarity] = df0.Histo3D(("h_Combinatorial_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight")
+        h[polarity].SetDirectory(0)
+        column_name_vector = r.std.vector('string')()
+        column_name_vector.push_back("weight")
+        print("Writing the Combinatorial tree with weights ...")
+        df0.Snapshot("DecayTree",'Comb_weights_'+polariy+'_'+category+'.root',column_name_vector)
+        print("Tree written.")
+    return h
+    
+        
+
+def GetTemplateMCsample(category, mcsample, MCtype, cut):
+    print(mcsample)
+    folder = GetFolder('MC',MCtype,'')
+    if mcsample not in ['Lb_LcDs','Lb_Lc2625Ds','Lb_Lc2593Ds']:
+        h = {}
+        h1 = {}
+        for polarity in polarities:
+            h[polarity] = r.TH3D()
+            fname = folderMC+mcsample+'_'+polarity+'_'+suffix[category]+'.root'
+            f = r.TFile(fname,'READ')
+            t = f.Get('tupleout/DecayTree')
+            df0 = r.RDataFrame(t)
+            if mcsample=='Lb_Lcmunu' or mcsample=='Lb_Lctaunu':
+                df0 = df0.Define("FFcorr",str(FFGstate))
+            if mcsample=='Lb_Lc2593munu' or mcsample=='Lb_Lc2593taunu':
+                df0 = df0.Define("FFcorr",str(FFEstateL))
+            if mcsample=='Lb_Lc2625munu' or mcsample=='Lb_Lc2625taunu':
+                df0 = df0.Define("FFcorr",str(FFEstateH))
+            if mcsample in ["Lb_Lcmunu","Lb_Lctaunu","Lb_Lc2625munu","Lb_Lc2625taunu","Lb_Lc2593munu","Lb_Lc2593taunu"]:
+                df0 = df0.Define("weight","GetMCweightWithFF(Event_PIDCalibEffWeight,w_LbCorr, Event_FFcorr,FFcorr)")
+            else:
+                df0 = df0.Define("weight","GetMCweightNoFF(Event_PIDCalibEffWeight,w_LbCorr")
+            h[polarity] = df0.Histo3D(("h_"+mcsample+"_"+polarity+"_"+str(cut), "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight")
+            h[polarity].SetDirectory(0)
+        #h1 = PutTogetherPolarityHistos(h,mcsample)
+        return h
+    if mcsample in ['Lb_LcDs','Lb_Lc2625Ds','Lb_Lc2593Ds']:
+        h_nominal, h_2body, h_mbody, h_mbody_1pl, h_mbody_1ml, h_mbody_1pq, h_mbody_1mq = {},{},{},{},{},{},{}
+        for polarity in polarities:
+            fname = folderMC+mcsample+'_'+polarity+'_full.root'
+            fpresel_name = folderMC+mcsample+'_'+polarity+'_full_preselectionVars.root'
+            f = r.TFile(fname,'READ')
+            t = f.Get('tupleout/DecayTree')
+            t.SetBranchStatus("*",0)
+            t.SetBranchStatus('Lb_ISOLATION_BDT',1)
+            t.SetBranchStatus('FitVar_q2_mLc',1)
+            t.SetBranchStatus('FitVar_El_mLc',1)
+            t.SetBranchStatus('FitVar_Mmiss2_mLc',1)
+            fpresel = r.TFile(fpresel_name,'READ')
+            tpresel = fpresel.Get('DecayTree')
+            t.AddFriend(tpresel)
+            df0 = r.RDataFrame(t)
+            df0 = df0.Define("weight","GetMCweightNoFF(Event_PIDCalibEffWeight,w_LbCorr)")
+            h_nominal[polarity] = df0.Histo3D(("h_"+mcsample+"_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight")
+            df1 = df0.Filter("twobody==true && mbody==false")
+            h_2body[polarity] = df1.Histo3D(("h_"+mcsample+"-2body_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight")
+            ##ADDITION of w_mbody>-1000 && w_mbody!=1 on 30.08.21
+            df2 = df0.Filter("twobody==false && mbody==true && w_mbody>-1000 && w_mbody!=1")
+            h_mbody[polarity] = df2.Histo3D(("h_"+mcsample+"-mbody_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight")
+            df2.Define("weight_1ml","Weight_MultibodyCharm_linear(w_mbody,"+str(-1)+")")
+            df2.Define("weight_1pl","Weight_MultibodyCharm_linear(w_mbody,"+str(1)+")")
+            df2.Define("weight_1mq","Weight_MultibodyCharm_quadratic(w_mbody,"+str(-1)+")")
+            df2.Define("weight_1pq","Weight_MultibodyCharm_quadratic(w_mbody,"+str(1)+")")
+            h_mbody_1ml[polarity] = df2.Histo3D(("h_"+mcsample+"-mbody_1ml_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight*weight_1ml")
+            h_mbody_1pl[polarity] = df2.Histo3D(("h_"+mcsample+"-mbody_1pl_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight*weight_1pl")
+            h_mbody_1mq[polarity] = df2.Histo3D(("h_"+mcsample+"-mbody_1mq_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight*weight_1mq")
+            h_mbody_1pq[polarity] = df2.Histo3D(("h_"+mcsample+"-mbody_1pq_"+polarity+"_"+category, "", 10, 0., 2600.,4, -2.E6, 14.E6,10, -2.E6, 14.E6),"FitVar_El_mLc","FitVar_q2_mLc","FitVar_Mmiss2_mLc","weight*weight_1pq")
+
+            h_nominal[polarity].SetDirectory(0)
+            h_2body[polarity].SetDirectory(0)
+            h_mbody[polarity].SetDirectory(0)
+            h_mbody_1pl[polarity].SetDirectory(0)
+            h_mbody_1ml[polarity].SetDirectory(0)
+            h_mbody_1pq[polarity].SetDirectory(0)
+            h_mbody_1mq[polarity].SetDirectory(0)
+        return h_nominal, h_2body, h_mbody, h_mbody_1pl, h_mbody_1ml, h_mbody_1pq, h_mbody_1mq
 
 
-
+def GetIntegralAndSigmas(category,hMISID, hComb):
+    integral_MISID = array('d',[0])
+    integral_Comb  = array('d',[0])
+    sigma_MISID    = array('d',[0])
+    sigma_Comb     = array('d',[0])
+    for polarity in polarities:
+        integral_MISID[0] += hMISID[polarity].Integral()
+        integral_Comb[0] += hComb[polarity].Integral()
+        #extract the sigmas
+        fMISID = r.TFile('MISID_weights_'+polariy+'_'+category+'.root','READ')
+        tMISID = fMISID.Get('DecayTree')
+        for i in range(tMISID.GetEntries()):
+            tMISID.GetEntry(i)
+            sigma_MISID[0]+=(tMISID.weight*tMISID.weight)
+        fComb = r.TFile('Comb_weights_'+polariy+'_'+category+'.root','READ')
+        tComb = fComb.Get('DecayTree')
+        for i in range(tComb.GetEntries()):
+            tComb.GetEntry(i)
+            sigma_Comb[0]+=(tComb.weight*tComb.weight)
+    sigma_MISID[0]=r.TMath.Sqrt(sigma_MISID[0])
+    sigma_Comb[0] = r.TMath.Sqrt(sigma_Comb[0])
+    return integral_MISID, integral_Comb, sigma_MISID, sigma_Comb
+    
 if __name__== "__main__":
     args = init()
     category = args.category
